@@ -82,8 +82,8 @@ def readAllDicom(paths,owner,examType):
             req = dict()
             result = list(Path(path_).rglob("*.dcm"))
             image = pydicom.dcmread(str(result[0]))
-
-            dicomId = image.data_element('AccessionNumber').value
+         
+            dicomId = image.data_element('SOPInstanceUID').value
 
             req['dicomId'] = dicomId
             req['typeExam'] = examType
