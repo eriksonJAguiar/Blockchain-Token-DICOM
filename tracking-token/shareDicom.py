@@ -95,7 +95,7 @@ def readAllDicom(paths,owner,examType):
 
 
 def shareDicom(amount):
-    paths = readPathDicom("../../CPTAC-CM")
+    paths = readPathDicom("../../DICOM_TCIA")
     sharefiles = readDicom(paths,amount)
     
     tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -109,21 +109,23 @@ def shareDicom(amount):
         fpath = os.path.join('./SharedDicom',strfile)
         if not os.path.exists('./SharedDicom'):
             os.mkdir('./SharedDicom')
-        
-        f = open(fpath, 'w+')
-        l = tcp.recv(4096)
+
+        f = open(fpath, 'wb+')
+        l = tcp.recv(1024)
+        count = 0
+        print('Recieve ...')
         while (l):
-            print("Receiving...")
             f.write(l)
-            l = tcp.recv(4096)
-        
+            l = tcp.recv(1024)
+            
+        print('Done ..')
         f.close()
     
     tcp.close()
     
 
 def registerDicom(hprovider, examType):
-    paths = readPathDicom("../../DICOM_TCIA/")
+    paths = readPathDicom("../../DICOM_TCIA")
     regs = readAllDicom(paths,hprovider,examType)
 
 
