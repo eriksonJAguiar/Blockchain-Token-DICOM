@@ -12,8 +12,6 @@ import os
 import requests
 import socket
 import pickle
-#file = pydicom.read_file("../../DICOM_TCIA/CPTAC-CM/C3L-00275/12-06-1999-XR\ CHEST\ 1V\ PORTABLE-53067/1-AP-73378/000000.dcm")
-#image = pydicom.dcmread(file)
 
 #print(image)
 
@@ -57,11 +55,9 @@ def readDicom(paths, amount):
         token = sha.hexdigest()
         
         zipname = '%s.zip'%(token)
-        zf = zipfile.ZipFile(os.path.join('~/SharedDicom',zipname), "w")
+        zf = zipfile.ZipFile(os.path.join(path_,zipname), "w")
         
         for res in result:
-            print(res)
-            break
             image = pydicom.dcmread(str(res))
             new_tag = ((0x08,0x17))
             image.add_new(new_tag,'CS',token) 
@@ -69,7 +65,7 @@ def readDicom(paths, amount):
             zf.write(str(res))
         
         zf.close()
-        pathzip.append(os.path.join('~/SharedDicom',zipname))
+        pathzip.append(os.path.join(path_,zipname))
         
     
     return pathzip
@@ -99,19 +95,31 @@ def readAllDicom(paths,owner,examType):
 
 
 def shareDicom(amount):
-    paths = readPathDicom("../../DICOM_TCIA/")
-    print(paths)
-    #
-    # sharefiles = readDicom(paths,amount)
+    paths = readPathDicom("../../CPTAC-CM")
+    sharefiles = readDicom(paths,amount)
     
-    # tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-    # tcp.connect((HOST, PORT))
+    tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    tcp.connect((HOST, PORT))
 
-    # data_send = pickle.dumps(sharefiles)
-    # tcp.send(data_send)
-    # data = tcp.recv(4096)
-    # print(pickle.loads(data))
-    # tcp.close()
+    for filename in sharefiles:
+        strfile = filename.split('/')
+        strfile = strfile[len(strfile)-1]
+        data_send = pickle.dumps(filename)
+        tcp.send(data_send)
+        fpath = os.path.join('./SharedDicom',strfile)
+        if not os.path.exists('./SharedDicom'):
+            os.mkdir('./SharedDicom')
+        
+        f = open(fpath, 'w+')
+        l = tcp.recv(4096)
+        while (l):
+            print("Receiving...")
+            f.write(l)
+            l = tcp.recv(4096)
+        
+        f.close()
+    
+    tcp.close()
     
 
 def registerDicom(hprovider, examType):
@@ -119,9 +127,9 @@ def registerDicom(hprovider, examType):
     regs = readAllDicom(paths,hprovider,examType)
 
 
-registerDicom('erikson','Digital Raio-X')
+#registerDicom('erikson','Digital Raio-X')
 
-#shareDicom(1)
+shareDicom(1)
 
 #registerDicom('erikson','Digital Raio-X')
 
