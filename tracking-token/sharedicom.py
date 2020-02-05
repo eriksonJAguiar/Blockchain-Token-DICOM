@@ -142,7 +142,7 @@ class  Serversharedicom:
             print('We have accepting connections')
             con, cliente = self.tcp.accept()
             print('Connected by ', cliente)
-            start_new_thread(__server_socket,(con,)) 
+            start_new_thread(self.__server_socket,(con,)) 
         
         tcp.close()
 
@@ -182,7 +182,7 @@ class Clientsharedicom:
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
             tcp.send(amount)
-            tcp.sendall(pickle.dumps(['user1','ICMC']))
+            tcp.sendall(pickle.dumps([research,org]))
             fname = tcp.recv(1024)
             while(fname):
                 fpath = os.path.join('~/SharedDicom',fname)
