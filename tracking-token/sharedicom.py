@@ -25,7 +25,7 @@ class  Serversharedicom:
         self.HOST = IP             
         self.PORT = PORT        
         self.tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.tcp.bind((HOST, PORT))
+        self.tcp.bind((self.HOST, self.PORT))
         self.tcp.listen(5)
 
     def __readPathDicom(path):
@@ -108,8 +108,8 @@ class  Serversharedicom:
     def __server_socket(self,con):
         amount = con.recv(1024)
         identities = picle.loads(con.recv(4096))
-        paths = __readPathDicom(self.path)
-        sharefiles,tokens = readDicom(paths,amount)
+        paths = self.__readPathDicom(self.path)
+        sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
             log = dict()
             fname = filename.split('/')
@@ -140,7 +140,7 @@ class  Serversharedicom:
         while True:
             print('Server started ...')
             print('We have accepting connections')
-            con, cliente = tcp.accept()
+            con, cliente = self.tcp.accept()
             print('Connected by ', cliente)
             start_new_thread(__server_socket,(con,)) 
         
@@ -149,8 +149,8 @@ class  Serversharedicom:
     #Local Path images
     def registerDicom(self,hprovider, examType):
         try:
-            paths = __readPathDicom(self.path)
-            regs = __readAllDicom(paths,hprovider,examType)
+            paths = self.__readPathDicom(self.path)
+            regs = self.__readAllDicom(paths,hprovider,examType)
             return True
         except:
             print('Error')
@@ -178,9 +178,9 @@ class Clientsharedicom:
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def requestDicom(self,amount,research,org):
-        if(__isValidReseach(research)):
+        if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            tcp.connect((HOST, PORT))
+            tcp.connect((self.HOST, self.PORT))
             tcp.send(amount)
             tcp.sendall(pickle.dumps(['user1','ICMC']))
             fname = tcp.recv(1024)

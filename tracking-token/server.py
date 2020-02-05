@@ -7,7 +7,7 @@ if __name__ == "__main__":
     # Params:
     # hprovider: healthcare provider to register dicom
     # typeExam: Type exam whithin dicom
-    server.registerDicom('USP', 'Radiography')
+    #server.registerDicom('USP', 'Radiography')
 
     # let available server for transfer dicom
     server.start_transfer_dicom()
