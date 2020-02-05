@@ -107,7 +107,7 @@ class  Serversharedicom:
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
         amount = con.recv(1024)
-        identities = picle.loads(con.recv(4096))
+        identities = pickle.loads(con.recv(4096))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
