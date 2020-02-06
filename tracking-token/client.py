@@ -6,4 +6,6 @@ if __name__ == "__main__":
 
     # Params:
     ### Request dicom images from blockchain network
+    print('Request stated')
     client.requestDicom(1,'user1','ICMC')
+    print('request finish')

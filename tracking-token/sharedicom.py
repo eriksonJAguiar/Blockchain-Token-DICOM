@@ -182,7 +182,7 @@ class Clientsharedicom:
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
             tcp.send(pickle.dumps(amount))
-            tcp.sendall(pickle.dumps([research,org]))
+            tcp.send(pickle.dumps([research,org]))
             fname = tcp.recv(1024)
             while(fname):
                 fpath = os.path.join('~/SharedDicom',fname)
