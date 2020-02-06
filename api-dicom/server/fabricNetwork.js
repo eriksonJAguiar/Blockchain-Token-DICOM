@@ -6,15 +6,15 @@ const CONTRACT = 'dicom';
 const path = require('path');
 
 
-async function connectNetwork(conn, walletOrg, user) {
+async function connectNetwork(conn, walletOrg) {
   const walletPath = path.join(process.cwd(), walletOrg);
   const wallet = new FileSystemWallet(walletPath);
   console.log(`Wallet path: ${walletPath}`);
   const ccpPath = path.resolve(__dirname, '..','..', 'hyperledger-network', 'connections', conn);
   // Check to see if we've already enrolled the user.
-  const userExists = await wallet.exists(user);
+  const userExists = await wallet.exists(IDENTITY);
   if (!userExists) {
-    console.log(`An identity for the user "${user}" does not exist in the wallet`);
+    console.log(`An identity for the user "${IDENTITY}" does not exist in the wallet`);
     console.log('Run the registerUser.js application before retrying');
     return;
   }

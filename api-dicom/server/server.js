@@ -12,7 +12,7 @@ const org = args[0];
 app.post('/api/createDicom', urlencoder, async function (req, res) {
 
   try {
-    const contract = await fabricNetwork.connectNetwork(`connection-${org}.json`, `../../wallet/wallet-${org}`,req.body.user); 
+    const contract = await fabricNetwork.connectNetwork(`connection-${org}.json`, `../../wallet/wallet-${org}`); 
     console.log(req.body);
     let tx = await contract.submitTransaction('createDicom', req.body.dicomId, req.body.typeExam, req.body.owner);
     res.json({
