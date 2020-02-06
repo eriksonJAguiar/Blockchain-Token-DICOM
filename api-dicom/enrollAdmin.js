@@ -37,7 +37,7 @@ async function main() {
         // Enroll the admin user, and import the new identity into the wallet.
         //const upper = org.replace(/^\w/, c => c.toUpperCase());
         const enrollment = await ca.enroll({ enrollmentID: 'admin', enrollmentSecret: 'adminpw' });
-        const identity = X509WalletMixin.createIdentity('HProvider', enrollment.certificate, enrollment.key.toBytes());
+        const identity = X509WalletMixin.createIdentity('HProviderMSP', enrollment.certificate, enrollment.key.toBytes());
         await wallet.import('admin', identity);
         console.log('Successfully enrolled admin user "admin" and imported it into the wallet');
 
