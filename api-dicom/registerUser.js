@@ -43,7 +43,7 @@ async function main() {
 
         const secret = await ca.register({enrollmentID: user, role: 'client' }, adminIdentity);
         const enrollment = await ca.enroll({ enrollmentID: user, enrollmentSecret: secret });
-        const userIdentity = X509WalletMixin.createIdentity('HProvider', enrollment.certificate, enrollment.key.toBytes());
+        const userIdentity = X509WalletMixin.createIdentity('HProviderMSP', enrollment.certificate, enrollment.key.toBytes());
         await wallet.import(user, userIdentity);
         console.log(`Successfully registered and enrolled admin user "${user}" and imported it into the wallet`);
 
