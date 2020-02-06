@@ -148,12 +148,12 @@ class  Serversharedicom:
 
     #Local Path images
     def registerDicom(self,hprovider, examType):
-        try:
-            paths = self.__readPathDicom(self.path)
-            regs = self.__readAllDicom(paths,hprovider,examType)
-            return True
-        except:
-            print('Error')
+        #try:
+        paths = self.__readPathDicom(self.path)
+        regs = self.__readAllDicom(paths,hprovider,examType)
+        #return True
+        #except:
+        #    print('Error')
 
     # def shareDicom(path,amount):
     #     paths = __readPathDicom(path)
