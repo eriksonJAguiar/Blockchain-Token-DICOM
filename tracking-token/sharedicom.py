@@ -28,7 +28,7 @@ class  Serversharedicom:
         self.tcp.bind((self.HOST, self.PORT))
         self.tcp.listen(5)
 
-    def __readPathDicom(path):
+    def __readPathDicom(self,path):
 
         result = list(Path(path).rglob("*.dcm"))
 
@@ -46,7 +46,7 @@ class  Serversharedicom:
         return dirs
 
 
-    def __readAllDicom(paths,owner,examType):
+    def __readAllDicom(self,paths,owner,examType):
         files = []
         for path_ in paths:
             try:
