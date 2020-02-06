@@ -106,7 +106,7 @@ class  Serversharedicom:
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        amount = con.recv(1024)
+        amount = picke.loads(con.recv(1024))
         identities = pickle.loads(con.recv(4096))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
@@ -148,12 +148,12 @@ class  Serversharedicom:
 
     #Local Path images
     def registerDicom(self,hprovider, examType):
-        #try:
-        paths = self.__readPathDicom(self.path)
-        regs = self.__readAllDicom(paths,hprovider,examType)
-        #return True
-        #except:
-        #    print('Error')
+        try:
+            paths = self.__readPathDicom(self.path)
+            regs = self.__readAllDicom(paths,hprovider,examType)
+            return True
+        except:
+            print('Error')
 
     # def shareDicom(path,amount):
     #     paths = __readPathDicom(path)
@@ -181,7 +181,7 @@ class Clientsharedicom:
         if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
-            tcp.send(amount)
+            tcp.send(pickle.dumps(amount))
             tcp.sendall(pickle.dumps([research,org]))
             fname = tcp.recv(1024)
             while(fname):
