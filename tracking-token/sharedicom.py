@@ -77,10 +77,12 @@ class  Serversharedicom:
                 dicomId = image.data_element('SOPInstanceUID').value
                 
                 requests.post('http://%s:3000/api/createDicom'%(self.IPBC),json={'user': owner, 'dicomId':dicomId,'typeExam':examType, 'owner':owner})
-                print('Regiter Successful')
             except:
                 print('%s File not register'%(dicomId))
                 exit(1)
+            
+        
+        print('Regiter Successful')
 
 
     def __readDicom(self,paths, amount):
