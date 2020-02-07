@@ -190,8 +190,8 @@ class Clientsharedicom:
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
             tcp.send(pickle.dumps(amount))
-            tcp.send(pickle.dumps(research))
-            tcp.send(pickle.dumps(org))
+            tcp.sendall(pickle.dumps(research))
+            tcp.sendall(pickle.dumps(org))
             fname = tcp.recv(1024)
             print('fname: %s'%(fname))
             while(fname):
