@@ -37,10 +37,8 @@ class  Serversharedicom:
             return True
         
         result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'hprovider', 'user': hprovider})
-
-        print(result)
         
-        if(result.status == 'True'):
+        if(result.status_code == 200):
             self.users.append(hprovider)
             return True
         
@@ -197,7 +195,7 @@ class Clientsharedicom:
         
         result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'research', 'user':research})
         
-        if(result.status == 'True'):
+        if(result.status_code == 200):
             self.users.append(research)
             return True
         
