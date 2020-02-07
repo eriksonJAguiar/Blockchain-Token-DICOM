@@ -6,7 +6,7 @@ const enrollAdmin = require('../enrollAdmin')
 const registerUser = require('../registerUser')
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
-urlencoder = bodyParser.urlencoded({ extended: true });
+var urlencoder = bodyParser.urlencoded({ extended: true });
 const args = process.argv.slice(2);
 const org = args[0];
 
@@ -18,7 +18,7 @@ try {
 }
 
 
-app.post('/api/registerUser', urlencoded, async function (req, res) {
+app.post('/api/registerUser', urlencoder, async function (req, res) {
   try {
     result = registerUser.registerUser(req.body.org, req.body.user);
     res.json({
