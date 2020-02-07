@@ -109,7 +109,7 @@ class  Serversharedicom:
         amount = pickle.loads(con.recv(1024))
         print('Amaount: %i'%(amount))
         user = con.recv(1024)
-        org = con.recv(1024)]
+        org = con.recv(1024)
         print('identities: %s and %s'%(user,org))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
