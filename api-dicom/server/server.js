@@ -15,7 +15,6 @@ try {
   enrollAdmin.enrollAdmin('research', 'ResearchMSP'); 
 } catch (error) {
   console.log(error);
-  continue;
 }
 
 
