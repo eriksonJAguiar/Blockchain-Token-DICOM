@@ -2,17 +2,43 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var app = express();
 const fabricNetwork = require('./fabricNetwork')
+const enrollAdmin = require('../enrollAdmin')
+const registerUser = require('../registerUser')
 app.set('view engine', 'ejs');
 app.use(bodyParser.json());
-urlencoder = bodyParser.urlencoded({ extended: true});
+urlencoder = bodyParser.urlencoded({ extended: true });
 const args = process.argv.slice(2);
 const org = args[0];
 
+try {
+  enrollAdmin.enrollAdmin('hprovider', 'HProviderMSP');
+  enrollAdmin.enrollAdmin('research', 'ResearchMSP'); 
+} catch (error) {
+  console.log(error);
+  continue;
+}
+
+
+app.post('/api/registerUser', urlencoded, async function (req, res) {
+  try {
+    result = registerUser.registerUser(req.body.org, req.body.user);
+    res.json({
+      status: 'True'
+    });
+    console.log('OK - Transaction has been submitted');
+  } catch (error) {
+    console.error(`Failed to evaluate transaction: ${error}`);
+    res.status(500).json({
+      error: error,
+      status: 'False'
+    });
+  }
+});
 
 app.post('/api/createDicom', urlencoder, async function (req, res) {
 
   try {
-    const contract = await fabricNetwork.connectNetwork(`connection-${org}.json`, `../../wallet/wallet-${org}`); 
+    const contract = await fabricNetwork.connectNetwork('connection-hprovider.json', '../../wallet/wallet-hprovider', req.body.user);
     console.log(req.body);
     let tx = await contract.submitTransaction('createDicom', req.body.dicomId, req.body.typeExam, req.body.owner);
     res.json({
@@ -31,10 +57,10 @@ app.post('/api/createDicom', urlencoder, async function (req, res) {
 
 app.get('/api/readDicom/:dicomId', async function (req, res) {
   try {
-    const contract = await fabricNetwork.connectNetwork(`connection-${org}.json`, `../../wallet/wallet-${org}`);
+    const contract = await fabricNetwork.connectNetwork('connection-hprovider.json', '../../wallet/wallet-hprovider', req.params.user.toString());
     const result = await contract.evaluateTransaction('readDicom', req.params.dicomId.toString());
     let response = JSON.parse(result.toString());
-    res.json({result:response});
+    res.json({ result: response });
     console.log('OK - Query Successful');
   } catch (error) {
     console.error(`Failed to evaluate transaction: ${error}`);
@@ -47,8 +73,8 @@ app.get('/api/readDicom/:dicomId', async function (req, res) {
 app.post('/api/shareDicom', urlencoder, async function (req, res) {
 
   try {
-    const contract = await fabricNetwork.connectNetwork(`connection-${org}.json`, `../../wallet/wallet-${org}`, req.body.user);
-    console.log(req.body);  
+    const contract = await fabricNetwork.connectNetwork('connection-research.json', '../../wallet/wallet-research', req.body.user);
+    console.log(req.body);
     let tx = await contract.submitTransaction('shareDicom', req.body.tokenDicom, req.body.to, req.body.toOrganization, Date.now().toString());
     res.json({
       status: 'OK - Transaction has been submitted',
@@ -66,10 +92,10 @@ app.post('/api/shareDicom', urlencoder, async function (req, res) {
 
 app.get('/api/readAccessLog/:tokenDicom', async function (req, res) {
   try {
-    const contract = await fabricNetwork.connectNetwork(`connection-${org}.json`, `../../wallet/wallet-${org}`);
+    const contract = await fabricNetwork.connectNetwork('connection-research.json', '../../wallet/wallet-research', req.params.user.toString());
     const result = await contract.evaluateTransaction('readAccessLog', req.params.tokenDicom.toString());
     let response = JSON.parse(result.toString());
-    res.json({result:response});
+    res.json({ result: response });
     console.log('OK - Query Successful');
   } catch (error) {
     console.error(`Failed to evaluate transaction: ${error}`);
@@ -83,7 +109,7 @@ app.get('/api/readAccessLog/:tokenDicom', async function (req, res) {
 
 
 
-app.listen(3000, ()=>{
+app.listen(3000, () => {
   console.log("***********************************");
   console.log("API server listening at localhost:3000");
   console.log("***********************************");

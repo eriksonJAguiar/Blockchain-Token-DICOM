@@ -20,14 +20,32 @@ from _thread import *
 
 class  Serversharedicom:
 
-    def __init__(self,path,IP,PORT):
+    def __init__(self,path,IP,IPBC,PORT):
         self.path = path
-        self.HOST = IP             
+        self.HOST = IP
+        self.IPBC = str(IPBC)             
         self.PORT = PORT        
         self.tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp.bind((self.HOST, self.PORT))
         self.tcp.listen(5)
+        self.users = []
 
+    
+    def __isValidReseach(self,hprovider):
+        
+        if (research in self.users):
+            return True
+        
+        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'hprovider', 'user':hprovider})
+        
+        if(result.status == 'True'):
+            self.users.append(hprovider)
+            return True
+        
+
+        return False
+    
+    
     def __readPathDicom(self,path):
 
         result = list(Path(path).rglob("*.dcm"))
@@ -50,17 +68,12 @@ class  Serversharedicom:
         files = []
         for path_ in paths:
             try:
-                req = dict()
                 result = list(Path(path_).rglob("*.dcm"))
                 image = pydicom.dcmread(str(result[0]))
             
                 dicomId = image.data_element('SOPInstanceUID').value
-
-                req['dicomId'] = dicomId
-                req['typeExam'] = examType
-                req['owner'] = owner
                 
-                requests.post('http://%s:3000/api/createDicom'%(self.HOST),json=req)
+                requests.post('http://%s:3000/api/createDicom'%(self.IPBC),json={'dicomId':dicomId,'typeExam':examType, 'owner':owner})
             except:
                 print('%s File not register'%(dicomId))
                 continue
@@ -102,63 +115,59 @@ class  Serversharedicom:
             tokens.append(token)
             
         
-        return pathzip,token
+        return pathzip,tokens
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
-    def __server_socket(self,con):
+    def __server_socket(self,con,hprovider):
         amount = pickle.loads(con.recv(1024))
-        print('Amount: %i'%(amount))
-        #user = con.recv(4096)
-        #user = pickle.loads(user)
-        #org = con.recv(4096)
-        #org = pickle.loads(org)
-        #print('identities: %s and %s'%(user,org))
+        time.sleep(1)
+        user = str(con.recv(4096).decode('utf8'))
+        time.sleep(1)
+        org = str(con.recv(4096).decode('utf8'))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
-            print(filename)
-            print(token)
-            log = dict()
             fname = filename.split('/')
             fname = fname[len(fname)-1]
-            con.send(fname)
-            with open(str(filename),"rb") as f:
+            con.send(fname.encode('utf8'))
+            with open(str(filename),"rb") as f: 
                 data = f.read(1024)
                 print('Sending ...')
                 while(data):
                     con.send(data)
                     data = f.read(1024)
 
-            time.sleep(1)
             print('Done!')
             print('Sent File ...')
                 
-            log['tokenDicom'] = token
-            log['to'] = 'user1'
-            log['toOrganization'] = 'ICMC'
-            requests.post('http://%s:3000/api/shareDicom'%(self.HOST),json=log)
+            requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': hprovider,'tokenDicom':token, 'to':user, 'toOrganization': org})
 
             print('Log added to Blockchain')
+
+            time.sleep(2)
 
             
         con.close()     
 
-    def start_transfer_dicom(self):
+    def start_transfer_dicom(self,hprovider):
         while True:
             print('Server started ...')
             print('We have accepting connections')
             con, cliente = self.tcp.accept()
             print('Connected by ', cliente)
-            start_new_thread(self.__server_socket,(con,)) 
+            start_new_thread(self.__server_socket,(con,hprovider,)) 
         
         tcp.close()
 
     #Local Path images
     def registerDicom(self,hprovider, examType):
         try:
-            paths = self.__readPathDicom(self.path)
-            regs = self.__readAllDicom(paths,hprovider,examType)
-            return True
+            if(self.__isValidReseach(hprovider)):
+                paths = self.__readPathDicom(self.path)
+                regs = self.__readAllDicom(paths,hprovider,examType)
+                return True
+            
+            return False
         except:
             print('Error')
 
@@ -166,8 +175,8 @@ class  Serversharedicom:
     #     paths = __readPathDicom(path)
     #     sharefiles = readDicom(paths,amount)
 
-    def audit(self,token):
-        result = requests.get('http://%s3000/api/readAccessLog/%s'%(self.HOST,token))
+    def audit(self,token,hprovider):
+        result = requests.get('http://%s:3000/api/readAccessLog'%(self.HOST), params={'tokenDicom':token, 'user': hprovider})
 
         return result
 
@@ -176,12 +185,22 @@ class Clientsharedicom:
     def __init__(self,IP,PORT):
         self.HOST = IP  
         self.PORT = PORT
+        self.users = []
 
     def __isValidReseach(self,research):
-        if (research == 'user1'):
+        
+        if (research in self.users):
             return True
         
+        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'research', 'user':research})
+        
+        if(result.status == 'True'):
+            self.users.append(research)
+            return True
+        
+
         return False
+        
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def requestDicom(self,amount,research,org):
@@ -189,11 +208,13 @@ class Clientsharedicom:
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
             tcp.send(pickle.dumps(amount))
-            tcp.sendall(pickle.dumps(research))
-            tcp.sendall(pickle.dumps(org))
-            fname = tcp.recv(1024)
-            print('fname: %s'%(fname))
+            time.sleep(1)
+            tcp.send(research.encode('utf8'))
+            time.sleep(1)
+            tcp.send(org.encode('utf8'))
+            fname = str(tcp.recv(1024).decode('utf8'))
             while(fname):
+                print('fname: %s'%(fname))
                 fpath = os.path.join('~/SharedDicom',fname)
                 if not os.path.exists('~/SharedDicom'):
                     os.mkdir('~/SharedDicom')
@@ -207,7 +228,7 @@ class Clientsharedicom:
                         
                 print('Done ..')
                 f.close()
-                fname = tcp.recv(1024)
-                print('fname: %s'%(fname))
+                fname = str(tcp.recv(1024).decode('utf8'))
+                time.sleep(2)
             
             tcp.close()

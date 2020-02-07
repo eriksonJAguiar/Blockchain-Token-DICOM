@@ -7,12 +7,12 @@
 const { FileSystemWallet, Gateway, X509WalletMixin } = require('fabric-network');
 const path = require('path');
 
-async function main() {
+async function registerUser(org,user) {
     try {
 
-        const args = process.argv.slice(2);
-        const org = args[0];
-        const user = args[1];
+        // const args = process.argv.slice(2);
+        // const org = args[0];
+        // const user = args[1];
         const ccpPath = path.resolve(__dirname, '..', 'hyperledger-network','connections', `connection-${org}.json`);
         // Create a new file system based wallet for managing identities.
         const walletPath = path.join(process.cwd(), `../wallet/wallet-${org}`);
@@ -22,8 +22,8 @@ async function main() {
         // Check to see if we've already enrolled the user.
         const userExists = await wallet.exists(user);
         if (userExists) {
-            console.log('An identity for the user "user1" already exists in the wallet');
-            return;
+            console.log(`An identity for the user "${user}" already exists in the wallet`);
+            return false;
         }
 
         // Check to see if we've already enrolled the admin user.
@@ -31,7 +31,7 @@ async function main() {
         if (!adminExists) {
             console.log('An identity for the admin user "admin" does not exist in the wallet');
             console.log('Run the enrollAdmin.js application before retrying');
-            return;
+            return false;
         }
         // Create a new gateway for connecting to our peer node.
         const gateway = new Gateway();
@@ -53,4 +53,4 @@ async function main() {
     }
 }
 
-main();
+module.exports = {registerUser}
