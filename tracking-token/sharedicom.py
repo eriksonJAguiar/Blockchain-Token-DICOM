@@ -76,7 +76,7 @@ class  Serversharedicom:
             
                 dicomId = image.data_element('SOPInstanceUID').value
                 
-                requests.post('http://%s:3000/api/createDicom'%(self.IPBC),json={'dicomId':dicomId,'typeExam':examType, 'owner':owner})
+                requests.post('http://%s:3000/api/createDicom'%(self.IPBC),json={'user': owner, 'dicomId':dicomId,'typeExam':examType, 'owner':owner})
             except:
                 print('%s File not register'%(dicomId))
                 exit(1)
