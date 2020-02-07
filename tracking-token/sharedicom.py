@@ -106,40 +106,37 @@ class  Serversharedicom:
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        while True:
-            amount = pickle.loads(con.recv(1024))
-            if amount:
-                break
-            print('Amount: %i'%(amount))
-            user = con.recv(4096)
-            user = pickle.loads(user)
-            org = con.recv(4096)
-            org = pickle.loads(org)
-            print('identities: %s and %s'%(user,org))
-            paths = self.__readPathDicom(self.path)
-            sharefiles,tokens = self.__readDicom(paths,amount)
-            for filename, token in zip(sharefiles,tokens):
-                log = dict()
-                fname = filename.split('/')
-                fname = fname[len(fname)-1]
-                con.send(fname)
-                with open(str(filename),"rb") as f:
+        amount = pickle.loads(con.recv(1024))
+        print('Amount: %i'%(amount))
+        user = con.recv(4096)
+        user = pickle.loads(user)
+        org = con.recv(4096)
+        org = pickle.loads(org)
+        print('identities: %s and %s'%(user,org))
+        paths = self.__readPathDicom(self.path)
+        sharefiles,tokens = self.__readDicom(paths,amount)
+        for filename, token in zip(sharefiles,tokens):
+            log = dict()
+            fname = filename.split('/')
+            fname = fname[len(fname)-1]
+            con.send(fname)
+            with open(str(filename),"rb") as f:
+                data = f.read(1024)
+                print('Sending ...')
+                while(data):
+                    con.send(data)
                     data = f.read(1024)
-                    print('Sending ...')
-                    while(data):
-                        con.send(data)
-                        data = f.read(1024)
 
-                time.sleep(1)
-                print('Done!')
-                print('Sent File ...')
+            time.sleep(1)
+            print('Done!')
+            print('Sent File ...')
                 
-                log['tokenDicom'] = token
-                log['to'] = identities[0]
-                log['toOrganization'] = identities[1]
-                requests.post('http://%s:3000/api/shareDicom'%(self.HOST),json=log)
+            log['tokenDicom'] = token
+            log['to'] = identities[0]
+            log['toOrganization'] = identities[1]
+            requests.post('http://%s:3000/api/shareDicom'%(self.HOST),json=log)
 
-                print('Log added to Blockchain')
+            print('Log added to Blockchain')
 
             
         con.close()     
