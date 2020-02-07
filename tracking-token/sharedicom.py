@@ -107,7 +107,9 @@ class  Serversharedicom:
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
+        print('Amaount: %i'%(amount))
         identities = pickle.loads(con.recv(4096))
+        print(identities)
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
@@ -184,6 +186,7 @@ class Clientsharedicom:
             tcp.send(pickle.dumps(amount))
             tcp.send(pickle.dumps([research,org]))
             fname = tcp.recv(1024)
+            print('fname: %s'%(fname))
             while(fname):
                 fpath = os.path.join('~/SharedDicom',fname)
                 if not os.path.exists('~/SharedDicom'):
@@ -199,5 +202,6 @@ class Clientsharedicom:
                 print('Done ..')
                 f.close()
                 fname = tcp.recv(1024)
+                print('fname: %s'%(fname))
             
             tcp.close()
