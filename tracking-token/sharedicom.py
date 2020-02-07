@@ -107,9 +107,9 @@ class  Serversharedicom:
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
         while True:
+            amount = pickle.loads(con.recv(1024))
             if amount:
                 break
-            amount = pickle.loads(con.recv(1024))
             print('Amount: %i'%(amount))
             user = con.recv(4096)
             user = pickle.loads(user)
