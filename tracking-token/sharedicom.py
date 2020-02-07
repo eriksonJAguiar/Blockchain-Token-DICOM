@@ -107,9 +107,9 @@ class  Serversharedicom:
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
-        print('Amaount: %i'%(amount))
-        user = pickle.loads(con.recv(1024))
-        org = pickle.loads(con.recv(1024))
+        print('Amount: %i'%(amount))
+        user = pickle.loads(con.recv(4096))
+        org = pickle.loads(con.recv(4096))
         print('identities: %s and %s'%(user,org))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
