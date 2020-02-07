@@ -36,7 +36,7 @@ class  Serversharedicom:
         if (hprovider in self.users):
             return True
         
-        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'hprovider', 'user': hprovider})
+        result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider})
         
         if(result.status_code == 200):
             self.users.append(hprovider)
@@ -76,7 +76,7 @@ class  Serversharedicom:
                 requests.post('http://%s:3000/api/createDicom'%(self.IPBC),json={'dicomId':dicomId,'typeExam':examType, 'owner':owner})
             except:
                 print('%s File not register'%(dicomId))
-                continue
+                exit(1)
 
         print('Regiter Successful')
 
