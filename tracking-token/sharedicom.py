@@ -33,10 +33,10 @@ class  Serversharedicom:
     
     def __isValidProvider(self,hprovider):
         
-        if (research in self.users):
+        if (hprovider in self.users):
             return True
         
-        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'hprovider', 'user':hprovider})
+        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'hprovider', 'user': hprovider})
         
         if(result.status == 'True'):
             self.users.append(hprovider)
