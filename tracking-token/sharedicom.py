@@ -108,11 +108,11 @@ class  Serversharedicom:
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
         print('Amount: %i'%(amount))
-        user = con.recv(4096)
-        user = pickle.loads(user)
-        org = con.recv(4096)
-        org = pickle.loads(org)
-        print('identities: %s and %s'%(user,org))
+        #user = con.recv(4096)
+        #user = pickle.loads(user)
+        #org = con.recv(4096)
+        #org = pickle.loads(org)
+        #print('identities: %s and %s'%(user,org))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
@@ -132,8 +132,8 @@ class  Serversharedicom:
             print('Sent File ...')
                 
             log['tokenDicom'] = token
-            log['to'] = identities[0]
-            log['toOrganization'] = identities[1]
+            log['to'] = 'user1'
+            log['toOrganization'] = 'ICMC'
             requests.post('http://%s:3000/api/shareDicom'%(self.HOST),json=log)
 
             print('Log added to Blockchain')
