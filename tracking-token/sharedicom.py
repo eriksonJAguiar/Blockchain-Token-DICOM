@@ -36,8 +36,6 @@ class  Serversharedicom:
         try:
             if (hprovider in self.users):
                 return True
-            
-            print(self.IPBC)
         
             result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider})
         
