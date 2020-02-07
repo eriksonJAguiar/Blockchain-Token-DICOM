@@ -37,6 +37,8 @@ class  Serversharedicom:
             return True
         
         result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'hprovider', 'user': hprovider})
+
+        print(result)
         
         if(result.status == 'True'):
             self.users.append(hprovider)
@@ -118,7 +120,7 @@ class  Serversharedicom:
         return pathzip,tokens
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
-    def __server_socket(self,con,hprovider):
+    def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
         time.sleep(1)
         user = str(con.recv(4096).decode('utf8'))
@@ -140,7 +142,7 @@ class  Serversharedicom:
             print('Done!')
             print('Sent File ...')
                 
-            requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': hprovider,'tokenDicom':token, 'to':user, 'toOrganization': org})
+            requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': user,'tokenDicom':token, 'to':user, 'toOrganization': org})
 
             print('Log added to Blockchain')
 
@@ -156,7 +158,7 @@ class  Serversharedicom:
                 print('We have accepting connections')
                 con, cliente = self.tcp.accept()
                 print('Connected by ', cliente)
-                start_new_thread(self.__server_socket,(con,hprovider,)) 
+                start_new_thread(self.__server_socket,(con,)) 
             
             tcp.close()
 

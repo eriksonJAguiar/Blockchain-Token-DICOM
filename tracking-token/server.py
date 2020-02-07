@@ -11,4 +11,4 @@ if __name__ == "__main__":
     server.registerDicom('USP', 'Radiography')
 
     # let available server for transfer dicom
-    server.start_transfer_dicom('user1')
+    server.start_transfer_dicom('USP')
