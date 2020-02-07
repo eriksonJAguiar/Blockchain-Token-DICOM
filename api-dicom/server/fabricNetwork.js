@@ -1,13 +1,12 @@
 // Setting for Hyperledger Fabric
 const {  FileSystemWallet,  Gateway} = require('fabric-network');
-const IDENTITY = null;
 const CHANNEL = 'healthchannel';
 const CONTRACT = 'dicom';
 const path = require('path');
 
 
 async function connectNetwork(conn, walletOrg, user) {
-  IDENTITY = user;
+  var IDENTITY = user;
   const walletPath = path.join(process.cwd(), walletOrg);
   const wallet = new FileSystemWallet(walletPath);
   console.log(`Wallet path: ${walletPath}`);
