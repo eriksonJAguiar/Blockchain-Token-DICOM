@@ -33,17 +33,22 @@ class  Serversharedicom:
     
     def __isValidProvider(self,hprovider):
         
-        if (hprovider in self.users):
-            return True
+        try:
+            if (hprovider in self.users):
+                return True
+            
+            print(self.IPBC)
         
-        result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider})
+            result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider})
         
-        if(result.status_code == 200):
-            self.users.append(hprovider)
-            return True
+            if(result.status_code == 200):
+                self.users.append(hprovider)
+                return True
+        except:
+            return False
         
 
-        return False
+       
     
     
     def __readPathDicom(self,path):
