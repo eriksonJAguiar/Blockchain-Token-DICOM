@@ -31,7 +31,7 @@ class  Serversharedicom:
         self.users = []
 
     
-    def __isValidReseach(self,hprovider):
+    def __isValidProvider(self,hprovider):
         
         if (research in self.users):
             return True
@@ -150,19 +150,20 @@ class  Serversharedicom:
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
-        while True:
-            print('Server started ...')
-            print('We have accepting connections')
-            con, cliente = self.tcp.accept()
-            print('Connected by ', cliente)
-            start_new_thread(self.__server_socket,(con,hprovider,)) 
-        
-        tcp.close()
+        if(self.__isValidProvider(hprovider)):
+            while True:
+                print('Server started ...')
+                print('We have accepting connections')
+                con, cliente = self.tcp.accept()
+                print('Connected by ', cliente)
+                start_new_thread(self.__server_socket,(con,hprovider,)) 
+            
+            tcp.close()
 
     #Local Path images
     def registerDicom(self,hprovider, examType):
         try:
-            if(self.__isValidReseach(hprovider)):
+            if(self.__isValidProvider(hprovider)):
                 paths = self.__readPathDicom(self.path)
                 regs = self.__readAllDicom(paths,hprovider,examType)
                 return True
