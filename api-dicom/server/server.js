@@ -18,7 +18,7 @@ try {
 
 app.post('/api/registerUser', urlencoder, async function (req, res) {
   try {
-    let result = registerUser.registerUser(req.body.org, req.body.user);
+    let result = registerUser.registerUser(req.body.org, req.body.user,req.body.msp);
     res.json({
       status: 'True'
     });

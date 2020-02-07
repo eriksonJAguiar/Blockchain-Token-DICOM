@@ -37,7 +37,7 @@ class  Serversharedicom:
             if (hprovider in self.users):
                 return True
         
-            result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider})
+            result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider, 'msp': 'HProviderMSP'})
         
             if(result.status_code == 200):
                 self.users.append(hprovider)
@@ -45,8 +45,6 @@ class  Serversharedicom:
         except:
             return False
         
-
-       
     
     
     def __readPathDicom(self,path):
@@ -197,7 +195,7 @@ class Clientsharedicom:
         if (research in self.users):
             return True
         
-        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'research', 'user':research})
+        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'research', 'user':research, 'msp': 'ResearchMSP'})
         
         if(result.status_code == 200):
             self.users.append(research)
