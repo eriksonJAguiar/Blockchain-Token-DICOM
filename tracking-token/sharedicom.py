@@ -108,8 +108,8 @@ class  Serversharedicom:
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
         print('Amaount: %i'%(amount))
-        user = con.recv(1024)
-        org = con.recv(1024)
+        user = pickle.loads(con.recv(1024))
+        org = pickle.loads(con.recv(1024))
         print('identities: %s and %s'%(user,org))
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
@@ -185,8 +185,8 @@ class Clientsharedicom:
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
             tcp.send(pickle.dumps(amount))
-            tcp.send(research)
-            tcp.send(org)
+            tcp.send(pickle.dumps(research))
+            tcp.send(pickle.dumps(org))
             fname = tcp.recv(1024)
             print('fname: %s'%(fname))
             while(fname):
