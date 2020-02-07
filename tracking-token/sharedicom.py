@@ -116,6 +116,8 @@ class  Serversharedicom:
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
+            print(filename)
+            print(token)
             log = dict()
             fname = filename.split('/')
             fname = fname[len(fname)-1]
