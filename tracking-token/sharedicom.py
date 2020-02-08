@@ -107,6 +107,10 @@ class  Serversharedicom:
             zipname = '%s.zip'%(token)
             newpath = os.path.join(self.path,'shared')
             os.makedirs(newpath, exist_ok=True)
+
+            newzip = os.path.join(self.path,'shared-zip')
+            os.makedirs(newzip, exist_ok=True)
+            zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
     
             for res in result:
                 fname = str(res).split('/')
@@ -115,13 +119,7 @@ class  Serversharedicom:
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
                 image.save_as(os.path.join(newpath,fname))
-            
-            newzip = os.path.join(self.path,'shared-zip')
-            os.makedirs(newzip, exist_ok=True)
-            zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
-            zf.write(newpath)
-            zf.close()
-            time.sleep(1)
+                zf.write(os.path.join(newpath,fname))
             
             #shutil.rmtree(newpath)
             exit(1)
