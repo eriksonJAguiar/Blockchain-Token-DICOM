@@ -119,7 +119,7 @@ class  Serversharedicom:
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
                 image.save_as(os.path.join(newpath,fname))
-                zf.write(os.path.join(newpath,fname))
+                zf.write(os.path.join(newpath,fname), arcname=fname)
             
             #shutil.rmtree(newpath)
             exit(1)
