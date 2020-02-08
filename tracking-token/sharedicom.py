@@ -121,8 +121,10 @@ class  Serversharedicom:
             zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
             zf.write(newpath)
             zf.close()
-            shutil.rmtree(newpath)
-
+            time.sleep(1)
+            
+            #shutil.rmtree(newpath)
+            exit(1)
             pathzip.append(os.path.join(newzip,zipname))
             tokens.append(token)
             
