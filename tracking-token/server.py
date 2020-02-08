@@ -2,7 +2,7 @@ from sharedicom import Serversharedicom
 
 
 if __name__ == "__main__":
-    server = Serversharedicom('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/', '10.62.9.185','10.62.9.185', 5000)
+    server = Serversharedicom('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/', '10.62.9.185','10.62.9.185', 5001)
 
     # Params:
     # hprovider: healthcare provider to register dicom

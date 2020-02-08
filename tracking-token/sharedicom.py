@@ -93,6 +93,7 @@ class  Serversharedicom:
             path_ = paths[rd]
 
             result = list(Path(path_).rglob("*.dcm"))
+            print(result)
             image = pydicom.dcmread(str(result[0]))
 
             dicomId = image.data_element('PatientID').value
@@ -106,7 +107,6 @@ class  Serversharedicom:
             zf = zipfile.ZipFile(os.path.join(path_,zipname), "w")
             
             for res in result:
-                print(res)
                 image = pydicom.dcmread(str(res))
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
