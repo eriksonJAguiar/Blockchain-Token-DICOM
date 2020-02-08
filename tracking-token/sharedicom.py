@@ -87,7 +87,7 @@ class  Serversharedicom:
         pathzip = []
         tokens = []
         if (amount > len(paths)):
-            return
+            amount = len(paths)-1
         for i in range(amount):
             rd = random.randint(0,len(paths)-1)
             path_ = paths[rd]
