@@ -17,7 +17,7 @@ from pathlib import Path
 from shutil import make_archive
 from pydicom.datadict import DicomDictionary, keyword_dict
 from _thread import *
-
+from shutil import copy2
 
 class  Serversharedicom:
 
@@ -95,7 +95,6 @@ class  Serversharedicom:
 
             #result = list(Path(path_).rglob("*.dcm"))
             result = glob.glob(os.path.join(path_,"*.dcm"))
-            print(result)
             image = pydicom.dcmread(str(result[0]))
 
             dicomId = image.data_element('PatientID').value
@@ -107,16 +106,20 @@ class  Serversharedicom:
             
             zipname = '%s.zip'%(token)
             zf = zipfile.ZipFile(os.path.join(path_,zipname), "w")
+            newpath = os.path.join(path_,"shareFiles")
+            os.mkdir(newpath)
             
+
             for res in result:
                 image = pydicom.dcmread(str(res))
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
                 image.save_as(str(res))
-                zf.write(str(res))
+                copy2(str(res), newpath)
             
+            zf.write(os.path.join(path_,"shareFiles"))
             zf.close()
-            pathzip.append(os.path.join(path_,zipname))
+            pathzip.append(os.path.join(newpath,zipname))
             tokens.append(token)
             
         
@@ -152,7 +155,7 @@ class  Serversharedicom:
 
             time.sleep(1)
 
-            
+        os.removedirs(os.path.join(path_,"shareFiles"))   
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
