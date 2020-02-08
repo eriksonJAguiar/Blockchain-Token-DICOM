@@ -222,9 +222,9 @@ class Clientsharedicom:
             fname = str(tcp.recv(1024).decode('utf8'))
             while(fname):
                 print('fname: %s'%(fname))
-                fpath = os.path.join('~/SharedDicom',fname)
-                if not os.path.exists('~/SharedDicom'):
-                    os.mkdir('~/SharedDicom')
+                fpath = os.path.join('../SharedDicom',fname)
+                if not os.path.exists('../SharedDicom'):
+                    os.mkdir('../SharedDicom')
 
                 f = open(fpath, 'wb+')
                 l = tcp.recv(1024)
