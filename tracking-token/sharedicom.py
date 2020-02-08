@@ -108,7 +108,7 @@ class  Serversharedicom:
             os.makedirs(newpath, exist_ok=True)
     
             for res in result:
-                fname = str(r).split('/')
+                fname = str(res).split('/')
                 fname = fname[len(fname)-1]
                 image = pydicom.dcmread(str(res))
                 new_tag = ((0x08,0x17))
