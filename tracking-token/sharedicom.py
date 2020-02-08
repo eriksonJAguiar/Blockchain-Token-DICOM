@@ -89,7 +89,7 @@ class  Serversharedicom:
         if (amount > len(paths)):
             return
         for i in range(amount):
-            rd = random.randint(0,amount)
+            rd = random.randint(0,len(paths)-1)
             path_ = paths[rd]
 
             result = list(Path(path_).rglob("*.dcm"))
@@ -106,6 +106,7 @@ class  Serversharedicom:
             zf = zipfile.ZipFile(os.path.join(path_,zipname), "w")
             
             for res in result:
+                print(res)
                 image = pydicom.dcmread(str(res))
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
@@ -126,6 +127,7 @@ class  Serversharedicom:
         user = str(con.recv(4096).decode('utf8'))
         time.sleep(1)
         org = str(con.recv(4096).decode('utf8'))
+        time.sleep(1)
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
@@ -146,7 +148,7 @@ class  Serversharedicom:
 
             print('Log added to Blockchain')
 
-            time.sleep(2)
+            time.sleep(1)
 
             
         con.close()     
