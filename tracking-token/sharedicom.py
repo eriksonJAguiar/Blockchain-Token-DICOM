@@ -155,7 +155,7 @@ class  Serversharedicom:
         if(self.__isValidProvider(hprovider)):
             while True:
                 print('Server started ...')
-                print('We have accepting connections')
+                print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
                 con, cliente = self.tcp.accept()
                 print('Connected by ', cliente)
                 start_new_thread(self.__server_socket,(con,)) 
