@@ -120,7 +120,8 @@ class  Serversharedicom:
             zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
             zf.write(newpath)
             zf.close()
-            os.rmdir(newpath)
+            dire = Path(newpath)
+            dire.rmdir()
 
             pathzip.append(os.path.join(newzip,zipname))
             tokens.append(token)
@@ -158,7 +159,8 @@ class  Serversharedicom:
 
             time.sleep(1)
 
-        os.rmdir(os.path.join(self.path,'shared-zip'))   
+        dire = Path(os.path.join(self.path,'shared-zip'))
+        dire.rmdir()   
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
