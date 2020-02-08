@@ -10,6 +10,7 @@ import hashlib
 import datetime
 import zipfile
 import requests
+import glob
 from pydicom.datadict import tag_for_keyword
 from pydicom.tag import Tag
 from pathlib import Path
