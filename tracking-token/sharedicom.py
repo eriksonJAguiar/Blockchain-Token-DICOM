@@ -105,21 +105,23 @@ class  Serversharedicom:
             token = sha.hexdigest()
             
             zipname = '%s.zip'%(token)
-            zf = zipfile.ZipFile(os.path.join(path_,zipname), "w")
-            newpath = os.path.join(path_,"shareFiles")
+            newpath = os.path.join(self.path,'shared')
             os.mkdir(newpath)
-            
-
+    
             for res in result:
                 image = pydicom.dcmread(str(res))
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
-                image.save_as(str(res))
-                copy2(str(res), newpath)
+                image.save_as(newpath)
             
-            zf.write(os.path.join(path_,"shareFiles"))
+            newzip = os.path.join(self.path,'shared-zip')
+            os.mkdir(newpath)
+            zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
+            zf.write(newpath)
             zf.close()
-            pathzip.append(os.path.join(newpath,zipname))
+            os.removedirs(newpath)
+
+            pathzip.append(os.path.join(newzip,zipname))
             tokens.append(token)
             
         
@@ -155,7 +157,7 @@ class  Serversharedicom:
 
             time.sleep(1)
 
-        os.removedirs(os.path.join(path_,"shareFiles"))   
+        os.removedirs(os.path.join(self.path,'shared-zip'))   
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
