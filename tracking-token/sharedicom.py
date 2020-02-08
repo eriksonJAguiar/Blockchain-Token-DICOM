@@ -179,7 +179,7 @@ class  Serversharedicom:
     #     sharefiles = readDicom(paths,amount)
 
     def audit(self,token,hprovider):
-        result = requests.get('http://%s:3000/api/readAccessLog'%(self.HOST), params={'tokenDicom':token, 'user': hprovider})
+        result = requests.get('http://%s:3000/api/readAccessLog'%(self.IPBC), params={'tokenDicom':token, 'user': hprovider})
 
         return result
 
