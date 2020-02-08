@@ -17,7 +17,6 @@ from pathlib import Path
 from shutil import make_archive
 from pydicom.datadict import DicomDictionary, keyword_dict
 from _thread import *
-from shutil import copy2
 
 class  Serversharedicom:
 
@@ -109,10 +108,12 @@ class  Serversharedicom:
             os.mkdir(newpath)
     
             for res in result:
+                fname = str(r).split('/')
+                fname = fname[len(fname)-1]
                 image = pydicom.dcmread(str(res))
                 new_tag = ((0x08,0x17))
                 image.add_new(new_tag,'CS',token) 
-                image.save_as(newpath)
+                image.save_as(os.path.join(newpath,fname))
             
             newzip = os.path.join(self.path,'shared-zip')
             os.mkdir(newpath)
