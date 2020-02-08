@@ -121,8 +121,7 @@ class  Serversharedicom:
                 image.save_as(os.path.join(newpath,fname))
                 zf.write(os.path.join(newpath,fname), arcname=fname)
             
-            #shutil.rmtree(newpath)
-            exit(1)
+            shutil.rmtree(newpath)
             pathzip.append(os.path.join(newzip,zipname))
             tokens.append(token)
             
