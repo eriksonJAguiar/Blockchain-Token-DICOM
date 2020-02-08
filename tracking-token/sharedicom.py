@@ -79,8 +79,7 @@ class  Serversharedicom:
             except:
                 print('%s File not register'%(dicomId))
                 exit(1)
-            
-        
+                
         print('Regiter Successful')
 
 
