@@ -105,7 +105,7 @@ class  Serversharedicom:
             
             zipname = '%s.zip'%(token)
             newpath = os.path.join(self.path,'shared')
-            os.mkdir(newpath)
+            os.makedirs(newpath, exist_ok=True)
     
             for res in result:
                 fname = str(r).split('/')
@@ -116,7 +116,7 @@ class  Serversharedicom:
                 image.save_as(os.path.join(newpath,fname))
             
             newzip = os.path.join(self.path,'shared-zip')
-            os.mkdir(newpath)
+            os.makedirs(newzip, exist_ok=True)
             zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
             zf.write(newpath)
             zf.close()
