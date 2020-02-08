@@ -92,7 +92,8 @@ class  Serversharedicom:
             rd = random.randint(0,len(paths)-1)
             path_ = paths[rd]
 
-            result = list(Path(path_).rglob("*.dcm"))
+            #result = list(Path(path_).rglob("*.dcm"))
+            result = glob.glob(os.path.join(path_,"*.dcm"))
             print(result)
             image = pydicom.dcmread(str(result[0]))
 
