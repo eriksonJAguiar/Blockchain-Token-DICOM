@@ -17,6 +17,7 @@ from pathlib import Path
 from shutil import make_archive
 from pydicom.datadict import DicomDictionary, keyword_dict
 from _thread import *
+import shutil
 
 class  Serversharedicom:
 
@@ -120,8 +121,7 @@ class  Serversharedicom:
             zf = zipfile.ZipFile(os.path.join(newzip,zipname), "w")
             zf.write(newpath)
             zf.close()
-            dire = Path(newpath)
-            dire.rmdir()
+            shutil.rmtree(newpath)
 
             pathzip.append(os.path.join(newzip,zipname))
             tokens.append(token)
@@ -159,8 +159,7 @@ class  Serversharedicom:
 
             time.sleep(1)
 
-        dire = Path(os.path.join(self.path,'shared-zip'))
-        dire.rmdir()   
+        shutil.rmtree(os.path.join(self.path,'shared-zip'))
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
