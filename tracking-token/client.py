@@ -6,6 +6,9 @@ if __name__ == "__main__":
 
     # Params:
     ### Request dicom images from blockchain network
-    print('Request stated')
-    client.requestDicom(1,'erikson','ICMC')
-    print('request finish')
+    
+    for i in range(30):
+        rd = random.randint(1,50)
+        print('Request stated for %i files'%(rd))
+        client.requestDicom(rd,'erikson','ICMC')
+        print('request finish')

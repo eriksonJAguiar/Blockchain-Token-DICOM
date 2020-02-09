@@ -165,7 +165,7 @@ class  Serversharedicom:
             process = psutil.Process(os.getpid())
             self.cpu.append(process.cpu_percent())
             self.memory.append(process.memory_percent())
-            self.times(self.time)
+            self.times.append(self.time)
             self.time +=1
             
         shutil.rmtree(os.path.join(self.path,'shared-zip'))
