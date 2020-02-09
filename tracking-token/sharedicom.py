@@ -18,6 +18,8 @@ from shutil import make_archive
 from pydicom.datadict import DicomDictionary, keyword_dict
 from _thread import *
 import shutil
+import pandas as pd
+import psutil
 
 class  Serversharedicom:
 
@@ -30,6 +32,10 @@ class  Serversharedicom:
         self.tcp.bind((self.HOST, self.PORT))
         self.tcp.listen(5)
         self.users = []
+        self.cpu = []
+        self.memory = []
+        self.times = []
+        self.time = 0
 
     
     def __isValidProvider(self,hprovider):
@@ -37,7 +43,6 @@ class  Serversharedicom:
         try:
             if (hprovider in self.users):
                 return True
-        
             result = requests.post('http://%s:3000/api/registerUser'%(self.IPBC), json={'org':'hprovider', 'user': hprovider, 'msp': 'HProviderMSP'})
         
             if(result.status_code == 200):
@@ -157,19 +162,33 @@ class  Serversharedicom:
 
             time.sleep(1)
 
+            process = psutil.Process(os.getpid())
+            self.cpu.append(process.cpu_percent())
+            self.memory.append(process.memory_percent())
+            self.times(self.time)
+            self.time +=1
+            
         shutil.rmtree(os.path.join(self.path,'shared-zip'))
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
         if(self.__isValidProvider(hprovider)):
-            while True:
-                print('Server started ...')
-                print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
-                con, cliente = self.tcp.accept()
-                print('Connected by ', cliente)
-                start_new_thread(self.__server_socket,(con,)) 
+            try:
+                while True:
+                    print('Server started ...')
+                    print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
+                    con, cliente = self.tcp.accept()
+                    print('Connected by ', cliente)
+                    start_new_thread(self.__server_socket,(con,)) 
+            except KeyboardInterrupt:
+                tcp.close()
+                tabela = pd.DataFrame()
+                tabela.insert(0, "Tempo", self.times)
+                tabela.insert(1, "Usage Memory", self.memory)
+                tabela.insert(2,"Usage CPU", self.cpu)
+                tabela.to_csv('../Results/Table_Performance_%s'%(datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")))
+        
             
-            tcp.close()
 
     #Local Path images
     def registerDicom(self,hprovider, examType):
