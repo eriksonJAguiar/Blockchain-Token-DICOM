@@ -47,8 +47,7 @@ def mensure(pid):
     latPeers = []
     latOderer = []
     latCouchs = []
-    date_file  = datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")
-    table = pd.DataFrame()
+    
     while psutil.pid_exists(pid):
         print('Read Latency ...')
         peers = []
@@ -83,15 +82,17 @@ def mensure(pid):
         latCouchs.append(statistics.mean(couch))
         time.sleep(1)
         iterTime += 1
-        table.insert(0, "Time", processTime)
-        table.insert(1, "Latency Socket", latSocketFile)
-        table.insert(2, "Latency API Blockchain", latAPIBC)
-        table.insert(3, "Latency Orderer", latOderer)
-        table.insert(4, "Latency Peers", latPeers)
-        table.insert(5, "Latency Couch", latCouchs)
-        table.to_csv('../Results/table_latency_%s' %(date_file), sep=';')
+    
 
     print('Finished Mensure ...')
+    table = pd.DataFrame()
+    table.insert(0, "Time", processTime)
+    table.insert(1, "Latency Socket", latSocketFile)
+    table.insert(2, "Latency API Blockchain", latAPIBC)
+    table.insert(3, "Latency Orderer", latOderer)
+    table.insert(4, "Latency Peers", latPeers)
+    table.insert(5, "Latency Couch", latCouchs)
+    table.to_csv('../Results/table_latency_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
     
 
 
