@@ -143,12 +143,12 @@ class  Serversharedicom:
     
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        amount = int(con.recv(1024).decode('utf8'))
-        time.sleep(1)
+        amount = pickle.loads(con.recv(4096))
+        sys.stdin.readline()
         user = str(con.recv(4096).decode('utf8'))
-        time.sleep(1)
+        sys.stdin.readline()
         org = str(con.recv(4096).decode('utf8'))
-        time.sleep(1)
+        sys.stdin.readline()
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
@@ -248,11 +248,12 @@ class Clientsharedicom:
         if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
-            tcp.send(str(amount).encode('utf8'))
-            time.sleep(1)
+            tcp.send(pickle.dumps(amount))
+            sys.stdin.readline()
             tcp.send(research.encode('utf8'))
-            time.sleep(1)
+            sys.stdin.readline()
             tcp.send(org.encode('utf8'))
+            sys.stdin.readline()
             fname = str(tcp.recv(1024).decode('utf8'))
             while(fname):
                 start_time_file = time.time()
