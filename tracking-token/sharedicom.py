@@ -174,7 +174,7 @@ class  Serversharedicom:
         tabela.insert(0, "Time", self.times)
         tabela.insert(1, "Usage Memory", self.memory)
         tabela.insert(2,"Usage CPU", self.cpu)
-        tabela.to_csv('../Results/table_Performance_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")))
+        tabela.to_csv('../Results/table_Performance_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")),sep=';')
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
@@ -276,5 +276,5 @@ class Clientsharedicom:
             tabela = pd.DataFrame()
             tabela.insert(0, "Time", self.time_file)
             tabela.insert(1, "Block Size (Kb)", self.block_size)
-            tabela.to_csv(os.path.join('../Results/table_sizeblock_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S"))))
+            tabela.to_csv(os.path.join('../Results/table_sizeblock_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S"))),sep=';')
             

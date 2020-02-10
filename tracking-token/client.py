@@ -9,7 +9,6 @@ pid = 0
 
 def runClient(ntimes):
     client = Clientsharedicom('10.62.9.185', 5001)
-
     pid = os.getpid()
     # Params:
     # Request dicom images from blockchain network
@@ -77,9 +76,9 @@ def mensure(pid):
     table.insert(3, "Latency Orderer", latOderer)
     table.insert(4, "Latency Peers", latPeers)
     table.insert(5, "Latency Couch", latCouchs)
-    table.to_csv('../Results/table_latency_%s' %(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")))
+    table.to_csv('../Results/table_latency_%s' %(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
 
 
 if __name__ == "__main__":
-    runClient(30)
+    start_new_thread(runClient, (1,))
     start_new_thread(mensure, (pid,))
