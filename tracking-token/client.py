@@ -97,6 +97,7 @@ def mensure(pid):
 
 
 if __name__ == "__main__":
-    #start_new_thread(runClient, (1,))
-    start_new_thread(mensure, (pid,))
-    runClient(1)
+    start_new_thread(runClient, (1,))
+    #start_new_thread(mensure, (pid,))
+    #runClient(1)
+    mensure(pid)

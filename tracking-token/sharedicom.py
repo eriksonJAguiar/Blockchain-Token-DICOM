@@ -144,8 +144,7 @@ class  Serversharedicom:
     
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        am = con.recv(1024)
-        amount = struct.unpack('!H',am)
+        amount = pickle.loads(con.recv(1024))
         time.sleep(1)
         user = str(con.recv(4096).decode('utf8'))
         time.sleep(1)
@@ -250,7 +249,7 @@ class Clientsharedicom:
         if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
-            tcp.send(struct.pack("!H", amount))
+            tcp.send(pickle.dumps(amount))
             time.sleep(1)
             tcp.send(research.encode('utf8'))
             time.sleep(1)
