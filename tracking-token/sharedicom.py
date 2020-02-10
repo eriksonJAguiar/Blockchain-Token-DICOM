@@ -133,12 +133,12 @@ class  Serversharedicom:
         
         return pathzip,tokens
 
-    def __mensure(self,process):
-        print('mensure ...')
-        self.cpu.append(process.cpu_percent())
-        self.memory.append(process.memory_percent())
-        self.times.append(self.time)
-        self.time +=1
+    # def __mensure(self,process):
+    #     print('mensure ...')
+    #     self.cpu.append(process.cpu_percent())
+    #     self.memory.append(process.memory_percent())
+    #     self.times.append(self.time)
+    #     self.time +=1
         
 
     
@@ -154,6 +154,7 @@ class  Serversharedicom:
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
             fname = filename.split('/')
+            print(fname)
             fname = fname[len(fname)-1]
             con.send(fname.encode('utf8'))
             with open(str(filename),"rb") as f: 
@@ -167,8 +168,12 @@ class  Serversharedicom:
             print('Done!')
             print('Sent File ...')
 
-            process = psutil.Process(os.getpid())
-            start_new_thread(self.__mensure, (process,))
+            # process = psutil.Process(os.getpid())
+            # start_new_thread(self.__mensure, (process,))
+            self.cpu.append(process.cpu_percent())
+            self.memory.append(process.memory_percent())
+            self.times.append(self.time)
+            self.time +=1
              
             requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': user,'tokenDicom':token, 'to':user, 'toOrganization': org})
             
