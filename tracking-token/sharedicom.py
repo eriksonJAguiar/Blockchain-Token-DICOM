@@ -153,11 +153,12 @@ class  Serversharedicom:
                     con.send(data)
                     data = f.read(1024)
 
+            
             print('Done!')
             print('Sent File ...')
-                
+             
             requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': user,'tokenDicom':token, 'to':user, 'toOrganization': org})
-
+            
             print('Log added to Blockchain')
 
             time.sleep(1)
@@ -169,6 +170,11 @@ class  Serversharedicom:
             self.time +=1
             
         shutil.rmtree(os.path.join(self.path,'shared-zip'))
+        tabela = pd.DataFrame()
+        tabela.insert(0, "Time", self.times)
+        tabela.insert(1, "Usage Memory", self.memory)
+        tabela.insert(2,"Usage CPU", self.cpu)
+        tabela.to_csv('../Results/table_Performance_%s'%(datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")))
         con.close()     
 
     def start_transfer_dicom(self,hprovider):
@@ -182,11 +188,7 @@ class  Serversharedicom:
                     start_new_thread(self.__server_socket,(con,)) 
             except KeyboardInterrupt:
                 tcp.close()
-                tabela = pd.DataFrame()
-                tabela.insert(0, "Tempo", self.times)
-                tabela.insert(1, "Usage Memory", self.memory)
-                tabela.insert(2,"Usage CPU", self.cpu)
-                tabela.to_csv('../Results/Table_Performance_%s'%(datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")))
+                
         
             
 
@@ -217,6 +219,8 @@ class Clientsharedicom:
         self.HOST = IP  
         self.PORT = PORT
         self.users = []
+        self.time_file = []
+        self.block_size = []
 
     def __isValidReseach(self,research):
         
@@ -245,6 +249,8 @@ class Clientsharedicom:
             tcp.send(org.encode('utf8'))
             fname = str(tcp.recv(1024).decode('utf8'))
             while(fname):
+                start_time_file = time.time()
+                size_block = 0
                 print('fname: %s'%(fname))
                 fpath = os.path.join('../SharedDicom',fname)
                 if not os.path.exists('../SharedDicom'):
@@ -252,14 +258,22 @@ class Clientsharedicom:
 
                 f = open(fpath, 'wb+')
                 l = tcp.recv(1024)
+                size_block += sys.getsizeof(l)
                 print('Recieve ...')
                 while (l):
                     f.write(l)
                     l = tcp.recv(1024)
+                    size_block += sys.getsizeof(l)
                         
                 print('Done ..')
+                self.time_file.append(time.time()-start_time_file)
+                self.block_size.append(size_block*0.001)
                 f.close()
                 fname = str(tcp.recv(1024).decode('utf8'))
                 time.sleep(2)
             
             tcp.close()
+            tabela = pd.DataFrame()
+            tabela.insert(0, "Time", self.time_file)
+            tabela.insert(1, "Block Size (Kb)", self.block_size)
+            tabela.to_csv('../Results/table_sizeBlock_%s'%(datetime.datetime.now().strftime("%m/%d/%Y_%H:%M:%S")))

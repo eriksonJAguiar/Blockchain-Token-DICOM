@@ -8,7 +8,8 @@ if __name__ == "__main__":
     ### Request dicom images from blockchain network
     
     for i in range(30):
-        rd = random.randint(1,50)
+        #rd = random.randint(1,50)
+        rd = 1
         print('Request stated for %i files'%(rd))
         client.requestDicom(rd,'erikson','ICMC')
         print('request finish')
