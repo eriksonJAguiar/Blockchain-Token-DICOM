@@ -143,7 +143,7 @@ class  Serversharedicom:
     
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        amount = pickle.loads(con.recv(4096))
+        amount = pickle.load(con.recv(1024))
         sys.stdin.readline()
         user = str(con.recv(4096).decode('utf8'))
         sys.stdin.readline()
@@ -248,7 +248,8 @@ class Clientsharedicom:
         if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
-            tcp.send(pickle.dumps(amount))
+            time.sleep(1)
+            tcp.send(pickle.dump(amount))
             sys.stdin.readline()
             tcp.send(research.encode('utf8'))
             sys.stdin.readline()
