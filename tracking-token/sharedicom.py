@@ -132,6 +132,15 @@ class  Serversharedicom:
         
         return pathzip,tokens
 
+    def __mensure(self,process):
+        print('mensure ...')
+        self.cpu.append(process.cpu_percent())
+        self.memory.append(process.memory_percent())
+        self.times.append(self.time)
+        self.time +=1
+        
+
+    
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
@@ -156,18 +165,15 @@ class  Serversharedicom:
             
             print('Done!')
             print('Sent File ...')
+
+            process = psutil.Process(os.getpid())
+            start_new_thread(self.__mensure, (process,))
              
             requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': user,'tokenDicom':token, 'to':user, 'toOrganization': org})
             
             print('Log added to Blockchain')
 
             time.sleep(1)
-
-            process = psutil.Process(os.getpid())
-            self.cpu.append(process.cpu_percent())
-            self.memory.append(process.memory_percent())
-            self.times.append(self.time)
-            self.time +=1
             
         shutil.rmtree(os.path.join(self.path,'shared-zip'))
         tabela = pd.DataFrame()
