@@ -20,6 +20,7 @@ from _thread import *
 import shutil
 import pandas as pd
 import psutil
+import struct
 
 class  Serversharedicom:
 
@@ -143,7 +144,8 @@ class  Serversharedicom:
     
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        amount = pickle.load(con.recv(1024))
+        am = con.recv(1024)
+        amount = struct.unpack('!H',am)
         sys.stdin.readline()
         user = str(con.recv(4096).decode('utf8'))
         sys.stdin.readline()
@@ -248,8 +250,7 @@ class Clientsharedicom:
         if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
-            time.sleep(1)
-            tcp.send(pickle.dump(amount))
+            tcp.send(struct.pack("!H", amount))
             sys.stdin.readline()
             tcp.send(research.encode('utf8'))
             sys.stdin.readline()
