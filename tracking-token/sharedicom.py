@@ -143,7 +143,7 @@ class  Serversharedicom:
     
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
-        amount = pickle.loads(con.recv(1024))
+        amount = int(con.recv(1024).decode('utf8'))
         time.sleep(1)
         user = str(con.recv(4096).decode('utf8'))
         time.sleep(1)
@@ -225,8 +225,6 @@ class Clientsharedicom:
         self.HOST = IP  
         self.PORT = PORT
         self.users = []
-        self.time_file = []
-        self.block_size = []
 
     def __isValidReseach(self,research):
         
@@ -245,10 +243,12 @@ class Clientsharedicom:
 
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def requestDicom(self,amount,research,org):
+        time_file = []
+        block_size = []
         if(self.__isValidReseach(research)):
             tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             tcp.connect((self.HOST, self.PORT))
-            tcp.send(pickle.dumps(amount))
+            tcp.send(str(amount).encode('utf8'))
             time.sleep(1)
             tcp.send(research.encode('utf8'))
             time.sleep(1)
@@ -272,15 +272,13 @@ class Clientsharedicom:
                     size_block += sys.getsizeof(l)
                         
                 print('Done ..')
-                self.time_file.append(time.time()-start_time_file)
-                self.block_size.append(size_block*0.001)
+                time_file.append(time.time()-start_time_file)
+                block_size.append(size_block*0.001)
                 f.close()
                 fname = str(tcp.recv(1024).decode('utf8'))
-                time.sleep(2)
+                time.sleep(1)
             
             tcp.close()
-            tabela = pd.DataFrame()
-            tabela.insert(0, "Time", self.time_file)
-            tabela.insert(1, "Block Size (Kb)", self.block_size)
-            tabela.to_csv(os.path.join('../Results/table_sizeblock_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S"))),sep=';')
+           
+        return(time_file, block_size)
             
