@@ -144,6 +144,7 @@ class Serversharedicom:
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
 
     def __server_socket(self, con):
+        time.sleep(1)
         cred = pickle.loads(con.recv(4096))
         amount = cred['amount']
         paths = self.__readPathDicom(self.path)
