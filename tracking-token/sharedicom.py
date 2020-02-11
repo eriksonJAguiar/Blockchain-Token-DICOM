@@ -133,12 +133,6 @@ class Serversharedicom:
 
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self, con):
-        # amount = pickle.loads(con.recv())
-        # time.sleep(1)
-        # user = con.recv().decode('utf8')
-        # time.sleep(1)
-        # org = con.recv().decode('utf8')
-        # time.sleep(1)
         cred = pickle.loads(con.recv(4096))
         amount = cred['amount']
         paths = self.__readPathDicom(self.path)
@@ -149,6 +143,7 @@ class Serversharedicom:
             file_info = {'fname': fname, 'fsize': os.path.getsize(filename)}
             con.send(pickle.dumps(file_info))
             with open(str(filename),"rb") as f: 
+                print('Send ...')
                 data = f.read(1024)
                 while data:
                     con.send(data)
@@ -263,7 +258,7 @@ class Clientsharedicom:
                 start_time_file = time.time()
                 
                 with open(fpath, "wb+") as f:
-                    print('fname: %s'%(fname))
+                    print('Recieve fname: %s'%(fname))
                     data = self.tcp.recv(1024)
                     while data:
                         data = self.tcp.recv(1024)
