@@ -195,8 +195,8 @@ class Serversharedicom:
         server.serve_forever()
 
     def start_transfer(self):
-        self.__start_transfer_socket()
         start_new_thread(self.__transfer_file_ftp_server, ())
+        self.__start_transfer_socket()
         
 
     # Local Path images
