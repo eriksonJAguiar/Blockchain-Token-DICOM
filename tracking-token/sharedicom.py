@@ -151,6 +151,7 @@ class  Serversharedicom:
                 data = f.read(1024)
                 print('Sending ...')
                 while(data):
+                    print('File ...')
                     con.send(data)
                     data = f.read(1024)
                     time.sleep(0.5)
