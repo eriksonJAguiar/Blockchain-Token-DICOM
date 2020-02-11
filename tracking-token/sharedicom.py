@@ -21,9 +21,6 @@ import shutil
 import pandas as pd
 import psutil
 import struct
-from pyftpdlib.authorizers import DummyAuthorizer
-from pyftpdlib.handlers import FTPHandler
-from pyftpdlib.servers import FTPServer
 from ftplib import FTP
 
 
