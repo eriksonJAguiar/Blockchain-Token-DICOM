@@ -140,7 +140,6 @@ class Serversharedicom:
         # org = con.recv().decode('utf8')
         # time.sleep(1)
         cred = pickle.loads(con.recv(4096))
-        print(cred)
         amount = cred['amount']
         paths = self.__readPathDicom(self.path)
         sharefiles, tokens = self.__readDicom(paths, amount)
@@ -154,6 +153,7 @@ class Serversharedicom:
                 while data:
                     con.send(data)
                     data = f.read(1024)
+                    time.sleep(0.01)
 
 
             print('Done!')
@@ -264,7 +264,7 @@ class Clientsharedicom:
                 
                 with open(fpath, "wb+") as f:
                     print('fname: %s'%(fname))
-                    
+                    data = self.tcp.recv(1024)
                     while data:
                         data = self.tcp.recv(1024)
                         f.write(data)
