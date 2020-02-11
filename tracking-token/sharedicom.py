@@ -223,6 +223,8 @@ class Clientsharedicom:
         self.HOST = IP  
         self.PORT = PORT
         self.users = []
+        self.tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.tcp.connect((self.HOST, self.PORT))
 
     def __isValidReseach(self,research):
         
@@ -243,16 +245,15 @@ class Clientsharedicom:
         time_file = []
         block_size = []
         if(self.__isValidReseach(research)):
-            tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-            tcp.connect((self.HOST, self.PORT))
+           
             # tcp.send(pickle.dumps(amount))
             # time.sleep(1)
             # tcp.send(research.encode('utf8'))
             # tcp.sleep(1)
             # tcp.send(org.encode('utf8'))
             json_credentials = {'amount': amount, 'user': research, 'org': org}
-            tcp.sendall(pickle.dumps(json_credentials))
-            file_info = pickle.loads(tcp.recv(1024))
+            self.tcp.sendall(pickle.dumps(json_credentials))
+            file_info = pickle.loads(self.tcp.recv(1024))
             while file_info:
                 fname = file_info['fname']
                 fsize = file_info['fsize']
@@ -266,7 +267,7 @@ class Clientsharedicom:
                     print('fname: %s'%(fname))
                     
                     while rsize <= fsize:
-                        data = tcp.recv(1024)
+                        data = self.tcp.recv(1024)
                         f.write(data)
                         rsize += len(data)
                     
@@ -275,7 +276,7 @@ class Clientsharedicom:
                 print('Done ..')
                 time_file.append(time.time()-start_time_file)
                 block_size.append(fsize*0.001)
-                file_info = pickle.loads(tcp.recv(1024))
+                file_info = pickle.loads(self.tcp.recv(1024))
                 time.sleep(1)
                 
 
@@ -300,7 +301,7 @@ class Clientsharedicom:
                 print('Done ..')
                 time_file.append(time.time()-start_time_file)
                 block_size.append(size_block*0.001)
-                fname = str(tcp.recv().decode('utf8'))
+                fname = str(self.tcp.recv(1024).decode('utf8'))
                 time.sleep(1)
             
             tcp.close()
