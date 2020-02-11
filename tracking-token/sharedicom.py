@@ -192,7 +192,7 @@ class Serversharedicom:
 
     def start_transfer(self):
         start_new_thread(self.__transfer_file_ftp_server, ())
-        start_new_thread(self.__start_transfer_socket, ())
+        self.__start_transfer_socket()
 
     # Local Path images
     def registerDicom(self, hprovider, examType):
