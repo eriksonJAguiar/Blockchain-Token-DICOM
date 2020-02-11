@@ -177,20 +177,21 @@ class Serversharedicom:
         tabela.insert(1, "Usage Memory", self.memory)
         tabela.insert(2,"Usage CPU", self.cpu)
         tabela.to_csv('../Results/table_Performance_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")),sep=';')
-        con.close()     
+        con.close()
+        con.destroy()     
 
     def start_transfer_dicom(self,hprovider):
         if(self.__isValidProvider(hprovider)):
             try:
-                while True:
-                    print('Server started ...')
-                    print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
-                    # con, cliente = self.tcp.accept()
-                    # print('Connected by ', cliente)
-                    context = zmq.Context()
-                    con = context.socket(zmq.REP)
-                    con.bind("tcp://{0}:{1}".format(self.HOST,self.PORT))
-                    start_new_thread(self.__server_socket,(con,)) 
+                context = zmq.Context()
+                con = context.socket(zmq.REP)
+                con.bind("tcp://{0}:{1}".format(self.HOST,self.PORT))
+                # while True:
+                print('Server started ...')
+                print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
+                # con, cliente = self.tcp.accept()
+                # print('Connected by ', cliente)
+                start_new_thread(self.__server_socket,(con,)) 
             except KeyboardInterrupt:
                 tcp.close()
                 
