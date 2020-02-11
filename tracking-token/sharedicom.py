@@ -248,17 +248,17 @@ class Clientsharedicom:
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
-            fpath = os.path.join('../SharedDicom', fname)
-            os.makedirs('../SharedDicom', exist_ok=True)
-            ftp = FTP('')
+            ftp = FTP()
             ftp.connect('10.62.9.185', 1026)
-            ftp.login()
-            ftp.cwd('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/shared-zip')
+            ftp.login(user='user', passwd = '12345')
+            ftp.cwd('../SharedDicom')
             ftp.retrlines('LIST')
             for filename in files:
                 # start_time_file = time.time()
                 fname = filename.split('/')
                 fname = fname[len(fname)-1]
+                fpath = os.path.join('../SharedDicom', fname)
+                os.makedirs('../SharedDicom', exist_ok=True)
                 localfile = open(os.path.join('../SharedDicom', fname), 'wb')
                 ftp.retrbinary('RETR ' + fname, localfile.write, 1024)
                 localfile.close()
