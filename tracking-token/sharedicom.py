@@ -153,7 +153,9 @@ class  Serversharedicom:
                 while(data):
                     con.send(data)
                     data = f.read(1024)
-                    time.sleep(1)
+                    time.sleep(0.5)
+                
+                f.close()
 
             
             print('Done!')
@@ -171,12 +173,6 @@ class  Serversharedicom:
             print('Log added to Blockchain')
 
             time.sleep(1)
-
-            process = psutil.Process(os.getpid())
-            self.cpu.append(process.cpu_percent())
-            self.memory.append(process.memory_percent())
-            self.times.append(self.time)
-            self.time +=1
             
         shutil.rmtree(os.path.join(self.path,'shared-zip'))
         tabela = pd.DataFrame()
@@ -272,11 +268,10 @@ class Clientsharedicom:
                     f.write(l)
                     l = tcp.recv(1024)
                     size_block += sys.getsizeof(l)
-                        
+                f.close()        
                 print('Done ..')
                 time_file.append(time.time()-start_time_file)
                 block_size.append(size_block*0.001)
-                f.close()
                 fname = str(tcp.recv(1024).decode('utf8'))
                 time.sleep(1)
             

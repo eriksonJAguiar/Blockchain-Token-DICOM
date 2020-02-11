@@ -22,7 +22,7 @@ if __name__ == "__main__":
         latOderer = []
         latCouchs = []
 
-        pid = sys.argv[0]
+        pid = int(sys.argv[0])
 
         while psutil.pid_exists(pid):
                 print('Read Latency ...')
