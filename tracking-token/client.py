@@ -16,10 +16,9 @@ if __name__ == "__main__":
     block_size: list = []
     # Params:
     # Request dicom images from blockchain network
-    for j in range(2):
-        for j in range(1):
-            #rd = random.randint(1,50)
-            rd = 1
+    for j in range(30):
+        for i in range(10):
+            rd = i*2
             client = Clientsharedicom('10.62.9.185', 5001)
             print('Request stated for %i files' % (rd))
             client.requestDicom(rd, 'erikson', 'ICMC')
