@@ -189,7 +189,7 @@ class Serversharedicom:
                     # print('Connected by ', cliente)
                     context = zmq.Context()
                     con = context.socket(zmq.REP)
-                    con.bind("tcp://*:5001")
+                    con.bind("tcp://*:{0}".format(self.PORT))
                     start_new_thread(self.__server_socket,(con,)) 
             except KeyboardInterrupt:
                 tcp.close()

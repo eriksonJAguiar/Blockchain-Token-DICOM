@@ -12,7 +12,7 @@ from tcp_latency import measure_latency
 
 if __name__ == "__main__":
     print(os.getpid())
-    client = Clientsharedicom('10.62.9.185', 5001)
+    client = Clientsharedicom('10.62.9.185', 5000)
     time_file: list = []
     block_size: list = []
     # Params:
