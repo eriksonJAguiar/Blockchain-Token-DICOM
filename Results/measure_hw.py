@@ -65,8 +65,6 @@ if __name__ == "__main__":
     start = time.time()
     finish = 0
 
-    fname = datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")
-
     while psutil.pid_exists(pid) and finish <= 4:
         processTime.append(times)
         processCpu.append(mensure_cpu(pids))
@@ -80,7 +78,7 @@ if __name__ == "__main__":
         table.insert(0, "Time", processTime)
         table.insert(1, "Usage CPU", processCpu)
         table.insert(2, "Usage Memory", processMem)
-        with atomic_overwrite('../Results/table_hw_%s.csv' %(fname)) as f:
+        with atomic_overwrite('../Results/table_hw.csv') as f:
             table.to_csv(f, sep=';')
 
 
