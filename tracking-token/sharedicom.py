@@ -148,11 +148,11 @@ class  Serversharedicom:
             fname = fname[len(fname)-1]
             con.send(fname.encode('utf8'))
             with open(str(filename),"rb") as f: 
-                data = f.read(4096)
+                data = f.read(1024)
                 print('Sending ...')
                 while(data):
                     con.send(data)
-                    data = f.read(4096)
+                    data = f.read(1024)
                     time.sleep(1)
 
             
