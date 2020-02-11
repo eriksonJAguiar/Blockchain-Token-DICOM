@@ -21,7 +21,10 @@ import shutil
 import pandas as pd
 import psutil
 import struct
-import zmq
+from pyftpdlib.authorizers import DummyAuthorizer
+from pyftpdlib.handlers import FTPHandler
+from pyftpdlib.servers import FTPServer
+from ftplib import FTP
 
 
 class Serversharedicom:
@@ -97,7 +100,6 @@ class Serversharedicom:
         for i in range(amount):
             rd = random.randint(0, len(paths)-1)
             path_ = paths[rd]
-
             # result = list(Path(path_).rglob("*.dcm"))
             result = glob.glob(os.path.join(path_, "*.dcm"))
             image = pydicom.dcmread(str(result[0]))
@@ -137,183 +139,129 @@ class Serversharedicom:
         self.cpu.append(psutil.cpu_percent())
         self.memory.append(a['used']/1073741824)
         self.times.append(self.time)
-        self.time +=1
-        self.thr.kill()
-        
-    
+        self.time += 1
+
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
+
     def __server_socket(self, con):
         cred = pickle.loads(con.recv(4096))
         amount = cred['amount']
         paths = self.__readPathDicom(self.path)
         sharefiles, tokens = self.__readDicom(paths, amount)
         con.sendall(pickle.dumps(sharefiles))
-        for filename, token in zip(sharefiles, tokens):
-            fname = filename.split('/')
-            fname = fname[len(fname)-1]
-            #file_info = {'fname': fname, 'fsize': os.path.getsize(filename)}
-            #con.send(pickle.dumps(file_info))
-            with open(str(filename),"rb") as f: 
-                print('Send ...')
-                data = f.read(1024)
-                while data:
-                    con.send(data)
-                    data = f.read(1024)
-                    time.sleep(0.001)
-                
-                f.close()
 
+        self.__mensure()
 
-            print('Done!')
-            print('Sent File ...')
-
-            #process = psutil.Process(os.getpid())
-            self.thr = start_new_thread(self.__mensure, ())
-            
-             
-            requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': cred['user'],'tokenDicom':token, 'to': cred['user'], 'toOrganization': cred['org']})
-            
+        for tk in tokens:
+            requests.post('http://%s:3000/api/shareDicom' % (self.IPBC), json={
+                          'user': cred['user'], 'tokenDicom': tk, 'to': cred['user'], 'toOrganization': cred['org']})
             print('Log added to Blockchain')
 
-            time.sleep(1)
-            
-        shutil.rmtree(os.path.join(self.path,'shared-zip'))
         tabela = pd.DataFrame()
         tabela.insert(0, "Time", self.times)
         tabela.insert(1, "Usage Memory", self.memory)
-        tabela.insert(2,"Usage CPU", self.cpu)
-        tabela.to_csv('../Results/table_Performance_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")),sep=';')
-        con.close() 
+        tabela.insert(2, "Usage CPU", self.cpu)
+        tabela.to_csv('../Results/table_Performance_%s.csv' %
+                      (datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
+        con.close()
 
-    def start_transfer_dicom(self,hprovider):
-        if(self.__isValidProvider(hprovider)):
-            try:
-                while True:
-                    print('Server started ...')
-                    print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
-                    con, cliente = self.tcp.accept()
-                    print('Connected by ', cliente)
-                    start_new_thread(self.__server_socket,(con,)) 
-            except KeyboardInterrupt:
-                tcp.close()
-                
-        
-            
+    def __start_transfer_socket(self):
+        try:
+            while True:
+                print('Server started ...')
+                print('We have accepting connections in %s:%s' %
+                      (self.HOST, self.PORT))
+                con, cliente = self.tcp.accept()
+                print('Connected by ', cliente)
+                start_new_thread(self.__server_socket, (con,))
+        except KeyboardInterrupt:
+            tcp.close()
+
+    def __transfer_file_ftp_server(self):
+        authorizer = DummyAuthorizer()
+        authorizer.add_user("user", "12345", os.path.join(
+            self.path, 'shared-zip'), perm="elradfmw")
+        authorizer.add_anonymous(os.path.join(
+            self.path, 'shared-zip'), perm="elradfmw")
+
+        handler = FTPHandler
+        handler.authorizer = authorizer
+
+        server = FTPServer((self.HOST, 1026), handler)
+        server.serve_forever()
 
     # Local Path images
-    def registerDicom(self,hprovider, examType):
+    def registerDicom(self, hprovider, examType):
         try:
             if(self.__isValidProvider(hprovider)):
                 paths = self.__readPathDicom(self.path)
-                regs = self.__readAllDicom(paths,hprovider,examType)
+                regs = self.__readAllDicom(paths, hprovider, examType)
                 return True
-            
+
             return False
         except:
             print('Error')
 
-    # def shareDicom(path,amount):
-    #     paths = __readPathDicom(path)
-    #     sharefiles = readDicom(paths,amount)
 
-    def audit(self,token,hprovider):
-        result = requests.get('http://%s:3000/api/readAccessLog'%(self.IPBC), params={'tokenDicom':token, 'user': hprovider})
+    def audit(self, token, hprovider):
+        result = requests.get('http://%s:3000/api/readAccessLog' %
+                              (self.IPBC), params={'tokenDicom': token, 'user': hprovider})
 
         return result
 
+
 class Clientsharedicom:
 
-    def __init__(self,IP,PORT):
-        self.HOST = IP  
+    def __init__(self, IP, PORT):
+        self.HOST = IP
         self.PORT = PORT
         self.users = []
         self.tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.tcp.connect((self.HOST, self.PORT))
 
-    def __isValidReseach(self,research):
-        
+    def __isValidReseach(self, research):
+
         if (research in self.users):
             return True
-        
-        result = requests.post('http://%s:3000/api/registerUser'%(self.HOST), json={'org':'research', 'user':research, 'msp': 'ResearchMSP'})
-        
+
+        result = requests.post('http://%s:3000/api/registerUser' % (self.HOST), json={
+                               'org': 'research', 'user': research, 'msp': 'ResearchMSP'})
+
         if(result.status_code == 200):
             self.users.append(research)
             return True
-        
 
         return False
-        
+
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
-    def requestDicom(self,amount,research,org):
+    def requestDicom(self, amount, research, org):
         time_file = []
         block_size = []
+        ftp = FTP('')
+        ftp.connect('10.62.9.185', 1026)
+        ftp.login()
+        ftp.cwd('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/shared-zip')
+        ftp.retrlines('LIST')
         if(self.__isValidReseach(research)):
-           
-            # tcp.send(pickle.dumps(amount))
-            # time.sleep(1)
-            # tcp.send(research.encode('utf8'))
-            # tcp.sleep(1)
-            # tcp.send(org.encode('utf8'))
             json_credentials = {'amount': amount, 'user': research, 'org': org}
-            print(json_credentials)
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
+            self.tcp.close()
+            fpath = os.path.join('../SharedDicom', fname)
+            os.makedirs('../SharedDicom', exist_ok=True)
             for filename in files:
-                # fname = file_info['fname']
-                # fsize = file_info['fsize']
+                # start_time_file = time.time()
                 fname = filename.split('/')
                 fname = fname[len(fname)-1]
-                buffsize = 0
-                fpath = os.path.join('../SharedDicom',fname)
-                os.makedirs('../SharedDicom', exist_ok=True)
-                 
-                start_time_file = time.time()
-                
-                with open(fpath, "wb+") as f:
-                    print('Recieve fname: %s'%(fname))
-                    data = self.tcp.recv(1024)
-                    buffsize += len(data)
-                    while data:
-                        data = self.tcp.recv(1024)
-                        f.write(data)
-                        buffsize += len(data)
-                    
-                    f.close()
-                
+                localfile = open(os.path.join('../SharedDicom', fname), 'wb')
+                ftp.retrbinary('RETR ' + fname, localfile.write, 1024)
+                ftp.quit()
+                localfile.close()
                 print('Done ..')
-                time_file.append(time.time()-start_time_file)
-                block_size.append(buffsize*0.001)
-                
-                # file_info = pickle.loads(self.tcp.recv(1024))
-                time.sleep(1)
-                
-
-
-            # while(fname):
-            #     start_time_file = time.time()
-            #     size_block = 0
-            #     print('fname: %s'%(fname))
-            #     fpath = os.path.join('../SharedDicom',fname)
-            #     if not os.path.exists('../SharedDicom'):
-            #         os.mkdir('../SharedDicom')
-
-            #     f = open(fpath, 'wb+')
-            #     l = tcp.recv(1024)
-            #     size_block += sys.getsizeof(l)
-            #     print('Recieve ...')
-            #     while (l):
-            #         f.write(l)
-            #         l = tcp.recv(1024)
-            #         size_block += sys.getsizeof(l)
-            #     f.close()        
-                # print('Done ..')
                 # time_file.append(time.time()-start_time_file)
-                # block_size.append(size_block*0.001)
-                # fname = str(self.tcp.recv(1024).decode('utf8'))
+                # block_size.append(buffsize*0.001)
+
                 # time.sleep(1)
-            self.tcp.close()
-            sys.stdout.flush()
-           
-        return(time_file, block_size)
             
+
+        # return(time_file, block_size)

@@ -16,15 +16,15 @@ if __name__ == "__main__":
     block_size: list = []
     # Params:
     # Request dicom images from blockchain network
-    for j in range(30):
+    for j in range(1):
         for j in range(1):
             #rd = random.randint(1,50)
             rd = 1
             client = Clientsharedicom('10.62.9.185', 5001)
             print('Request stated for %i files' % (rd))
             tm, block = client.requestDicom(rd, 'erikson', 'ICMC')
-            time_file = tm
-            block_size = block
+            time_file += tm
+            block_size += block
             print('request finish')
 
     tabela = pd.DataFrame()
