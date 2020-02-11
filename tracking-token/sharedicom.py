@@ -147,7 +147,7 @@ class Serversharedicom:
         paths = self.__readPathDicom(self.path)
         sharefiles, tokens = self.__readDicom(paths, amount)
         con.sendall(pickle.dumps(sharefiles))
-
+        com.close()
         self.__mensure()
 
         for tk in tokens:
@@ -162,9 +162,9 @@ class Serversharedicom:
         tabela.to_csv('../Results/table_Performance_%s.csv' %
                       (datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
         
-        delfile = pickle.loads(con.recv(1024))
-        if delfile:
-            shutil.rmtree(os.path.join(self.path,'shared-zip'))
+        # delfile = pickle.loads(con.recv(1024))
+        # if delfile:
+        # shutil.rmtree(os.path.join(self.path,'shared-zip'))
         con.close()
 
     def start_transfer_dicom(self):
@@ -178,21 +178,8 @@ class Serversharedicom:
         except KeyboardInterrupt:
             tcp.close()
 
-    def __transfer_file_ftp_server(self):
-        authorizer = DummyAuthorizer()
-        authorizer.add_user("user", "12345", os.path.join(
-            self.path, 'shared-zip'), perm="elradfmw")
-        authorizer.add_anonymous(os.path.join(
-            self.path, 'shared-zip'), perm="elradfmw")
-
-        handler = FTPHandler
-        handler.authorizer = authorizer
-
-        server = FTPServer((self.HOST, 1026), handler)
-        server.serve_forever()
-
+    
     def start_transfer(self):
-        start_new_thread(self.__transfer_file_ftp_server, ())
         self.start_transfer_dicom()
         
 
@@ -248,19 +235,19 @@ class Clientsharedicom:
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
+            os.makedirs('../SharedDicom', exist_ok=True)
             ftp = FTP()
             ftp.connect('10.62.9.185', 1026)
             ftp.login(user='user', passwd = '12345')
-            ftp.cwd('../SharedDicom')
-            ftp.retrlines('LIST')
+            ftp.cwd('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/shared-zip/')
+            #ftp.retrlines('LIST')
             for filename in files:
                 # start_time_file = time.time()
                 fname = filename.split('/')
                 fname = fname[len(fname)-1]
                 fpath = os.path.join('../SharedDicom', fname)
-                os.makedirs('../SharedDicom', exist_ok=True)
                 localfile = open(os.path.join('../SharedDicom', fname), 'wb')
-                ftp.retrbinary('RETR ' + fname, localfile.write, 1024)
+                ftp.retrbinary('STOR ' + fname, localfile.write, 1024)
                 localfile.close()
                 print('Done ..')
                 # time_file.append(time.time()-start_time_file)
