@@ -20,6 +20,7 @@ latCouchs = []
 def mensure_latency():
 
     print('Read Latency ...')
+    server_hostname = '10.62.9.185'
     peers = []
     couch = []
     processTime.append(iterTime)
@@ -60,11 +61,17 @@ if __name__ == "__main__":
     server_hostname = '10.62.9.185'
 
     print("Connecting to {0}".format(server_hostname))
-    
+
     pid = int(sys.argv[1])
     
-    while psutil.pid_exists(pid):
+    start = time.time()
+    finish = 0
+
+    while psutil.pid_exists(pid) and finish <= 4:
+            processTime.append(iterTime)
             measure_latency()
+            iterTime += 1
+            finish += int((time.time() - start)/3600)
 
     print('Finished Mensure ...')
     table = pd.DataFrame()

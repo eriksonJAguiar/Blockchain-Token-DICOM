@@ -38,10 +38,10 @@ def mensure_mem(pids):
 
 def get_pids(ports):
     pids = []
-    pcss = psutil.psutil.net_connections()
+    pcss = psutil.net_connections()
     for p in pcss:
         if p.laddr[1] in ports:
-            pids.append(p.laddr[1])
+            pids.append(p.pid)
 
     return pids
     
@@ -55,14 +55,16 @@ if __name__ == "__main__":
 
     pids = get_pids(ports)
     
+    start = time.time()
+    finish = 0
 
-    while psutil.pid_exists(pid):
+    while psutil.pid_exists(pid) and finish <= 4:
         processTime.append(times)
         processCpu.append(mensure_cpu(pids))
         m = start_new_thread(mensure_mem, (pids,))
         processMem.append(m)
-        time.sleep(1)
         times += 1
+        finish += int((time.time() - start)/3600)
 
     print('Finished Mensure ...')
     table = pd.DataFrame()
