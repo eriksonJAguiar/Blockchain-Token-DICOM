@@ -144,7 +144,7 @@ class Serversharedicom:
         paths = self.__readPathDicom(self.path)
         sharefiles, tokens = self.__readDicom(paths, amount)
         con.sendall(pickle.dumps(sharefiles))
-        com.close()
+        con.close()
         self.__mensure()
 
         for tk in tokens:
@@ -232,29 +232,23 @@ class Clientsharedicom:
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
+            self.tcp.close()
             os.makedirs('../SharedDicom', exist_ok=True)
             ftp = FTP()
             ftp.connect('10.62.9.185', 1026)
             ftp.login(user='user', passwd = '12345')
-            ftp.cwd('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/shared-zip/')
-            #ftp.retrlines('LIST')
+            ftp.cwd('shared-zip')
             for filename in files:
                 # start_time_file = time.time()
                 fname = filename.split('/')
                 fname = fname[len(fname)-1]
                 fpath = os.path.join('../SharedDicom', fname)
-                localfile = open(os.path.join('../SharedDicom', fname), 'wb')
-                ftp.retrbinary('STOR ' + fname, localfile.write, 1024)
-                localfile.close()
+                with open(fpath, 'wb') as f:
+                    ftp.retrbinary('RETR %s' % fname, f.write)
                 print('Done ..')
                 # time_file.append(time.time()-start_time_file)
                 # block_size.append(buffsize*0.001)
-
                 # time.sleep(1)
             ftp.quit()
-            time.sleep(1)
-            self.tcp.send(pickle.dumps(True))
-            
-            self.tcp.close()
 
         # return(time_file, block_size)
