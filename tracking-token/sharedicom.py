@@ -153,7 +153,7 @@ class  Serversharedicom:
                 while(data):
                     con.send(data)
                     data = f.read(4096)
-                    time.sleep(0.5)
+                    time.sleep(1)
 
             
             print('Done!')
