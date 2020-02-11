@@ -42,7 +42,6 @@ class Serversharedicom:
         self.memory = []
         self.times = []
         self.time = 0
-        self.thr = None
 
     def __isValidProvider(self, hprovider):
 
@@ -120,13 +119,13 @@ class Serversharedicom:
             zf = zipfile.ZipFile(os.path.join(newzip, zipname), "w")
 
             for res in result:
-                fname = str(res).split('/')
-                fname = fname[len(fname)-1]
-                image = pydicom.dcmread(str(res))
-                new_tag = ((0x08, 0x17))
-                image.add_new(new_tag, 'CS', token)
-                image.save_as(os.path.join(newpath, fname))
-                zf.write(os.path.join(newpath, fname), arcname=fname)
+                    fname = str(res).split('/')
+                    fname = fname[len(fname)-1]
+                    image = pydicom.dcmread(str(res))
+                    new_tag = ((0x08, 0x17))
+                    image.add_new(new_tag, 'CS', token)
+                    image.save_as(os.path.join(newpath, fname))
+                    zf.write(os.path.join(newpath, fname), arcname=fname)
 
             shutil.rmtree(newpath)
             pathzip.append(os.path.join(newzip, zipname))
@@ -142,9 +141,7 @@ class Serversharedicom:
         self.time += 1
 
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
-
     def __server_socket(self, con):
-        time.sleep(1)
         cred = pickle.loads(con.recv(4096))
         amount = cred['amount']
         paths = self.__readPathDicom(self.path)
@@ -170,15 +167,14 @@ class Serversharedicom:
             shutil.rmtree(os.path.join(self.path,'shared-zip'))
         con.close()
 
-    def __start_transfer_socket(self):
+    def start_transfer_dicom(self):
         try:
-            while True:
+             while True:
                 print('Server started ...')
-                print('We have accepting connections in %s:%s' %
-                      (self.HOST, self.PORT))
+                print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
                 con, cliente = self.tcp.accept()
                 print('Connected by ', cliente)
-                self.__server_socket(con)
+                start_new_thread(self.__server_socket,(con,)) 
         except KeyboardInterrupt:
             tcp.close()
 
@@ -197,7 +193,7 @@ class Serversharedicom:
 
     def start_transfer(self):
         start_new_thread(self.__transfer_file_ftp_server, ())
-        self.__start_transfer_socket()
+        self.start_transfer_dicom()
         
 
     # Local Path images
@@ -247,32 +243,33 @@ class Clientsharedicom:
     def requestDicom(self, amount, research, org):
         time_file = []
         block_size = []
-        ftp = FTP('')
-        ftp.connect('10.62.9.185', 1026)
-        ftp.login()
-        ftp.cwd('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/shared-zip')
-        ftp.retrlines('LIST')
+        
         if(self.__isValidReseach(research)):
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
             fpath = os.path.join('../SharedDicom', fname)
             os.makedirs('../SharedDicom', exist_ok=True)
+            ftp = FTP('')
+            ftp.connect('10.62.9.185', 1026)
+            ftp.login()
+            ftp.cwd('/media/erjulioaguiar/DFE1-F19A/DICOM_TCIA/shared-zip')
+            ftp.retrlines('LIST')
             for filename in files:
                 # start_time_file = time.time()
                 fname = filename.split('/')
                 fname = fname[len(fname)-1]
                 localfile = open(os.path.join('../SharedDicom', fname), 'wb')
                 ftp.retrbinary('RETR ' + fname, localfile.write, 1024)
-                ftp.quit()
                 localfile.close()
                 print('Done ..')
                 # time_file.append(time.time()-start_time_file)
                 # block_size.append(buffsize*0.001)
 
                 # time.sleep(1)
-            
-            tcp.send(pickle.dumps(True))
+            ftp.quit()
+            time.sleep(1)
+            self.tcp.send(pickle.dumps(True))
             
             self.tcp.close()
 
