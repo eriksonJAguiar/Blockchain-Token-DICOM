@@ -163,6 +163,10 @@ class Serversharedicom:
         tabela.insert(2, "Usage CPU", self.cpu)
         tabela.to_csv('../Results/table_Performance_%s.csv' %
                       (datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
+        
+        delfile = pickle.loads(con.recv(1024))
+        if delfile:
+            shutil.rmtree(os.path.join(self.path,'shared-zip'))
         con.close()
 
     def __start_transfer_socket(self):
@@ -191,8 +195,9 @@ class Serversharedicom:
         server.serve_forever()
 
     def start_transfer(self):
-        start_new_thread(self.__transfer_file_ftp_server, ())
         self.__start_transfer_socket()
+        start_new_thread(self.__transfer_file_ftp_server, ())
+        
 
     # Local Path images
     def registerDicom(self, hprovider, examType):
@@ -250,7 +255,6 @@ class Clientsharedicom:
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
-            self.tcp.close()
             fpath = os.path.join('../SharedDicom', fname)
             os.makedirs('../SharedDicom', exist_ok=True)
             for filename in files:
@@ -267,5 +271,8 @@ class Clientsharedicom:
 
                 # time.sleep(1)
             
+            tcp.send(pickle.dumps(True))
+            
+            self.tcp.close()
 
         # return(time_file, block_size)

@@ -22,13 +22,11 @@ if __name__ == "__main__":
             rd = 1
             client = Clientsharedicom('10.62.9.185', 5001)
             print('Request stated for %i files' % (rd))
-            tm, block = client.requestDicom(rd, 'erikson', 'ICMC')
-            time_file += tm
-            block_size += block
+            client.requestDicom(rd, 'erikson', 'ICMC')
             print('request finish')
 
-    tabela = pd.DataFrame()
-    tabela.insert(0, "Time", time_file)
-    tabela.insert(1, "Block Size (Kb)", block_size)
-    tabela.to_csv(os.path.join('../Results/table_sizeblock_%s.csv' %
-                               (datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S"))), sep=';')
+    # tabela = pd.DataFrame()
+    # tabela.insert(0, "Time", time_file)
+    # tabela.insert(1, "Block Size (Kb)", block_size)
+    # tabela.to_csv(os.path.join('../Results/table_sizeblock_%s.csv' %
+    #                            (datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S"))), sep=';')
