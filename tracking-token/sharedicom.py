@@ -249,7 +249,7 @@ class Clientsharedicom:
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.sendall(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
-            for file in files:
+            for filename in files:
                 # fname = file_info['fname']
                 # fsize = file_info['fsize']
                 fname = filename.split('/')
@@ -297,11 +297,11 @@ class Clientsharedicom:
             #         l = tcp.recv(1024)
             #         size_block += sys.getsizeof(l)
             #     f.close()        
-                print('Done ..')
-                time_file.append(time.time()-start_time_file)
-                block_size.append(size_block*0.001)
-                fname = str(self.tcp.recv(1024).decode('utf8'))
-                time.sleep(1)
+                # print('Done ..')
+                # time_file.append(time.time()-start_time_file)
+                # block_size.append(size_block*0.001)
+                # fname = str(self.tcp.recv(1024).decode('utf8'))
+                # time.sleep(1)
             
             tcp.close()
            
