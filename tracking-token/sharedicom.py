@@ -133,26 +133,28 @@ class Serversharedicom:
 
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self, con):
-        amount = pickle.loads(con.recv())
-        time.sleep(1)
-        user = con.recv().decode('utf8')
-        time.sleep(1)
-        org = con.recv().decode('utf8')
-        time.sleep(1)
+        # amount = pickle.loads(con.recv())
+        # time.sleep(1)
+        # user = con.recv().decode('utf8')
+        # time.sleep(1)
+        # org = con.recv().decode('utf8')
+        # time.sleep(1)
+        cred = pickle.loads(con.recv(4096))
+        print(cred)
+        amount = cred['amount']
         paths = self.__readPathDicom(self.path)
         sharefiles, tokens = self.__readDicom(paths, amount)
         for filename, token in zip(sharefiles, tokens):
             fname = filename.split('/')
             fname = fname[len(fname)-1]
             con.send(fname.encode('utf8'))
-            with open(str(filename), "rb") as f:
-                data = f.read(1024)
-                print('Sending ...')
-                while(data):
-                    con.send(data)
-                    data = f.read(1024)
-
-                f.close()
+            with open(str(filename),"rb") as f: 
+                size = os.path.getsize(filename)
+                s = 0
+                while s <= size:
+                    fl = f.read(1024)
+                    con.send(fl)
+                    s += len(fl)
 
 
             print('Done!')
@@ -165,7 +167,7 @@ class Serversharedicom:
             self.times.append(self.time)
             self.time +=1
              
-            requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': user,'tokenDicom':token, 'to':user, 'toOrganization': org})
+            requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': cred['user'],'tokenDicom':token, 'to': cred['user'], 'toOrganization': cred['org']})
             
             print('Log added to Blockchain')
 
@@ -183,15 +185,12 @@ class Serversharedicom:
     def start_transfer_dicom(self,hprovider):
         if(self.__isValidProvider(hprovider)):
             try:
-                context = zmq.Context()
-                con = context.socket(zmq.REP)
-                con.bind("tcp://{0}:{1}".format(self.HOST,self.PORT))
-                # while True:
-                print('Server started ...')
-                print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
-                # con, cliente = self.tcp.accept()
-                # print('Connected by ', cliente)
-                self.__server_socket(con) 
+                while True:
+                    print('Server started ...')
+                    print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
+                    con, cliente = self.tcp.accept()
+                    print('Connected by ', cliente)
+                    start_new_thread(self.__server_socket,(con,)) 
             except KeyboardInterrupt:
                 tcp.close()
                 
@@ -245,15 +244,16 @@ class Clientsharedicom:
         time_file = []
         block_size = []
         if(self.__isValidReseach(research)):
-            context = zmq.Context()
-            socket = context.socket(zmq.REQ)
-            socket.connect("tcp://{0}:{1}".format(self.HOST, self.PORT))
-            socket.send(pickle.dumps(amount))
-            time.sleep(1)
-            socket.send(research.encode('utf8'))
-            socket.sleep(1)
-            socket.send(org.encode('utf8'))
-            fname = str(socket.recv().decode('utf8'))
+            tcp = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            tcp.connect((self.HOST, self.PORT))
+            # tcp.send(pickle.dumps(amount))
+            # time.sleep(1)
+            # tcp.send(research.encode('utf8'))
+            # tcp.sleep(1)
+            # tcp.send(org.encode('utf8'))
+            json_credentials = {'amount': amount, 'user': research, 'org': org}
+            tcp.sendall(pickle.dumps(json_credentials))
+            fname = str(tcp.recv(1024).decode('utf8'))
             while(fname):
                 start_time_file = time.time()
                 size_block = 0
@@ -263,18 +263,18 @@ class Clientsharedicom:
                     os.mkdir('../SharedDicom')
 
                 f = open(fpath, 'wb+')
-                l = socket.recv()
+                l = tcp.recv(1024)
                 size_block += sys.getsizeof(l)
                 print('Recieve ...')
                 while (l):
                     f.write(l)
-                    l = socket.recv()
+                    l = tcp.recv()
                     size_block += sys.getsizeof(l)
                 f.close()        
                 print('Done ..')
                 time_file.append(time.time()-start_time_file)
                 block_size.append(size_block*0.001)
-                fname = str(socket.recv().decode('utf8'))
+                fname = str(tcp.recv().decode('utf8'))
                 time.sleep(1)
             
             tcp.close()
