@@ -145,7 +145,6 @@ class  Serversharedicom:
         sharefiles,tokens = self.__readDicom(paths,amount)
         for filename, token in zip(sharefiles,tokens):
             fname = filename.split('/')
-            print(fname)
             fname = fname[len(fname)-1]
             con.send(fname.encode('utf8'))
             with open(str(filename),"rb") as f: 
