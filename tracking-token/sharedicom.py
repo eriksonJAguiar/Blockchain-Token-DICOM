@@ -305,9 +305,8 @@ class Clientsharedicom:
                 # block_size.append(size_block*0.001)
                 # fname = str(self.tcp.recv(1024).decode('utf8'))
                 # time.sleep(1)
-            
-            self.tcp.shutdown(socket.SHUT_WR)
             self.tcp.close()
+            sys.stdout.flush()
            
         return(time_file, block_size)
             
