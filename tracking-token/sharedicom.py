@@ -178,8 +178,7 @@ class Serversharedicom:
         tabela.insert(1, "Usage Memory", self.memory)
         tabela.insert(2,"Usage CPU", self.cpu)
         tabela.to_csv('../Results/table_Performance_%s.csv'%(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")),sep=';')
-        con.close()
-        con.destroy()     
+        con.close() 
 
     def start_transfer_dicom(self,hprovider):
         if(self.__isValidProvider(hprovider)):
@@ -266,10 +265,9 @@ class Clientsharedicom:
                 with open(fpath, "wb+") as f:
                     print('fname: %s'%(fname))
                     
-                    while rsize <= fsize:
+                    while data:
                         data = self.tcp.recv(1024)
                         f.write(data)
-                        rsize += len(data)
                     
                     f.close()
                 
