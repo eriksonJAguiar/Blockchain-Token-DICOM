@@ -137,9 +137,9 @@ class  Serversharedicom:
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
         time.sleep(1)
-        user = str(con.recv(4096).decode('utf8'))
+        user = str(con.recv(1024).decode('utf8'))
         time.sleep(1)
-        org = str(con.recv(4096).decode('utf8'))
+        org = str(con.recv(1024).decode('utf8'))
         time.sleep(1)
         paths = self.__readPathDicom(self.path)
         sharefiles,tokens = self.__readDicom(paths,amount)
@@ -153,6 +153,7 @@ class  Serversharedicom:
                 while(data):
                     con.send(data)
                     data = f.read(1024)
+                    time.sleep(1)
 
             
             print('Done!')
