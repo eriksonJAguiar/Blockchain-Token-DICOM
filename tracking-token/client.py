@@ -23,8 +23,8 @@ if __name__ == "__main__":
             rd = 1
             print('Request stated for %i files' % (rd))
             tm, block = client.requestDicom(rd, 'erikson', 'ICMC')
-            time_file += tm
-            block_size += block
+            time_file = tm
+            block_size = block
             print('request finish')
 
     tabela = pd.DataFrame()

@@ -133,15 +133,6 @@ class  Serversharedicom:
         
         return pathzip,tokens
 
-    # def __mensure(self,process):
-    #     print('mensure ...')
-    #     self.cpu.append(process.cpu_percent())
-    #     self.memory.append(process.memory_percent())
-    #     self.times.append(self.time)
-    #     self.time +=1
-        
-
-    
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self,con):
         amount = pickle.loads(con.recv(1024))
@@ -180,6 +171,12 @@ class  Serversharedicom:
             print('Log added to Blockchain')
 
             time.sleep(1)
+
+            process = psutil.Process(os.getpid())
+            self.cpu.append(process.cpu_percent())
+            self.memory.append(process.memory_percent())
+            self.times.append(self.time)
+            self.time +=1
             
         shutil.rmtree(os.path.join(self.path,'shared-zip'))
         tabela = pd.DataFrame()
@@ -246,7 +243,6 @@ class Clientsharedicom:
 
         return False
         
-
     #req.body.tokenDicom, req.body.to, req.body.toOrganization
     def requestDicom(self,amount,research,org):
         time_file = []
