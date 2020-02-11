@@ -150,6 +150,8 @@ class Serversharedicom:
                     con.send(data)
                     data = f.read(1024)
                     time.sleep(0.001)
+                
+                f.close()
 
 
             print('Done!')
@@ -247,7 +249,7 @@ class Clientsharedicom:
             # tcp.sleep(1)
             # tcp.send(org.encode('utf8'))
             json_credentials = {'amount': amount, 'user': research, 'org': org}
-            self.tcp.sendall(pickle.dumps(json_credentials))
+            self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
             for filename in files:
                 # fname = file_info['fname']
@@ -257,7 +259,7 @@ class Clientsharedicom:
                 buffsize = 0
                 fpath = os.path.join('../SharedDicom',fname)
                 os.makedirs('../SharedDicom', exist_ok=True)
-                
+                 
                 start_time_file = time.time()
                 
                 with open(fpath, "wb+") as f:
@@ -303,7 +305,7 @@ class Clientsharedicom:
                 # fname = str(self.tcp.recv(1024).decode('utf8'))
                 # time.sleep(1)
             
-            tcp.close()
+            self.tcp.close()
            
         return(time_file, block_size)
             
