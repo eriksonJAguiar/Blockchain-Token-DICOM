@@ -159,7 +159,7 @@ class Serversharedicom:
             print('Done!')
             print('Sent File ...')
 
-            # process = psutil.Process(os.getpid())
+            process = psutil.Process(os.getpid())
             # start_new_thread(self.__mensure, (process,))
             self.cpu.append(process.cpu_percent())
             self.memory.append(process.memory_percent())
