@@ -254,7 +254,6 @@ class Clientsharedicom:
             tcp.send(research.encode('utf8'))
             time.sleep(1)
             tcp.send(org.encode('utf8'))
-            time.sleep(1)
             fname = str(tcp.recv(1024).decode('utf8'))
             while(fname):
                 start_time_file = time.time()
