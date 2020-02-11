@@ -8,12 +8,19 @@ import datetime
 import psutil
 import sys
 from _thread import *
-
+import contextlib
 
 processTime: list = []
 times = 0
 processCpu: list = []
 processMem: list = []
+
+@contextlib.contextmanager
+def atomic_overwrite(filename):
+    temp = filename + '~'
+    with open(temp, "w") as f:
+        yield f
+    os.rename(temp, filename) # this will only happen if no exception was raised
 
 def mensure_cpu(pids):
     cpus = []
@@ -58,6 +65,8 @@ if __name__ == "__main__":
     start = time.time()
     finish = 0
 
+    fname = datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")
+
     while psutil.pid_exists(pid) and finish <= 4:
         processTime.append(times)
         processCpu.append(mensure_cpu(pids))
@@ -66,12 +75,13 @@ if __name__ == "__main__":
         times += 1
         finish += int((time.time() - start)/3600)
 
-    print('Finished Mensure ...')
-    table = pd.DataFrame()
-    table.insert(0, "Time", processTime)
-    table.insert(1, "Usage CPU", processCpu)
-    table.insert(2, "Usage Memory", processMem)
-    table.to_csv('../Results/table_hw_%s.csv' %(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
+        #print('Finished Mensure ...')
+        table = pd.DataFrame()
+        table.insert(0, "Time", processTime)
+        table.insert(1, "Usage CPU", processCpu)
+        table.insert(2, "Usage Memory", processMem)
+        with atomic_overwrite('../Results/table_hw_%s.csv' %(fname)) as f:
+            table.to_csv(f, sep=';')
 
 
     

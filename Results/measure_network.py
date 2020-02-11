@@ -7,7 +7,7 @@ import pandas as pd
 import datetime
 import psutil
 import sys
-
+import contextlib
 
 processTime = []
 iterTime = 0
@@ -16,6 +16,16 @@ latSocketFile = []
 latPeers = []
 latOderer = []
 latCouchs = []
+
+
+@contextlib.contextmanager
+def atomic_overwrite(filename):
+    temp = filename + '~'
+    with open(temp, "w") as f:
+        yield f
+    # this will only happen if no exception was raised
+    os.rename(temp, filename)
+
 
 def mensure_latency():
 
@@ -63,25 +73,23 @@ if __name__ == "__main__":
     print("Connecting to {0}".format(server_hostname))
 
     pid = int(sys.argv[1])
-    
+
     start = time.time()
     finish = 0
-
+    fname = datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")
     while psutil.pid_exists(pid) and finish <= 4:
-            processTime.append(iterTime)
-            measure_latency()
-            iterTime += 1
-            finish += int((time.time() - start)/3600)
+        processTime.append(iterTime)
+        measure_latency()
+        iterTime += 1
+        finish += int((time.time() - start)/3600)
 
-    print('Finished Mensure ...')
-    table = pd.DataFrame()
-    table.insert(0, "Time", processTime)
-    table.insert(1, "Latency Socket", latSocketFile)
-    table.insert(2, "Latency API Blockchain", latAPIBC)
-    table.insert(3, "Latency Orderer", latOderer)
-    table.insert(4, "Latency Peers", latPeers)
-    table.insert(5, "Latency Couch", latCouchs)
-    table.to_csv('../Results/table_latency_%s.csv' %(datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")), sep=';')
-
-
-    
+        #print('Finished Mensure ...')
+        table = pd.DataFrame()
+        table.insert(0, "Time", processTime)
+        table.insert(1, "Latency Socket", latSocketFile)
+        table.insert(2, "Latency API Blockchain", latAPIBC)
+        table.insert(3, "Latency Orderer", latOderer)
+        table.insert(4, "Latency Peers", latPeers)
+        table.insert(5, "Latency Couch", latCouchs)
+        with atomic_overwrite('../Results/table_latency_%s.csv' % (fname)) as f:
+            table.to_csv(f, sep=';')
