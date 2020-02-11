@@ -249,6 +249,7 @@ class Clientsharedicom:
             # tcp.sleep(1)
             # tcp.send(org.encode('utf8'))
             json_credentials = {'amount': amount, 'user': research, 'org': org}
+            print(json_credentials)
             self.tcp.send(pickle.dumps(json_credentials))
             files = pickle.loads(self.tcp.recv(4096))
             for filename in files:
@@ -305,6 +306,7 @@ class Clientsharedicom:
                 # fname = str(self.tcp.recv(1024).decode('utf8'))
                 # time.sleep(1)
             
+            self.tcp.shutdown(socket.SHUT_WR)
             self.tcp.close()
            
         return(time_file, block_size)
