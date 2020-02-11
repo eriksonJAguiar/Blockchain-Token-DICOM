@@ -191,7 +191,7 @@ class Serversharedicom:
                 print('We have accepting connections in %s:%s'%(self.HOST,self.PORT))
                 # con, cliente = self.tcp.accept()
                 # print('Connected by ', cliente)
-                start_new_thread(self.__server_socket,(con,)) 
+                self.__server_socket(con) 
             except KeyboardInterrupt:
                 tcp.close()
                 
