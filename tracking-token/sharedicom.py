@@ -236,8 +236,7 @@ class Clientsharedicom:
             os.makedirs('../SharedDicom', exist_ok=True)
             ftp = FTP()
             ftp.connect('10.62.9.185', 1026)
-            ftp.login(user='user', passwd = '12345')
-            ftp.cwd('shared-zip')
+            ftp.login('user','12345')
             for filename in files:
                 # start_time_file = time.time()
                 fname = filename.split('/')
