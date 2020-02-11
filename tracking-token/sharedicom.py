@@ -39,6 +39,7 @@ class Serversharedicom:
         self.memory = []
         self.times = []
         self.time = 0
+        self.thr = None
 
     def __isValidProvider(self, hprovider):
 
@@ -131,6 +132,15 @@ class Serversharedicom:
 
         return pathzip, tokens
 
+    def __mensure(self):
+        a = dict(psutil.virtual_memory()._asdict())
+        self.cpu.append(psutil.cpu_percent())
+        self.memory.append(a['used']/1073741824)
+        self.times.append(self.time)
+        self.time +=1
+        self.thr.kill()
+        
+    
     # req.body.tokenDicom, req.body.to, req.body.toOrganization
     def __server_socket(self, con):
         cred = pickle.loads(con.recv(4096))
@@ -157,12 +167,9 @@ class Serversharedicom:
             print('Done!')
             print('Sent File ...')
 
-            process = psutil.Process(os.getpid())
-            # start_new_thread(self.__mensure, (process,))
-            self.cpu.append(process.cpu_percent())
-            self.memory.append(process.memory_percent())
-            self.times.append(self.time)
-            self.time +=1
+            #process = psutil.Process(os.getpid())
+            self.thr = start_new_thread(self.__mensure, ())
+            
              
             requests.post('http://%s:3000/api/shareDicom'%(self.IPBC),json={'user': cred['user'],'tokenDicom':token, 'to': cred['user'], 'toOrganization': cred['org']})
             

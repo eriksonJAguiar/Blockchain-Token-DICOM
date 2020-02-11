@@ -12,15 +12,15 @@ from tcp_latency import measure_latency
 
 if __name__ == "__main__":
     print(os.getpid())
-    client = Clientsharedicom('10.62.9.185', 5001)
     time_file: list = []
     block_size: list = []
     # Params:
     # Request dicom images from blockchain network
-    for j in range(2):
+    for j in range(30):
         for j in range(1):
             #rd = random.randint(1,50)
             rd = 1
+            client = Clientsharedicom('10.62.9.185', 5001)
             print('Request stated for %i files' % (rd))
             tm, block = client.requestDicom(rd, 'erikson', 'ICMC')
             time_file = tm
