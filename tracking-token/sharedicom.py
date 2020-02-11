@@ -148,13 +148,16 @@ class  Serversharedicom:
             fname = fname[len(fname)-1]
             con.send(fname.encode('utf8'))
             with open(str(filename),"rb") as f: 
+                fz = 0
                 data = f.read(1024)
                 print('Sending ...')
                 while(data):
-                    print('File ...')
+                    print('File ... %i'%(int(fz/sys.getsizeof(f))))
                     con.send(data)
                     data = f.read(1024)
-                    time.sleep(0.5)
+                    fz += 1024
+                    time.sleep(0.1)
+                    os.system('clear')
                 
                 f.close()
 
