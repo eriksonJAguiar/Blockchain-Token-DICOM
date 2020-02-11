@@ -137,11 +137,12 @@ class Serversharedicom:
         amount = cred['amount']
         paths = self.__readPathDicom(self.path)
         sharefiles, tokens = self.__readDicom(paths, amount)
+        con.sendall(pickle.dumps(sharefiles))
         for filename, token in zip(sharefiles, tokens):
             fname = filename.split('/')
             fname = fname[len(fname)-1]
-            file_info = {'fname': fname, 'fsize': os.path.getsize(filename)}
-            con.send(pickle.dumps(file_info))
+            #file_info = {'fname': fname, 'fsize': os.path.getsize(filename)}
+            #con.send(pickle.dumps(file_info))
             with open(str(filename),"rb") as f: 
                 print('Send ...')
                 data = f.read(1024)
@@ -247,11 +248,13 @@ class Clientsharedicom:
             # tcp.send(org.encode('utf8'))
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             self.tcp.sendall(pickle.dumps(json_credentials))
-            file_info = pickle.loads(self.tcp.recv(1024))
-            while file_info:
-                fname = file_info['fname']
-                fsize = file_info['fsize']
-                rsize = 0
+            files = pickle.loads(self.tcp.recv(4096))
+            for file in files:
+                # fname = file_info['fname']
+                # fsize = file_info['fsize']
+                fname = filename.split('/')
+                fname = fname[len(fname)-1]
+                buffsize = 0
                 fpath = os.path.join('../SharedDicom',fname)
                 os.makedirs('../SharedDicom', exist_ok=True)
                 
@@ -260,16 +263,19 @@ class Clientsharedicom:
                 with open(fpath, "wb+") as f:
                     print('Recieve fname: %s'%(fname))
                     data = self.tcp.recv(1024)
+                    buffsize += len(data)
                     while data:
                         data = self.tcp.recv(1024)
                         f.write(data)
+                        buffsize += len(data)
                     
                     f.close()
                 
                 print('Done ..')
                 time_file.append(time.time()-start_time_file)
-                block_size.append(fsize*0.001)
-                file_info = pickle.loads(self.tcp.recv(1024))
+                block_size.append(buffsize*0.001)
+                
+                # file_info = pickle.loads(self.tcp.recv(1024))
                 time.sleep(1)
                 
 
