@@ -147,14 +147,13 @@ class Serversharedicom:
         for filename, token in zip(sharefiles, tokens):
             fname = filename.split('/')
             fname = fname[len(fname)-1]
-            con.send(fname.encode('utf8'))
+            file_info = {'fname': fname, 'fsize': os.path.getsize(filename)}
+            con.send(pickle.dumps(file_info))
             with open(str(filename),"rb") as f: 
-                size = os.path.getsize(filename)
-                s = 0
-                while s <= size:
-                    fl = f.read(1024)
-                    con.send(fl)
-                    s += len(fl)
+                data = f.read(1024)
+                while data:
+                    con.send(data)
+                    data = f.read(1024)
 
 
             print('Done!')
@@ -253,24 +252,51 @@ class Clientsharedicom:
             # tcp.send(org.encode('utf8'))
             json_credentials = {'amount': amount, 'user': research, 'org': org}
             tcp.sendall(pickle.dumps(json_credentials))
-            fname = str(tcp.recv(1024).decode('utf8'))
-            while(fname):
-                start_time_file = time.time()
-                size_block = 0
-                print('fname: %s'%(fname))
+            file_info = pickle.loads(tcp.recv(1024))
+            while file_info:
+                fname = file_info['fname']
+                fsize = file_info['fsize']
+                rsize = 0
                 fpath = os.path.join('../SharedDicom',fname)
-                if not os.path.exists('../SharedDicom'):
-                    os.mkdir('../SharedDicom')
+                os.makedirs('../SharedDicom', exist_ok=True)
+                
+                start_time_file = time.time()
+                
+                with open(fpath, "wb+") as f:
+                    print('fname: %s'%(fname))
+                    
+                    while rsize <= fsize:
+                        data = tcp.recv(1024)
+                        f.write(data)
+                        rsize += len(data)
+                    
+                    f.close()
+                
+                print('Done ..')
+                time_file.append(time.time()-start_time_file)
+                block_size.append(fsize*0.001)
+                file_info = pickle.loads(tcp.recv(1024))
+                time.sleep(1)
+                
 
-                f = open(fpath, 'wb+')
-                l = tcp.recv(1024)
-                size_block += sys.getsizeof(l)
-                print('Recieve ...')
-                while (l):
-                    f.write(l)
-                    l = tcp.recv()
-                    size_block += sys.getsizeof(l)
-                f.close()        
+
+            # while(fname):
+            #     start_time_file = time.time()
+            #     size_block = 0
+            #     print('fname: %s'%(fname))
+            #     fpath = os.path.join('../SharedDicom',fname)
+            #     if not os.path.exists('../SharedDicom'):
+            #         os.mkdir('../SharedDicom')
+
+            #     f = open(fpath, 'wb+')
+            #     l = tcp.recv(1024)
+            #     size_block += sys.getsizeof(l)
+            #     print('Recieve ...')
+            #     while (l):
+            #         f.write(l)
+            #         l = tcp.recv(1024)
+            #         size_block += sys.getsizeof(l)
+            #     f.close()        
                 print('Done ..')
                 time_file.append(time.time()-start_time_file)
                 block_size.append(size_block*0.001)
