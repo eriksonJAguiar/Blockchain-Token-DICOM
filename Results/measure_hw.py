@@ -10,10 +10,9 @@ import sys
 from _thread import *
 import contextlib
 
-processTime: list = []
-times = 0
-processCpu: list = []
-processMem: list = []
+# processTime: list = []
+# processCpu: list = []
+# processMem: list = []
 
 @contextlib.contextmanager
 def atomic_overwrite(filename):
@@ -66,11 +65,12 @@ if __name__ == "__main__":
     finish = 0
     table = pd.DataFrame()
 
+    times = 0
+
     while psutil.pid_exists(pid) and finish <= 10:
-        processTime.append(times)
-        processCpu.append(mensure_cpu(pids))
-        m = start_new_thread(mensure_mem, (pids,))
-        processMem.append(m)
+        processTime = times
+        processCpu = mensure_cpu(pids)
+        processMem = start_new_thread(mensure_mem, (pids,))
         times += 1
         finish += int((time.time() - start)/3600)
 
