@@ -64,6 +64,7 @@ if __name__ == "__main__":
     
     start = time.time()
     finish = 0
+    table = pd.DataFrame()
 
     while psutil.pid_exists(pid) and finish <= 4:
         processTime.append(times)
@@ -74,12 +75,11 @@ if __name__ == "__main__":
         finish += int((time.time() - start)/3600)
 
         #print('Finished Mensure ...')
-        table = pd.DataFrame()
-        table.insert(0, "Time", processTime)
-        table.insert(1, "Usage CPU", processCpu)
-        table.insert(2, "Usage Memory", processMem)
-        with atomic_overwrite('../Results/table_hw.csv') as f:
-            table.to_csv(f, sep=';')
+        table = table.append({"Time":  processTime, "UsageCPU": processCpu, "UsageMem": processMem})
+        # table.insert(0, "Time", processTime)
+        # table.insert(1, "Usage CPU", processCpu)
+        # table.insert(2, "Usage Memory", processMem)
+        table.to_csv('../Results/table_hw.csv', sep=';', header=False, index=False)
 
 
     

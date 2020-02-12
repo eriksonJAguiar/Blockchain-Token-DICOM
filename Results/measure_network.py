@@ -9,12 +9,12 @@ import psutil
 import sys
 import contextlib
 
-processTime = []
-latAPIBC = []
-latSocketFile = []
-latPeers = []
-latOderer = []
-latCouchs = []
+# processTime = []
+# latAPIBC = []
+# latSocketFile = []
+# latPeers = []
+# latOderer = []
+# latCouchs = []
 
 
 @contextlib.contextmanager
@@ -34,6 +34,7 @@ if __name__ == "__main__":
 
     #pid = int(sys.argv[1])
 
+    table = pd.DataFrame()
     times = 0
 
     start = time.time()
@@ -43,11 +44,10 @@ if __name__ == "__main__":
         print('Read Latency ...')
         peers = []
         couch = []
-        processTime.append(times)
-        latAPIBC.append(measure_latency(server_hostname, port=3000)[0])
-        latSocketFile.append(measure_latency(
-            server_hostname, port=5001)[0])
-        latOderer.append(measure_latency(server_hostname, port=7050)[0])
+        _processTime = times
+        _latAPIBC = measure_latency(server_hostname, port=3000)[0]
+        _latSocketFile = measure_latency(server_hostname, port=1021)[0]
+        _latOderer = measure_latency(server_hostname, port=7050)[0]
         peers.append(measure_latency(server_hostname, port=7051)[0])
         peers.append(measure_latency(server_hostname, port=8051)[0])
         peers.append(measure_latency(server_hostname, port=9051)[0])
@@ -59,7 +59,7 @@ if __name__ == "__main__":
         peers.append(measure_latency(server_hostname, port=15051)[0])
         peers.append(measure_latency(server_hostname, port=16051)[0])
         peers = list(filter(None, peers))
-        latPeers.append(statistics.mean(peers))
+        _latPeers = statistics.mean(peers)
         couch.append(measure_latency(server_hostname, port=5984)[0])
         couch.append(measure_latency(server_hostname, port=6984)[0])
         couch.append(measure_latency(server_hostname, port=7984)[0])
@@ -71,18 +71,16 @@ if __name__ == "__main__":
         couch.append(measure_latency(server_hostname, port=13984)[0])
         couch.append(measure_latency(server_hostname, port=14984)[0])
         couch = list(filter(None, couch))
-        latCouchs.append(statistics.mean(couch))
+        _latCouchs = statistics.mean(couch)
         time.sleep(1)
         times += 1
         finish += int((time.time() - start)/3600)
 
         #print('Finished Mensure ...')
-        table = pd.DataFrame()
-        table.insert(0, "Time", processTime)
-        table.insert(1, "Latency Socket", latSocketFile)
-        table.insert(2, "Latency API Blockchain", latAPIBC)
-        table.insert(3, "Latency Orderer", latOderer)
-        table.insert(4, "Latency Peers", latPeers)
-        table.insert(5, "Latency Couch", latCouchs)
-        with atomic_overwrite('../Results/table_latency.csv') as f:
-            table.to_csv(f, sep=';')
+        table = table.append({"Time": _processTime, "LatFTP": _latSocketFile, "LatApi":_latAPIBC, "LatOrder": _latOderer, "LatPeers":_latPeers, "LatCouchs":_latCouchs}, ignore_index=True) # 0, "Time"
+        # table.insert() # 1, "Latency Socket"
+        # table.insert(_latAPIBC) # 2, "Latency API Blockchain"
+        # table.insert(_latOderer) # 3, "Latency Orderer"
+        # table.insert(_latPeers) # 4, "Latency Peers"
+        # table.insert(_latCouchs) # 5, "Latency Couch"
+        table.to_csv('../Results/table_latency.csv', mode='a',sep=';', header=False, index=False)
