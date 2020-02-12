@@ -73,7 +73,8 @@ if __name__ == "__main__":
         processMem = start_new_thread(mensure_mem, (pids,))
         times += 1
         finish += int((time.time() - start)/3600)
-
+        time.sleep(1)
+        print("Mem: {0}, CPU: {1}".format(processCpu, processMem))
         #print('Finished Mensure ...')
         table = table.append({"Time":  processTime, "UsageCPU": processCpu, "UsageMem": processMem})
         # table.insert(0, "Time", processTime)

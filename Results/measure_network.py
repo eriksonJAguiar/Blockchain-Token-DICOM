@@ -47,7 +47,7 @@ if __name__ == "__main__":
         couch = []
         _processTime = times
         _latAPIBC = measure_latency(server_hostname, port=3000)[0]
-        _latSocketFile = measure_latency(server_hostname, port=1021)[0]
+        _latSocketFile = measure_latency(server_hostname, port=1026)[0]
         _latOderer = measure_latency(server_hostname, port=7050)[0]
         peers.append(measure_latency(server_hostname, port=7051)[0])
         peers.append(measure_latency(server_hostname, port=8051)[0])
