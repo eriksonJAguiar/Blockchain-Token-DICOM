@@ -84,4 +84,4 @@ if __name__ == "__main__":
         # table.insert(_latOderer) # 3, "Latency Orderer"
         # table.insert(_latPeers) # 4, "Latency Peers"
         # table.insert(_latCouchs) # 5, "Latency Couch"
-        table.to_csv('../Results/table_latency.csv', mode='a',sep=';', header=False, index=False)
+        table.to_csv('../Results/table_latency2.csv', mode='a',sep=';', header=False, index=False)
