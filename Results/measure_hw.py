@@ -59,6 +59,7 @@ if __name__ == "__main__":
     
     pid = int(sys.argv[1])
 
+    print('Get pids')
     pids = get_pids(ports)
     
     start = time.time()
@@ -66,7 +67,7 @@ if __name__ == "__main__":
     table = pd.DataFrame()
 
     times = 0
-
+    print('Started collect')
     while psutil.pid_exists(pid) and finish <= 10:
         processTime = times
         processCpu = mensure_cpu(pids)
