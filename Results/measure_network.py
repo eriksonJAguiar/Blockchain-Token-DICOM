@@ -40,7 +40,8 @@ if __name__ == "__main__":
     start = time.time()
     finish = 0
     fname = datetime.datetime.now().strftime("%m%d%Y_%H:%M:%S")
-    while finish <= 4:
+    pid = int(sys.argv[1])
+    while psutil.pid_exists(pid) and finish <= 10:
         print('Read Latency ...')
         peers = []
         couch = []

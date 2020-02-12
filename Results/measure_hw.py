@@ -66,7 +66,7 @@ if __name__ == "__main__":
     finish = 0
     table = pd.DataFrame()
 
-    while psutil.pid_exists(pid) and finish <= 4:
+    while psutil.pid_exists(pid) and finish <= 10:
         processTime.append(times)
         processCpu.append(mensure_cpu(pids))
         m = start_new_thread(mensure_mem, (pids,))
