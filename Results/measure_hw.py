@@ -25,7 +25,7 @@ def mensure_cpu(pids):
     cpus = []
     for pid in pids:
         p = psutil.Process(pid)
-        cpu = p.cpu_percent(interval=5)
+        cpu = p.cpu_percent(interval=None)
         cpus.append(cpu)
     
     return statistics.mean(cpus)
@@ -34,11 +34,8 @@ def mensure_mem(pids):
     mem = []
     for pid in pids:
         p = psutil.Process(pid)
-        m = p.memory_percent()
+        m = p.memory_full_info().vms/(1024.0 ** 3)
         mem.append(m)
-
-    
-    time.sleep(5)
 
     return statistics.mean(mem)
 
@@ -70,18 +67,18 @@ if __name__ == "__main__":
     print('Started collect')
     while psutil.pid_exists(pid) and finish <= 10:
         processTime = times
-        processCpu = mensure_cpu(pids)
-        processMem = start_new_thread(mensure_mem, (pids,))
+        processCpu =  psutil.cpu_percent(interval=5)  #mensure_cpu(pids)
+        processMem =  psutil.virtual_memory().percent #start_new_thread(mensure_mem, (pids,))
         times += 1
         finish += int((time.time() - start)/3600)
-        time.sleep(1)
-        print("Mem: {0}, CPU: {1}".format(processCpu, processMem))
+        time.sleep(20)
+        print("Mem: {1}, CPU: {0}".format(processCpu, processMem))
         #print('Finished Mensure ...')
-        table = table.append({"Time":  processTime, "UsageCPU": processCpu, "UsageMem": processMem})
+        table = table.append({"Time":  processTime, "UsageCPU": processCpu, "UsageMem": processMem}, ignore_index=True)
         # table.insert(0, "Time", processTime)
         # table.insert(1, "Usage CPU", processCpu)
         # table.insert(2, "Usage Memory", processMem)
-        table.to_csv('../Results/table_hw.csv', sep=';', header=False, index=False)
+        table.to_csv('../Results/table_hw2.csv', sep=';', header=False, index=False)
 
 
     
