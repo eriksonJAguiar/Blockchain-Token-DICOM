@@ -19,11 +19,11 @@ def getHash(path):
 
 def calcSim(hashes):
     scores = []
-    f = open('sim.txt','w')
+    f = open('sim.txt',mode='w',encoding='utf-8')
     for hs in hashes:
         for h in hashes:
             s = hamming_distance(hs,h)
-            f.write(str(s)+"/n")
+            f.write(str(s) + os.linesep)
 
     f.close()
             
