@@ -1,29 +1,35 @@
-import nwalign as nw
+from hexhamming import hamming_distance
 import pydicom
-import glob
+import os
+from pathlib import Path
+import pandas as pd
 
 def getHash(path):
-    result = glob.glob(os.path.join(path_, "*.dcm"))
-    hs = []
+    #result = glob.glob(os.path.join(path, "*.dcm"))
+    result =  Path('/media/erjulioaguiar/F30E-2F6C/SharedDicom/').rglob('*.dcm')
+    hs = set()
     for res in result:
-        image = pydicom.dcmread(str(res))
-        h = str(image[0x08, 0x17].value)
-        hs.append(h)
+       image = pydicom.dcmread(str(res))
+       h = str(image[0x08,0x17].value)
+       hs.add(h)
     
-    return hs
+    return list(hs)
 
 
-def calcAlign(hashes):
+
+def calcSim(hashes):
     scores = []
+    f = open('sim.txt','w')
     for hs in hashes:
         for h in hashes:
-            s = nw.score_alignment(hs,h)
-            scores.append(s)
-    
+            s = hamming_distance(hs,h)
+            f.write(str(s)+"/n")
 
-    return scores
+    f.close()
+            
+    
             
 if __name__ == "__main__":
     hs = getHash('/media/erjulioaguiar/F30E-2F6C/SharedDicom/')
-    s = calcAlign(hs)
-    print(s)
+    calcSim(hs)
+    
