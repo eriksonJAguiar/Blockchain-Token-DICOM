@@ -3,6 +3,7 @@ import pydicom
 import os
 from pathlib import Path
 import pandas as pd
+from Levenshtein import distance
 
 def getHash(path):
     #result = glob.glob(os.path.join(path, "*.dcm"))
@@ -27,9 +28,19 @@ def calcSim(hashes):
 
     f.close()
             
-    
+
+def calcSimLev(hashes):
+    scores = []
+    f = open('sim_lev.txt',mode='w',encoding='utf-8')
+    for hs in hashes:
+        for h in hashes:
+            s = distance(hs,h)
+            f.write(str(s) + os.linesep)
+
+    f.close()
+
             
 if __name__ == "__main__":
     hs = getHash('/media/erjulioaguiar/F30E-2F6C/SharedDicom/')
-    calcSim(hs)
+    calcSimLev(hs)
     
