@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 import pandas as pd
 from Levenshtein import distance
+import text_align as align
 
 def getHash(path):
     #result = glob.glob(os.path.join(path, "*.dcm"))
@@ -39,8 +40,19 @@ def calcSimLev(hashes):
 
     f.close()
 
+
+def calcAlign(hashes):
+    scores = []
+    f = open('sim_align.txt',mode='w',encoding='utf-8')
+    for hs in hashes:
+        for h in hashes:
+            s = align.calculate_redundancy(hs,h)
+            f.write(str(s) + os.linesep)
+
+    f.close()
+
             
 if __name__ == "__main__":
     hs = getHash('/media/erjulioaguiar/F30E-2F6C/SharedDicom/')
-    calcSimLev(hs)
+    calcAlign(hs)
     
