@@ -13,12 +13,12 @@ lt2 <- read.csv2("Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/tab
 
 lt <- rbind(lt1,lt2)
 
-png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/cpu_usage.png", width = 4, height = 4, units = 'in', res = 300)
-plot(t,hw$cpu, type= "l",col = "red", xlab = "Time (s)", ylab = "CPU used (%)", main = "CPU Usage")
+png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/cpu_usage_pt.png", width = 4, height = 4, units = 'in', res = 300)
+plot(t,hw$cpu, type= "l",col = "red", xlab = "Tempo (s)", ylab = "Uso de CPU (%)", main = "Uso de CPU")
 dev.off()
 
-png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/memory_usage.png", width = 4, height = 4, units = 'in', res = 300)
-plot(t,hw$memory, type= "l",col = "red", xlab = "Time (s)", ylab = "Memory used (%)", main = "Memory Usage")
+png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/memory_usage_pt.png", width = 4, height = 4, units = 'in', res = 300)
+plot(t,hw$memory, type= "l",col = "red", xlab = "Tempo (s)", ylab = "Uso de memória (%)", main = "Uso de memória")
 dev.off()
 
 tm<-c()
@@ -38,16 +38,16 @@ while(i <= length(lt$time)){
 
 
 
-
-png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/latency.png", width = 4, height = 4, units = 'in', res = 300)
+png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/latency_pt.png", width = 3, height = 3, units = 'in', res = 200)
 boxplot(c(lt$latftp),c(lt$latapibc),c(lt$latoderer),c(lt$latpeers),c(lt$latcouch),
-        main = "Network Latency",
-        ylab = "Latency/s",
-        names = c("Storage", "API BC", "Orderer", "Peers", "Couchdb"),
+        main = "Latência da rede",
+        ylab = "Latência/s",
         col = "red",
         border = "black",
-        notch = TRUE
+        notch = TRUE,
+        names = c("Armaz.", "API BC", "Ord.", "Nós", "Couchdb")
 )
+
 
 dev.off()
 
@@ -115,3 +115,34 @@ sd(c(lt$latcouch))
 var(c(lt$latcouch))
 max(c(lt$latcouch))
 min(c(lt$latcouch))
+
+### Hahs analysis ######
+
+sim <- as.integer(readLines('/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/sim.txt'))
+simLev <- as.integer(readLines('/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/sim_lev.txt'))
+algin <- as.integer(readLines('/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/sim_align.txt'))
+
+denpoison <- dpois(sim,2)
+denormal <- dnorm(sim,log = TRUE)
+dbionmial <- dnbinom(sim,size = length(sim),prob = 0.2,log = TRUE)
+dchiquad <- dchisq(sim,1)
+densim <- density(sim, kernel = "gaussian");
+plot(x, main = "Density Similarity")
+
+curve(density(x))
+
+x <- rnorm(simLev, mean=mean(simLev), sd=sd(simLev))
+
+png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/pdf_Levestein_pt.png", width = 4, height = 4, units = 'in', res = 300)
+plot(density(x), ylab="Densidade",main = "PDF similaridade tokens",col="red")
+dev.off()
+
+png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/cdf_Levenstein_pt.png", width = 4, height = 4, units = 'in', res = 300)
+plot(ecdf(x),ylab="Densidade",xlab="",main="CDF similaridade Tokens",verticals = FALSE, col="red")
+dev.off()
+
+c <- acf(x)
+
+png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/acf.png", width = 4, height = 4, units = 'in', res = 300)
+plot(c, type="o", main="Autocorrelation values", xlab = "")
+dev.off()
