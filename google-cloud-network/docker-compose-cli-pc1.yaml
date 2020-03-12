@@ -13,7 +13,7 @@ volumes:
 networks:
   health_network:
     external:
-      name: $(hostname)
+      name: health_network
 
 services:
 
