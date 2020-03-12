@@ -22,8 +22,8 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.healthcare.com
     container_name: orderer.healthcare.com
-    # networks:
-    #   - health_network
+    networks:
+      - health_network
 
   
   ca.hprovider.healthcare.com:
@@ -31,8 +31,8 @@ services:
     extends:
       file:  docker-compose-ca.yaml
       service: ca.hprovider.healthcare.com
-    # networks:
-    #   - health_network
+    networks:
+      - health_network
 
   
   peer0.hprovider.healthcare.com:
@@ -40,8 +40,8 @@ services:
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.hprovider.healthcare.com
-    # networks:
-    #   - health_network
+    networks:
+      - health_network
 
 
   cli:
@@ -74,8 +74,8 @@ services:
     depends_on:
       - orderer.healthcare.com
       - peer0.hprovider.healthcare.com
-    # networks:
-    #   - health_network
+    networks:
+      - health_network
 
   
   deploy:
@@ -88,12 +88,12 @@ services:
           - node.hostname == hostname
   
 
-  networks:
-      health_network:
-        aliases:
-          - orderer.healthcare.com
-          - ca.hprovider.healthcare.com
-          - peer0.hprovider.healthcare.com
-          - cli
+  # networks:
+  #     health_network:
+  #       aliases:
+  #         - orderer.healthcare.com
+  #         - ca.hprovider.healthcare.com
+  #         - peer0.hprovider.healthcare.com
+  #         - cli
 
     
