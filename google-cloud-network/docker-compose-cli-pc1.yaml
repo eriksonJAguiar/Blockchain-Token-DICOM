@@ -85,7 +85,7 @@ services:
           condition: on-failure
       placement:
         constraints:
-          - node.hostname == $(hostname)
+          - node.hostname == hostname
   
 
   networks:
