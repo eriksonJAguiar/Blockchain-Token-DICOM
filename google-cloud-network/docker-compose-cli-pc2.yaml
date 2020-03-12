@@ -16,16 +16,6 @@ networks:
     external:
       name: health_network
 
-deploy:
-      replicas: 5
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == 10.154.0.2
-
 services:
 
   peer1.hprovider.healthcare.com:
@@ -97,3 +87,22 @@ services:
       - peer4.hprovider.healthcare.com
     networks:
       - health_network
+
+  
+  deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+          condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == $(hostname)
+  
+
+  networks:
+      health_network:
+        aliases:
+          - peer1.hprovider.healthcare.com
+          - peer2.hprovider.healthcare.com
+          - peer3.hprovider.healthcare.com
+          - peer4.hprovider.healthcare.com

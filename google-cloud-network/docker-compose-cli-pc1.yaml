@@ -13,17 +13,7 @@ volumes:
 networks:
   health_network:
     external:
-      name: health_network
-
-deploy:
-      replicas: 5
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == 10.158.0.3
+      name: $(hostname)
 
 services:
 
@@ -32,8 +22,8 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.healthcare.com
     container_name: orderer.healthcare.com
-    networks:
-      - health_network
+    # networks:
+    #   - health_network
 
   
   ca.hprovider.healthcare.com:
@@ -41,8 +31,8 @@ services:
     extends:
       file:  docker-compose-ca.yaml
       service: ca.hprovider.healthcare.com
-    networks:
-      - health_network
+    # networks:
+    #   - health_network
 
   
   peer0.hprovider.healthcare.com:
@@ -50,8 +40,8 @@ services:
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.hprovider.healthcare.com
-    networks:
-      - health_network
+    # networks:
+    #   - health_network
 
 
   cli:
@@ -84,5 +74,26 @@ services:
     depends_on:
       - orderer.healthcare.com
       - peer0.hprovider.healthcare.com
-    networks:
-      - health_network
+    # networks:
+    #   - health_network
+
+  
+  deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+          condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == $(hostname)
+  
+
+  networks:
+      health_network:
+        aliases:
+          - orderer.healthcare.com
+          - ca.hprovider.healthcare.com
+          - peer0.hprovider.healthcare.com
+          - cli
+
+    
