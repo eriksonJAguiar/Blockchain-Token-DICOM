@@ -7,6 +7,8 @@ version: '2'
 
 networks:
   health_network:
+    external:
+      name: health_network
 
 services:
   ca.hprovider.healthcare.com:

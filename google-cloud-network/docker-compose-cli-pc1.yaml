@@ -7,7 +7,6 @@ version: '2'
 
 volumes:
   orderer.healthcare.com:
-  ca.hprovider.healthcare.com:
   peer0.hprovider.healthcare.com:    
 
 networks:
@@ -22,15 +21,6 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.healthcare.com
     container_name: orderer.healthcare.com
-    networks:
-      - health_network
-
-  
-  ca.hprovider.healthcare.com:
-    container_name: ca.hprovider.healthcare.com
-    extends:
-      file:  docker-compose-ca.yaml
-      service: ca.hprovider.healthcare.com
     networks:
       - health_network
 
