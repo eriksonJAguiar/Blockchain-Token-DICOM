@@ -21,6 +21,15 @@ services:
       file:   base/docker-compose-base.yaml
       service: orderer.healthcare.com
     container_name: orderer.healthcare.com
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.hostname == hostname
     networks:
       - health_network
 
@@ -30,6 +39,15 @@ services:
     extends:
       file:  base/docker-compose-base.yaml
       service: peer0.hprovider.healthcare.com
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.hostname == hostname
     networks:
       - health_network
 

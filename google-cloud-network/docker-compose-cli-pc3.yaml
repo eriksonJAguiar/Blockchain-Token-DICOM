@@ -14,7 +14,7 @@ networks:
       name: health_network
 
 deploy:
-      replicas: 5
+      replicas: 2
       restart_policy:
         condition: on-failure
         delay: 5s

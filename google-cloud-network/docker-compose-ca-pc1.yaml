@@ -28,3 +28,13 @@ services:
     container_name: ca.hprovider.healthcare.com
     networks:
       - health_network
+    
+    deploy:
+      replicas: 2
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.hostname == hostname
