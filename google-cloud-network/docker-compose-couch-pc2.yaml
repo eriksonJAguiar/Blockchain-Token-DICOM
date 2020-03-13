@@ -19,15 +19,6 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
     ports:
       - "6984:5984"
     networks:
@@ -58,15 +49,6 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
     ports:
       - "9984:5984"
     networks:
@@ -94,15 +76,6 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
     ports:
       - "10984:5984"
     networks:
@@ -130,15 +103,6 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
     ports:
       - "11984:5984"
     networks:

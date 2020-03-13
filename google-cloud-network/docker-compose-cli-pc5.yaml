@@ -23,14 +23,6 @@ networks:
 
 services:
 
-  orderer.healthcare.com:
-    extends:
-      file:   base/docker-compose-base.yaml
-      service: orderer.healthcare.com
-    container_name: orderer.healthcare.com
-    networks:
-      - health_network
-
   peer0.hprovider.healthcare.com:
     container_name: peer0.hprovider.healthcare.com
     extends:

@@ -509,9 +509,9 @@ CHANNEL_NAME="healthchannel"
 #Version chaicode defaults to 1.0
 NEW_VERSION_CHAINCODE=1.0
 # use this as the default docker-compose yaml definition
-COMPOSE_FILE=docker-compose-cli-pc1.yaml
+COMPOSE_FILE=docker-compose-cli-pc2.yaml
 #
-COMPOSE_FILE_COUCH=docker-compose-couch-pc1.yaml
+COMPOSE_FILE_COUCH=docker-compose-couch-pc2.yaml
 # org3 docker compose file
 COMPOSE_FILE_ORG3=docker-compose-org3.yaml
 # kafka and zookeeper compose file
@@ -519,7 +519,7 @@ COMPOSE_FILE_KAFKA=docker-compose-kafka.yaml
 # two additional etcd/raft orderers
 COMPOSE_FILE_RAFT2=docker-compose-etcdraft2.yaml
 # certificate authorities compose file
-COMPOSE_FILE_CA=docker-compose-ca-pc1.yaml
+COMPOSE_FILE_CA=docker-compose-ca-pc2.yaml
 #
 # use golang as the default language for chaincode
 LANGUAGE=node
