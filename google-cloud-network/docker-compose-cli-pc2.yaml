@@ -25,15 +25,6 @@ services:
       service: peer1.hprovider.healthcare.com
     networks:
       - health_network
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
 
 #---------------------------------- New Peers -------------------------------
   
@@ -44,15 +35,6 @@ services:
       service: peer2.hprovider.healthcare.com
     networks:
       - health_network
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
 
   peer3.hprovider.healthcare.com:
     container_name: peer3.hprovider.healthcare.com
@@ -61,15 +43,6 @@ services:
       service: peer3.hprovider.healthcare.com
     networks:
       - health_network
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
   
   peer4.hprovider.healthcare.com:
     container_name: peer4.hprovider.healthcare.com
@@ -78,16 +51,6 @@ services:
       service: peer4.hprovider.healthcare.com
     networks:
       - health_network
-    deploy:
-      replicas: 2
-      restart_policy:
-        condition: on-failure
-        delay: 5s
-        max_attempts: 3
-      placement:
-        constraints:
-          - node.hostname == hostname
-
 
   cli:
     container_name: cli
