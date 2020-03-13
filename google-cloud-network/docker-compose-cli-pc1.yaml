@@ -68,15 +68,15 @@ services:
       - health_network
 
   
-  deploy:
-        replicas: 1
-        # restart_policy:
-        #   condition: on-failure
-        #   delay: 5s
-        #   max_attempts: 3
-        placement:
-          constraints:
-            - node.hostname == hostname
+  # deploy:
+  #       replicas: 1
+  #       # restart_policy:
+  #       #   condition: on-failure
+  #       #   delay: 5s
+  #       #   max_attempts: 3
+  #       placement:
+  #         constraints:
+  #           - node.hostname == hostname
   
 
   # networks:
