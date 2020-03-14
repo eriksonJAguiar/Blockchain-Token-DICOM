@@ -3,12 +3,13 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '3.4'
+version: '3'
 
 
 networks:
-  ingress:
-    external: true
+  health_network:
+    #external: true
+    driver: overlay
 
 services:
   ca.hprovider.healthcare.com:
@@ -31,6 +32,6 @@ services:
         constraints:
           - node.hostname == ${hostname}
     networks:
-      ingress:
-        aliases:
-          - ca.hprovider.healthcare.com
+      - health_network
+        # aliases:
+        #   - ca.hprovider.healthcare.com
