@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: Apache-2.0
 #
 
-version: '3'
+version: '3.4'
 
 
 networks:
@@ -29,7 +29,7 @@ services:
       mode: global
       placement:
         constraints:
-          - node.hostname == hyperledger-node1
+          - node.hostname == node1
     networks:
       health_network:
         aliases:
