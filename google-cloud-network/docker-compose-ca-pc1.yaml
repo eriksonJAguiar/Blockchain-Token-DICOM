@@ -12,13 +12,12 @@ networks:
       name: health_network
 
 services:
-  ca.hprovider.healthcare.com:
+  ca_hprovider_healthcare_com:
     image: hyperledger/fabric-ca:$IMAGE_TAG
-    hostname: ca.hprovider.healthcare.com
-    container_name: ca.hprovider.healthcare.com
+    #container_name: ca.hprovider.healthcare.com
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.hprovider.healthcare.com
+      #- FABRIC_CA_SERVER_CA_NAME=ca.hprovider.healthcare.com
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${BYFN_CA1_PRIVATE_KEY}
@@ -29,11 +28,9 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/hprovider.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
     deploy:
-      mode: global
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == manager]
     networks:
       health_network:
         aliases:
-          - ca.hprovider.healthcare.com
+          - ca_hprovider_healthcare_com

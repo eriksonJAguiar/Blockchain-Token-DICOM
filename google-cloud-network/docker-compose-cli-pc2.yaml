@@ -6,27 +6,28 @@
 version: '3'
 
 volumes:
-  peer1.hprovider.healthcare.com:
-  peer2.hprovider.healthcare.com:  
-  peer3.hprovider.healthcare.com:
-  peer4.hprovider.healthcare.com:
+  peer1_hprovider_healthcare_com:
+  peer2_hprovider_healthcare_com:  
+  peer3_hprovider_healthcare_com:
+  peer4_hprovider_healthcare_com:
 
 networks:
   health_network:
-    external: true
+    external: 
+      name: health_network
 
 services:
 
-  peer1.hprovider.healthcare.com:
-    hostname: peer1.hprovider.healthcare.com
+  peer1_hprovider_healthcare_com:
+    #hostname: peer1.hprovider.healthcare.com
     environment:
-      - CORE_PEER_ID=peer1.hprovider.healthcare.com
-      - CORE_PEER_ADDRESS=peer1.hprovider.healthcare.com:8051
+      - CORE_PEER_ID=peer1_hprovider_healthcare_com
+      - CORE_PEER_ADDRESS=peer1_hprovider_healthcare_com:8051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
-      - CORE_PEER_CHAINCODEADDRESS=peer1.hprovider.healthcare.com:8052
+      - CORE_PEER_CHAINCODEADDRESS=peer1_hprovider_healthcare_com:8052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.hprovider.healthcare.com:8051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1_hprovider_healthcare_com:8051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -54,24 +55,23 @@ services:
     networks:
       health_network:
         aliases:
-          - peer1.hprovider.healthcare.com
+          - peer1_hprovider_healthcare_com
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
 
 #---------------------------------- New Peers -------------------------------
   
-  peer2.hprovider.healthcare.com:
-    hostname: peer2.hprovider.healthcare.com
+  peer2_hprovider_healthcare_com:
+    #hostname: peer2_hprovider_healthcare.com
     environment:
-      - CORE_PEER_ID=peer2.hprovider.healthcare.com
-      - CORE_PEER_ADDRESS=peer2.hprovider.healthcare.com:11051
+      - CORE_PEER_ID=peer2_hprovider_healthcare.com
+      - CORE_PEER_ADDRESS=peer2_hprovider_healthcare_com:11051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
-      - CORE_PEER_CHAINCODEADDRESS=peer2.hprovider.healthcare.com:11052
+      - CORE_PEER_CHAINCODEADDRESS=peer2_hprovider_healthcare_com:11052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2.hprovider.healthcare.com:11051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2_hprovider.healthcare_com:11051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -99,22 +99,21 @@ services:
     networks:
       health_network:
         aliases:
-          - peer2.hprovider.healthcare.com
+          - peer2_hprovider_healthcare_com
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
 
-  peer3.hprovider.healthcare.com:
-    hostname: peer3.hprovider.healthcare.com
+  peer3_hprovider_healthcare_com:
+    #hostname: peer3.hprovider.healthcare.com
     environment:
-      - CORE_PEER_ID=peer3.hprovider.healthcare.com
-      - CORE_PEER_ADDRESS=peer3.hprovider.healthcare.com:12051
+      - CORE_PEER_ID=peer3_hprovider_healthcare.com
+      - CORE_PEER_ADDRESS=peer3_hprovider_healthcare_com:12051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:12051
-      - CORE_PEER_CHAINCODEADDRESS=peer3.hprovider.healthcare.com:12052
+      - CORE_PEER_CHAINCODEADDRESS=peer3_hprovider_healthcare_com:12052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:12052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3.hprovider.healthcare.com:12051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3_hprovider_healthcare_com:12051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -142,22 +141,21 @@ services:
     networks:
       health_network:
         aliases:
-          - peer3.hprovider.healthcare.com
+          - peer3_hprovider_healthcare_com
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
   
-  peer4.hprovider.healthcare.com:
-    hostname: peer4.hprovider.healthcare.com
+  peer4_hprovider_healthcare_com:
+    #hostname: peer4_hprovider_healthcare_com
     environment:
-      - CORE_PEER_ID=peer4.hprovider.healthcare.com
-      - CORE_PEER_ADDRESS=peer4.hprovider.healthcare.com:13051
+      - CORE_PEER_ID=peer4_hprovider_healthcare_com
+      - CORE_PEER_ADDRESS=peer4_hprovider_healthcare_com:13051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:13051
-      - CORE_PEER_CHAINCODEADDRESS=peer4.hprovider.healthcare.com:13052
+      - CORE_PEER_CHAINCODEADDRESS=peer4_hprovider_healthcare_com:13052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:13052
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4.hprovider.healthcare.com:13051
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4_hprovider_healthcare_com:13051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -185,14 +183,13 @@ services:
     networks:
       health_network:
         aliases:
-          - peer4.hprovider.healthcare.com
+          - peer4_hprovider_healthcare_com
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
 
-  cli.pc2:
-    hostname: cli.pc2
+  cli_pc2:
+    #hostname: clipc2
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
@@ -202,7 +199,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       #- FABRIC_LOGGING_SPEC=DEBUG
       - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli.pc2
+      - CORE_PEER_ID=cli_pc2
       - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_PEER_TLS_ENABLED=true
@@ -219,13 +216,13 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - peer1.hprovider.healthcare.com
-      - peer2.hprovider.healthcare.com
-      - peer3.hprovider.healthcare.com
-      - peer4.hprovider.healthcare.com
+      - peer1_hprovider_healthcare_com
+      - peer2_hprovider_ healthcare_com
+      - peer3_hprovider_healthcare_com
+      - peer4_hprovider_healthcare_com
     networks:
       health_network:
         aliases:
-          - cli.pc2
+          - cli_pc2
 
   

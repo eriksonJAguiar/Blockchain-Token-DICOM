@@ -6,18 +6,19 @@
 version: '3'
 
 volumes:
-  orderer.healthcare.com:
-  peer0.hprovider.healthcare.com:    
+  orderer_healthcare_com:
+  peer0_hprovider_healthcare_com:    
 
 networks:
   health_network:
-    external: true
+    external: 
+      name: health_network
 
 services:
 
-  orderer.healthcare.com:
+  orderer_healthcare_com:
     image: hyperledger/fabric-orderer:$IMAGE_TAG
-    hostname: orderer.healthcare.com
+    #hostname: orderer.healthcare.com
     environment:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
@@ -57,24 +58,23 @@ services:
       - 7050:7050
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
     networks:
       health_network:
         aliases:
-          - orderer.healthcare.com
+          - orderer_healthcare_com
 
   
-  peer0.hprovider.healthcare.com:
-    hostname: peer0.hprovider.healthcare.com
+  peer0_hprovider_healthcare_com:
+    #hostname: peer0.hprovider.healthcare.com
     environment:
-      - CORE_PEER_ID=peer0.hprovider.healthcare.com
-      - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_ID=peer0_hprovider_healthcare_com
+      - CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0.hprovider.healthcare.com:7052
+      - CORE_PEER_CHAINCODEADDRESS=peer0_hprovider_healthcare_com:7052
       - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.hprovider.healthcare.com:8051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1_hprovider_healthcare_com:8051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       # the following setting starts chaincode containers on the same
@@ -102,16 +102,15 @@ services:
     networks:
       health_network:
         aliases:
-          - peer0.hprovider.healthcare.com
+          - peer0_hprovider_healthcare_com
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
     
 
 
-  cli.pc1:
-    hostname: cli.pc1
+  cli_pc1:
+    hostname: cli_pc1
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
@@ -121,8 +120,8 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       #- FABRIC_LOGGING_SPEC=DEBUG
       - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli.pc1
-      - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_ID=cli_pc1
+      - CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_PEER_TLS_ENABLED=true
       - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.crt
@@ -138,31 +137,10 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     depends_on:
-      - orderer.healthcare.com
-      - peer0.hprovider.healthcare.com
+      - orderer_healthcare_com
+      - peer0_hprovider_healthcare_com
     networks:
       health_network:
         aliases:
-          - cli.pc1
-
-  
-  # deploy:
-  #       replicas: 1
-  #       # restart_policy:
-  #       #   condition: on-failure
-  #       #   delay: 5s
-  #       #   max_attempts: 3
-  #       placement:
-  #         constraints:
-  #           - node.hostname == hostname
-  
-
-  # networks:
-  #     health_network:
-  #       aliases:
-  #         - orderer.healthcare.com
-  #         - ca.hprovider.healthcare.com
-  #         - peer0.hprovider.healthcare.com
-  #         - cli
-
+          - cli_pc1
     

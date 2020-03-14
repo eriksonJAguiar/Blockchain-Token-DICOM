@@ -7,7 +7,8 @@ version: '3'
 
 networks:
   health_network:
-    external: true
+    external: 
+      name: health_network
 
 services:
   couchdb1:
@@ -27,7 +28,7 @@ services:
         aliases:
           - couchdb1
 
-  peer1.hprovider.healthcare.com:
+  peer1_hprovider_healthcare_com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
@@ -59,7 +60,7 @@ services:
         aliases:
           - couchdb4
 
-  peer2.hprovider.healthcare.com:
+  peer2_hprovider_healthcare_com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb4:5984
@@ -88,7 +89,7 @@ services:
         aliases:
           - couchdb5
 
-  peer3.hprovider.healthcare.com:
+  peer3_hprovider_healthcare_com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:5984
@@ -117,7 +118,7 @@ services:
         aliases:
           - couchdb6
 
-  peer4.hprovider.healthcare.com:
+  peer4_hprovider_healthcare_com:
     environment:
       - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
       - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb5:5984

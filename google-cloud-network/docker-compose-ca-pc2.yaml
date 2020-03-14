@@ -11,11 +11,11 @@ networks:
 
 
 services:
-  ca.research.healthcare.com:
+  ca_research_healthcare_com:
     image: hyperledger/fabric-ca:$IMAGE_TAG
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
-      - FABRIC_CA_SERVER_CA_NAME=ca.research.healthcare.com
+      #- FABRIC_CA_SERVER_CA_NAME=ca.research.healthcare.com
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem
       - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${BYFN_CA2_PRIVATE_KEY}
@@ -25,12 +25,11 @@ services:
     command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${BYFN_CA2_PRIVATE_KEY} -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/research.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    hostname: ca.research.healthcare.com
+    #hostname: ca.research.healthcare.com
     deploy:
       placement:
-        constraints:
-          - node.hostname == ${hostname}
+        constraints: [node.role == worker]
     networks:
       health_network:
         aliases:
-          - ca.hprovider.healthcare.com
+          - ca_hprovider_healthcare_com
