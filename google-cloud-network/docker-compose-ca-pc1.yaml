@@ -7,7 +7,7 @@ version: '3'
 
 
 networks:
-  health_network:
+  health-network:
     external: true
 
 services:
@@ -31,6 +31,6 @@ services:
         constraints:
           - node.hostname == hyperledger-node1
     networks:
-      health_network:
+      health-network:
         aliases:
           - ca.hprovider.healthcare.com
