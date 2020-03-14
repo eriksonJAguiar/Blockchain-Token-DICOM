@@ -8,7 +8,7 @@ version: '3'
 
 networks:
   health_network:
-    #external: true
+    external: true
     driver: overlay
 
 services:
@@ -32,6 +32,6 @@ services:
         constraints:
           - node.hostname == ${hostname}
     networks:
-      - health_network
-        # aliases:
-        #   - ca.hprovider.healthcare.com
+      health_network:
+        aliases:
+          - ca.hprovider.healthcare.com
