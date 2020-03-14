@@ -27,10 +27,9 @@ services:
     volumes:
       - ./crypto-config/peerOrganizations/hprovider.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
     deploy:
+      mode: global
       placement:
         constraints:
           - node.hostname == hyperledger-node1
     networks:
-      health_network:
-        aliases:
-          - ca.hprovider.healthcare.com
+      - health_network
