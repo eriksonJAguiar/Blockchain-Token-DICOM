@@ -32,4 +32,6 @@ services:
         constraints:
           - node.hostname == hyperledger-node1
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - ca.hprovider.healthcare.com
