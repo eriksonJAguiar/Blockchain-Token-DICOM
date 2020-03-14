@@ -18,11 +18,11 @@ services:
       - FABRIC_CA_SERVER_CA_NAME=ca.hprovider.healthcare.com
       - FABRIC_CA_SERVER_TLS_ENABLED=true
       - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem
-      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${BYFN_CA1_PRIVATE_KEY}
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk}
       - FABRIC_CA_SERVER_PORT=7054
     ports:
       - "7054:7054"
-    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${BYFN_CA1_PRIVATE_KEY} -b admin:adminpw -d'
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk} -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/hprovider.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
     container_name: ca.hprovider.healthcare.com
