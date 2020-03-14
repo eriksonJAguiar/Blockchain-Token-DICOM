@@ -8,7 +8,8 @@ version: '3'
 
 networks:
   health_network:
-    external: true
+    external:
+      name: health_network
 
 services:
   ca.hprovider.healthcare.com:
