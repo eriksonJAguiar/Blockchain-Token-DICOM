@@ -13,8 +13,7 @@ volumes:
 
 networks:
   health_network:
-    external:
-      name: health_network
+    external: true
 
 services:
 
@@ -53,7 +52,13 @@ services:
     ports:
       - 8051:8051
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - peer1.hprovider.healthcare.com
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == ${hostname}
 
 #---------------------------------- New Peers -------------------------------
   
@@ -92,11 +97,17 @@ services:
     ports:
       - 11051:8051
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - peer2.hprovider.healthcare.com
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == ${hostname}
 
   peer3.hprovider.healthcare.com:
     container_name: peer3.hprovider.healthcare.com
-     environment:
+    environment:
       - CORE_PEER_ID=peer3.hprovider.healthcare.com
       - CORE_PEER_ADDRESS=peer3.hprovider.healthcare.com:12051
       - CORE_PEER_LISTENADDRESS=0.0.0.0:12051
@@ -129,7 +140,13 @@ services:
     ports:
       - 12051:8051
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - peer3.hprovider.healthcare.com
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == ${hostname}
   
   peer4.hprovider.healthcare.com:
     container_name: peer4.hprovider.healthcare.com
@@ -166,10 +183,16 @@ services:
     ports:
       - 13051:8051
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - peer4.hprovider.healthcare.com
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == ${hostname}
 
-  cli:
-    container_name: cli
+  cli.pc2:
+    container_name: cli.pc2
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
@@ -179,7 +202,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       #- FABRIC_LOGGING_SPEC=DEBUG
       - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli
+      - CORE_PEER_ID=cli.pc2
       - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_PEER_TLS_ENABLED=true
@@ -201,23 +224,8 @@ services:
       - peer3.hprovider.healthcare.com
       - peer4.hprovider.healthcare.com
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - cli.pc2
 
   
-  # deploy:
-  #     mode: replicated
-  #     replicas: 1
-  #     restart_policy:
-  #         condition: on-failure
-  #     placement:
-  #       constraints:
-  #         - node.hostname == hostname
-  
-
-  # networks:
-  #     health_network:
-  #       aliases:
-  #         - peer1.hprovider.healthcare.com
-  #         - peer2.hprovider.healthcare.com
-  #         - peer3.hprovider.healthcare.com
-  #         - peer4.hprovider.healthcare.com

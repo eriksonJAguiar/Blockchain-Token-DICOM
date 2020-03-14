@@ -7,6 +7,7 @@ version: '3'
 
 networks:
   health_network:
+    external: true
 
 services:
   couchdb1:
@@ -22,7 +23,9 @@ services:
     ports:
       - "6984:5984"
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - couchdb1
 
   peer1.hprovider.healthcare.com:
     environment:
@@ -52,7 +55,9 @@ services:
     ports:
       - "9984:5984"
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - couchdb4
 
   peer2.hprovider.healthcare.com:
     environment:
@@ -79,7 +84,9 @@ services:
     ports:
       - "10984:5984"
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - couchdb5
 
   peer3.hprovider.healthcare.com:
     environment:
@@ -106,7 +113,9 @@ services:
     ports:
       - "11984:5984"
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - couchdb6
 
   peer4.hprovider.healthcare.com:
     environment:

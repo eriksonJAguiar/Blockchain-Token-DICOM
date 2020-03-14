@@ -11,8 +11,7 @@ volumes:
 
 networks:
   health_network:
-    external:
-      name: health_network
+    external: true
 
 services:
 
@@ -60,6 +59,10 @@ services:
       placement:
         constraints:
           - node.hostname == ${hostname}
+    networks:
+      health_network:
+        aliases:
+          - orderer.healthcare.com
 
   
   peer0.hprovider.healthcare.com:
@@ -97,15 +100,18 @@ services:
     ports:
       - 7051:7051
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - peer0.hprovider.healthcare.com
     deploy:
       placement:
         constraints:
           - node.hostname == ${hostname}
+    
 
 
-  cli:
-    container_name: cli
+  cli.pc1:
+    container_name: cli.pc1
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
@@ -115,7 +121,7 @@ services:
       - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
       #- FABRIC_LOGGING_SPEC=DEBUG
       - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli
+      - CORE_PEER_ID=cli.pc1
       - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
       - CORE_PEER_LOCALMSPID=HProviderMSP
       - CORE_PEER_TLS_ENABLED=true
@@ -135,7 +141,9 @@ services:
       - orderer.healthcare.com
       - peer0.hprovider.healthcare.com
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - cli.pc1
 
   
   # deploy:
