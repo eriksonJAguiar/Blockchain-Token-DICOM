@@ -29,7 +29,7 @@ services:
       mode: global
       placement:
         constraints:
-          - node.hostname == node1
+          - node.hostname == ${hostname}
     networks:
       health_network:
         aliases:
