@@ -66,7 +66,7 @@ services:
 
   
   peer0.hprovider.healthcare.com:
-    container_name: peer0.hprovider.healthcare.com
+    hostname: peer0.hprovider.healthcare.com
     environment:
       - CORE_PEER_ID=peer0.hprovider.healthcare.com
       - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
@@ -111,7 +111,7 @@ services:
 
 
   cli.pc1:
-    container_name: cli.pc1
+    hostname: cli.pc1
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true

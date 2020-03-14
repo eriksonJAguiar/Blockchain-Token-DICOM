@@ -25,6 +25,12 @@ services:
     command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${BYFN_CA2_PRIVATE_KEY} -b admin:adminpw -d'
     volumes:
       - ./crypto-config/peerOrganizations/research.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
-    container_name: ca.research.healthcare.com
+    hostname: ca.research.healthcare.com
+    deploy:
+      placement:
+        constraints:
+          - node.hostname == ${hostname}
     networks:
-      - health_network
+      health_network:
+        aliases:
+          - ca.hprovider.healthcare.com

@@ -18,7 +18,7 @@ networks:
 services:
 
   peer1.hprovider.healthcare.com:
-    container_name: peer1.hprovider.healthcare.com
+    hostname: peer1.hprovider.healthcare.com
     environment:
       - CORE_PEER_ID=peer1.hprovider.healthcare.com
       - CORE_PEER_ADDRESS=peer1.hprovider.healthcare.com:8051
@@ -63,7 +63,7 @@ services:
 #---------------------------------- New Peers -------------------------------
   
   peer2.hprovider.healthcare.com:
-    container_name: peer2.hprovider.healthcare.com
+    hostname: peer2.hprovider.healthcare.com
     environment:
       - CORE_PEER_ID=peer2.hprovider.healthcare.com
       - CORE_PEER_ADDRESS=peer2.hprovider.healthcare.com:11051
@@ -106,7 +106,7 @@ services:
           - node.hostname == ${hostname}
 
   peer3.hprovider.healthcare.com:
-    container_name: peer3.hprovider.healthcare.com
+    hostname: peer3.hprovider.healthcare.com
     environment:
       - CORE_PEER_ID=peer3.hprovider.healthcare.com
       - CORE_PEER_ADDRESS=peer3.hprovider.healthcare.com:12051
@@ -149,7 +149,7 @@ services:
           - node.hostname == ${hostname}
   
   peer4.hprovider.healthcare.com:
-    container_name: peer4.hprovider.healthcare.com
+    hostname: peer4.hprovider.healthcare.com
     environment:
       - CORE_PEER_ID=peer4.hprovider.healthcare.com
       - CORE_PEER_ADDRESS=peer4.hprovider.healthcare.com:13051
@@ -192,7 +192,7 @@ services:
           - node.hostname == ${hostname}
 
   cli.pc2:
-    container_name: cli.pc2
+    hostname: cli.pc2
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
