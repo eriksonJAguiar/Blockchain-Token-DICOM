@@ -7,7 +7,7 @@ version: '3.4'
 
 
 networks:
-  health_network:
+  ingress:
     external: true
 
 services:
@@ -31,6 +31,6 @@ services:
         constraints:
           - node.hostname == ${hostname}
     networks:
-      health_network:
+      ingress:
         aliases:
           - ca.hprovider.healthcare.com
