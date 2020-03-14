@@ -29,7 +29,7 @@ services:
     deploy:
       placement:
         constraints:
-          - node.hostname == ${hostname}
+          - node.hostname == hyperledger-node1
     networks:
       health_network:
         aliases:
