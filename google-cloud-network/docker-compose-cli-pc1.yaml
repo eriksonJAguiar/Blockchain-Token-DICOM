@@ -53,7 +53,7 @@ services:
         - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
         - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp:/var/hyperledger/orderer/msp
         - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/:/var/hyperledger/orderer/tls
-        - orderer.healthcare.com:/var/hyperledger/production/orderer
+        - orderer_healthcare_com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
     deploy:
@@ -96,7 +96,7 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
-        - peer0.hprovider.healthcare.com:/var/hyperledger/production
+        - peer0_hprovider_healthcare_com:/var/hyperledger/production
     ports:
       - 7051:7051
     networks:
