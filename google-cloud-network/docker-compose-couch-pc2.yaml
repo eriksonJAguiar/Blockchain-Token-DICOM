@@ -27,6 +27,9 @@ services:
       health_network:
         aliases:
           - couchdb1
+    deploy:
+      placement:
+        constraints: [node.role == worker]
 
   peer1_hprovider_healthcare_com:
     environment:
@@ -59,6 +62,9 @@ services:
       health_network:
         aliases:
           - couchdb4
+    deploy:
+      placement:
+        constraints: [node.role == worker]
 
   peer2_hprovider_healthcare_com:
     environment:
@@ -88,6 +94,9 @@ services:
       health_network:
         aliases:
           - couchdb5
+    deploy:
+      placement:
+        constraints: [node.role == worker]
 
   peer3_hprovider_healthcare_com:
     environment:
@@ -117,6 +126,9 @@ services:
       health_network:
         aliases:
           - couchdb6
+    deploy:
+      placement:
+        constraints: [node.role == worker]
 
   peer4_hprovider_healthcare_com:
     environment:

@@ -7,12 +7,14 @@ version: '3'
 
 networks:
   health_network:
-    external: true
+    external: 
+      name: health_network
+  
 
 services:
   couchdb0:
     container_name: couchdb0
-    image: hyperledger/fabric-couchdb
+    image: hyperledger/fabric-couchdb:$IMAGE_TAG
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -26,6 +28,9 @@ services:
       health_network:
         aliases:
           - couchdb0
+    deploy:
+      placement:
+        constraints: [node.role == manager]
 
   peer0_hprovider_healthcare_com:
     environment:
