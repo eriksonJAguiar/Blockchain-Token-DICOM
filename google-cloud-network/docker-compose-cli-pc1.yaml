@@ -18,35 +18,36 @@ services:
 
   orderer_healthcare_com:
     image: hyperledger/fabric-orderer:$IMAGE_TAG
-    #hostname: orderer.healthcare.com
-    environment:
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
-      - FABRIC_LOGGING_SPEC=INFO
-      - FABRIC_LOGGING_SPEC=DEBUG
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt\
-      - FABRIC_LOGGING_SPEC=INFO
-      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
-      - ORDERER_GENERAL_GENESISMETHOD=file
-      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
-      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
-      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
-      # enabled TLS
-      - ORDERER_GENERAL_TLS_ENABLED=true
-      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
-      - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
-      - ORDERER_KAFKA_VERBOSE=true
-      - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
-      - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
-      - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    hostname: orderer.healthcare.com
+    env_file: .orderer-env
+    # environment:
+    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    #   - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
+    #   - FABRIC_LOGGING_SPEC=INFO
+    #   - FABRIC_LOGGING_SPEC=DEBUG
+    #   - CORE_PEER_TLS_ENABLED=true
+    #   - CORE_PEER_GOSSIP_USELEADERELECTION=true
+    #   - CORE_PEER_GOSSIP_ORGLEADER=false
+    #   - CORE_PEER_PROFILE_ENABLED=true
+    #   - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+    #   - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+    #   - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt\
+    #   - FABRIC_LOGGING_SPEC=INFO
+    #   - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+    #   - ORDERER_GENERAL_GENESISMETHOD=file
+    #   - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+    #   - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+    #   - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+    #   # enabled TLS
+    #   - ORDERER_GENERAL_TLS_ENABLED=true
+    #   - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    #   - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    #   - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+    #   - ORDERER_KAFKA_TOPIC_REPLICATIONFACTOR=1
+    #   - ORDERER_KAFKA_VERBOSE=true
+    #   - ORDERER_GENERAL_CLUSTER_CLIENTCERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+    #   - ORDERER_GENERAL_CLUSTER_CLIENTPRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+    #   - ORDERER_GENERAL_CLUSTER_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
@@ -62,34 +63,35 @@ services:
     networks:
       health_network:
         aliases:
-          - orderer_healthcare_com
+          - orderer.healthcare.com
 
   
   peer0_hprovider_healthcare_com:
-    #hostname: peer0.hprovider.healthcare.com
-    environment:
-      - CORE_PEER_ID=peer0_hprovider_healthcare_com
-      - CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
-      - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
-      - CORE_PEER_CHAINCODEADDRESS=peer0_hprovider_healthcare_com:7052
-      - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
-      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1_hprovider_healthcare_com:8051
-      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_hprovider_healthcare_com:7051
-      - CORE_PEER_LOCALMSPID=HProviderMSP
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      # the following setting starts chaincode containers on the same
-      # bridge network as the peers
-      # https://docs.docker.com/compose/networking/
-      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
-      - FABRIC_LOGGING_SPEC=INFO
-      - FABRIC_LOGGING_SPEC=DEBUG
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_GOSSIP_USELEADERELECTION=true
-      - CORE_PEER_GOSSIP_ORGLEADER=false
-      - CORE_PEER_PROFILE_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    hostname: peer0.hprovider.healthcare.com
+    env_file: .peer1-hp-env
+    # environment:
+      # - CORE_PEER_ID=peer0_hprovider_healthcare_com
+      # - CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
+      # - CORE_PEER_LISTENADDRESS=0.0.0.0:7051
+      # - CORE_PEER_CHAINCODEADDRESS=peer0_hprovider_healthcare_com:7052
+      # - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:7052
+      # - CORE_PEER_GOSSIP_BOOTSTRAP=peer1_hprovider_healthcare_com:8051
+      # - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0_hprovider_healthcare_com:7051
+      # - CORE_PEER_LOCALMSPID=HProviderMSP
+      # - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # # the following setting starts chaincode containers on the same
+      # # bridge network as the peers
+      # # https://docs.docker.com/compose/networking/
+      # - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
+      # - FABRIC_LOGGING_SPEC=INFO
+      # - FABRIC_LOGGING_SPEC=DEBUG
+      # - CORE_PEER_TLS_ENABLED=true
+      # - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      # - CORE_PEER_GOSSIP_ORGLEADER=false
+      # - CORE_PEER_PROFILE_ENABLED=true
+      # - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      # - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      # - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
@@ -102,7 +104,7 @@ services:
     networks:
       health_network:
         aliases:
-          - peer0_hprovider_healthcare_com
+          - peer0.hprovider.healthcare.com
     deploy:
       placement:
         constraints: [node.role == worker]
@@ -114,20 +116,21 @@ services:
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
-    environment:
-      - SYS_CHANNEL=$SYS_CHANNEL
-      - GOPATH=/opt/gopath
-      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-      #- FABRIC_LOGGING_SPEC=DEBUG
-      - FABRIC_LOGGING_SPEC=INFO
-      - CORE_PEER_ID=cli_pc1
-      - CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
-      - CORE_PEER_LOCALMSPID=HProviderMSP
-      - CORE_PEER_TLS_ENABLED=true
-      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.crt
-      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.key
-      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
-      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/users/Admin@hprovider.healthcare.com/msp
+    env_file: .cli-env
+    # environment:
+    #   - SYS_CHANNEL=$SYS_CHANNEL
+    #   - GOPATH=/opt/gopath
+    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+    #   #- FABRIC_LOGGING_SPEC=DEBUG
+    #   - FABRIC_LOGGING_SPEC=INFO
+    #   - CORE_PEER_ID=cli_pc1
+    #   - CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
+    #   - CORE_PEER_LOCALMSPID=HProviderMSP
+    #   - CORE_PEER_TLS_ENABLED=true
+    #   - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.crt
+    #   - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.key
+    #   - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
+    #   - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/users/Admin@hprovider.healthcare.com/msp
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: /bin/bash
     volumes:
