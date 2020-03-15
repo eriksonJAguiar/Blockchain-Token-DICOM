@@ -67,6 +67,7 @@ services:
 
   
   peer0_hprovider_healthcare_com:
+    image: hyperledger/fabric-peer:$IMAGE_TAG
     hostname: peer0.hprovider.healthcare.com
     env_file: .peer1-hp-env
     # environment:
