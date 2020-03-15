@@ -104,15 +104,15 @@ services:
     networks:
       health_network:
         aliases:
-          - peer0.hprovider.healthcare.com
+          - peer0_hprovider_healthcare_com
     deploy:
       placement:
         constraints: [node.role == worker]
     
 
 
-  cli_pc1:
-    hostname: cli_pc1
+  cli:
+    hostname: cli
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true
@@ -145,5 +145,5 @@ services:
     networks:
       health_network:
         aliases:
-          - cli_pc1
+          - cli
     
