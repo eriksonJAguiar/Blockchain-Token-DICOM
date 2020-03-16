@@ -29,5 +29,6 @@ services:
         aliases:
           - couchdb0
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == manager]

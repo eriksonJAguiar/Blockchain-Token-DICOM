@@ -26,6 +26,7 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     deploy:
+      mode: replicated
       replicas: 5
       placement:
         constraints: [node.role == worker]

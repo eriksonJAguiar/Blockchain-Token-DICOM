@@ -30,6 +30,7 @@ services:
     ports:
       - 7050:7050
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
     networks:
@@ -56,6 +57,7 @@ services:
         aliases:
           - peer0_hprovider_healthcare_com
     deploy:
+      mode: replicated
       replicas: 2
       placement:
         constraints: [node.role == worker]

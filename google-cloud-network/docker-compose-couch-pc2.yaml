@@ -90,5 +90,6 @@ services:
         aliases:
           - couchdb6
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]

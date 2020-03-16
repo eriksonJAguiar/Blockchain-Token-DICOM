@@ -35,6 +35,7 @@ services:
         aliases:
           - peer0_research_healthcare_com
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
 
@@ -57,6 +58,7 @@ services:
         aliases:
           - peer0_research_healthcare_com
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
 

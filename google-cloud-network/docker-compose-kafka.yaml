@@ -8,30 +8,38 @@
 # and is not fault tolerant. This healthcare is a toy deployment that is only meant to exercise the Kafka code path
 # of the ordering service.
 
-version: '2'
+version: '3'
 
 networks:
   health_network:
 
 services:
-  zookeeper.healthcare.com:
-    container_name: zookeeper.healthcare.com
+  zookeeper_healthcare_com:
+    hostname: zookeeper.healthcare.com
+    container_name: zookeeper_healthcare_com
     image: hyperledger/fabric-zookeeper:$IMAGE_TAG
     environment:
       ZOOKEEPER_CLIENT_PORT: 32181
       ZOOKEEPER_TICK_TIME: 2000
     networks:
-    - health_network
+      health_network:
+        aliases:
+          - zookeeper_healthcare_com
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == manager]
 
-  kafka.healthcare.com:
-    container_name: kafka.healthcare.com
+  kafka_healthcare_com:
+    hostname: kafka_healthcare_com
+    container_name: kafka_healthcare_com
     image: hyperledger/fabric-kafka:$IMAGE_TAG
     depends_on:
-    - zookeeper.healthcare.com
+    - zookeeper_healthcare_com
     environment:
       - KAFKA_BROKER_ID=1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper.healthcare.com:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka.healthcare.com:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper_healthcare_com:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_healthcare_com:9092
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_MESSAGE_MAX_BYTES=1048576 # 1 * 1024 * 1024 B
       - KAFKA_REPLICA_FETCH_MAX_BYTES=1048576 # 1 * 1024 * 1024 B
@@ -40,4 +48,10 @@ services:
       - KAFKA_MIN_INSYNC_REPLICAS=1
       - KAFKA_DEFAULT_REPLICATION_FACTOR=1
     networks:
-    - health_network
+      health_network:
+        aliases:
+          - kafka_healthcare_com
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == manager]

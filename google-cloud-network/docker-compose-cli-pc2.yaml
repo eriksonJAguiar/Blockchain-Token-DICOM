@@ -36,6 +36,7 @@ services:
         aliases:
           - peer1_hprovider_healthcare_com
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
   
@@ -57,6 +58,7 @@ services:
         aliases:
           - peer2_hprovider_healthcare_com
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
 
@@ -78,6 +80,7 @@ services:
         aliases:
           - peer3_hprovider_healthcare_com
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
   
@@ -99,6 +102,7 @@ services:
         aliases:
           - peer4_hprovider_healthcare_com
     deploy:
+      mode: replicated
       placement:
         constraints: [node.role == worker]
 
