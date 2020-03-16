@@ -70,7 +70,7 @@ services:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
-        - peer3.hprovider.healthcare.com:/var/hyperledger/production
+        - peer3_hprovider_healthcare_com:/var/hyperledger/production
     ports:
       - 12051:8051
     networks:

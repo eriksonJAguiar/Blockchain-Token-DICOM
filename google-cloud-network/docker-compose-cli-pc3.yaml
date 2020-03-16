@@ -17,8 +17,10 @@ networks:
 services:
 
   peer0_research_healthcare_com:
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    hostname: peer0.research.healthcare.com
     container_name: peer0_research_healthcare_com
-    env_file: .peer0-rs-env
+    env_file: env/.peer0-rs-env
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
@@ -37,8 +39,10 @@ services:
         constraints: [node.role == worker]
 
   peer1_research_healthcare_com:
+    image: hyperledger/fabric-peer:$IMAGE_TAG
+    hostname: peer1.research.healthcare.com
     container_name: peer1_research_healthcare_com
-    env_file: .peer1-rs-env
+    env_file: env/.peer1-rs-env
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/msp:/etc/hyperledger/fabric/msp

@@ -13,7 +13,7 @@ networks:
 services:
   couchdb3:
     container_name: couchdb3
-    image: hyperledger/fabric-couchdb:letast
+    image: hyperledger/fabric-couchdb:latest
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -33,7 +33,7 @@ services:
 
   couchdb5:
     container_name: couchdb5
-    image: hyperledger/fabric-couchdb:letast
+    image: hyperledger/fabric-couchdb:latest
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
     # for CouchDB.  This will prevent CouchDB from operating in an "Admin Party" mode.
     environment:
@@ -42,7 +42,7 @@ services:
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
     ports:
-      - "8984:5984"
+      - "15984:5984"
     networks:
       health_network:
         aliases:
