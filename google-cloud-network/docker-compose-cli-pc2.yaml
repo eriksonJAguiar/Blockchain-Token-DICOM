@@ -21,37 +21,14 @@ services:
   peer1_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     hostname: peer1.hprovider.healthcare.com
-    env_file: .peer1-hp-pc2
-    # environment:
-    #   - CORE_PEER_ID=peer1_hprovider_healthcare_com
-    #   - CORE_PEER_ADDRESS=peer1_hprovider_healthcare_com:8051
-    #   - CORE_PEER_LISTENADDRESS=0.0.0.0:8051
-    #   - CORE_PEER_CHAINCODEADDRESS=peer1_hprovider_healthcare_com:8052
-    #   - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:8052
-    #   - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1_hprovider_healthcare_com:8051
-    #   - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
-    #   - CORE_PEER_LOCALMSPID=HProviderMSP
-    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    #   # the following setting starts chaincode containers on the same
-    #   # bridge network as the peers
-    #   # https://docs.docker.com/compose/networking/
-    #   - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
-    #   - FABRIC_LOGGING_SPEC=INFO
-    #   - FABRIC_LOGGING_SPEC=DEBUG
-    #   - CORE_PEER_TLS_ENABLED=true
-    #   - CORE_PEER_GOSSIP_USELEADERELECTION=true
-    #   - CORE_PEER_GOSSIP_ORGLEADER=false
-    #   - CORE_PEER_PROFILE_ENABLED=true
-    #   - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    #   - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    #   - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    env_file: env/.peer1-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
-        - peer1.hprovider.healthcare.com:/var/hyperledger/production
+        - peer1_hprovider_healthcare_com:/var/hyperledger/production
     ports:
       - 8051:8051
     networks:
@@ -61,43 +38,18 @@ services:
     deploy:
       placement:
         constraints: [node.role == worker]
-
-#---------------------------------- New Peers -------------------------------
   
   peer2_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     hostname: peer2_hprovider_healthcare.com
-    env_file: .peer2-hp-pc2
-    # environment:
-    #   - CORE_PEER_ID=peer2_hprovider_healthcare.com
-    #   - CORE_PEER_ADDRESS=peer2_hprovider_healthcare_com:11051
-    #   - CORE_PEER_LISTENADDRESS=0.0.0.0:11051
-    #   - CORE_PEER_CHAINCODEADDRESS=peer2_hprovider_healthcare_com:11052
-    #   - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:11052
-    #   - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer2_hprovider.healthcare_com:11051
-    #   - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
-    #   - CORE_PEER_LOCALMSPID=HProviderMSP
-    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    #   # the following setting starts chaincode containers on the same
-    #   # bridge network as the peers
-    #   # https://docs.docker.com/compose/networking/
-    #   - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
-    #   - FABRIC_LOGGING_SPEC=INFO
-    #   - FABRIC_LOGGING_SPEC=DEBUG
-    #   - CORE_PEER_TLS_ENABLED=true
-    #   - CORE_PEER_GOSSIP_USELEADERELECTION=true
-    #   - CORE_PEER_GOSSIP_ORGLEADER=false
-    #   - CORE_PEER_PROFILE_ENABLED=true
-    #   - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    #   - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    #   - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    env_file: env/.peer2-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
-        - peer2.hprovider.healthcare.com:/var/hyperledger/production
+        - peer2_hprovider_healthcare_com:/var/hyperledger/production
     ports:
       - 11051:8051
     networks:
@@ -111,30 +63,7 @@ services:
   peer3_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     hostname: peer3.hprovider.healthcare.com
-    env_file: .peer3-hp-pc2
-    # environment:
-    #   - CORE_PEER_ID=peer3_hprovider_healthcare.com
-    #   - CORE_PEER_ADDRESS=peer3_hprovider_healthcare_com:12051
-    #   - CORE_PEER_LISTENADDRESS=0.0.0.0:12051
-    #   - CORE_PEER_CHAINCODEADDRESS=peer3_hprovider_healthcare_com:12052
-    #   - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:12052
-    #   - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer3_hprovider_healthcare_com:12051
-    #   - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
-    #   - CORE_PEER_LOCALMSPID=HProviderMSP
-    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    #   # the following setting starts chaincode containers on the same
-    #   # bridge network as the peers
-    #   # https://docs.docker.com/compose/networking/
-    #   - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
-    #   - FABRIC_LOGGING_SPEC=INFO
-    #   - FABRIC_LOGGING_SPEC=DEBUG
-    #   - CORE_PEER_TLS_ENABLED=true
-    #   - CORE_PEER_GOSSIP_USELEADERELECTION=true
-    #   - CORE_PEER_GOSSIP_ORGLEADER=false
-    #   - CORE_PEER_PROFILE_ENABLED=true
-    #   - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    #   - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    #   - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    env_file: env/.peer3-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
@@ -155,37 +84,14 @@ services:
   peer4_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     hostname: peer4_hprovider_healthcare_com
-    env_file: .peer4-hp-pc2
-    # environment:
-    #   - CORE_PEER_ID=peer4_hprovider_healthcare_com
-    #   - CORE_PEER_ADDRESS=peer4_hprovider_healthcare_com:13051
-    #   - CORE_PEER_LISTENADDRESS=0.0.0.0:13051
-    #   - CORE_PEER_CHAINCODEADDRESS=peer4_hprovider_healthcare_com:13052
-    #   - CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:13052
-    #   - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4_hprovider_healthcare_com:13051
-    #   - CORE_PEER_GOSSIP_BOOTSTRAP=peer0_hprovider_healthcare_com:7051
-    #   - CORE_PEER_LOCALMSPID=HProviderMSP
-    #   - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
-    #   # the following setting starts chaincode containers on the same
-    #   # bridge network as the peers
-    #   # https://docs.docker.com/compose/networking/
-    #   - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network
-    #   - FABRIC_LOGGING_SPEC=INFO
-    #   - FABRIC_LOGGING_SPEC=DEBUG
-    #   - CORE_PEER_TLS_ENABLED=true
-    #   - CORE_PEER_GOSSIP_USELEADERELECTION=true
-    #   - CORE_PEER_GOSSIP_ORGLEADER=false
-    #   - CORE_PEER_PROFILE_ENABLED=true
-    #   - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
-    #   - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
-    #   - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+    env_file: env/.peer4-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
-        - peer4.hprovider.healthcare.com:/var/hyperledger/production
+        - peer4_hprovider_healthcare_com:/var/hyperledger/production
     ports:
       - 13051:8051
     networks:
