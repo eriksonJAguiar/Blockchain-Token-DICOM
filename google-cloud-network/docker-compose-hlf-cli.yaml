@@ -26,10 +26,10 @@ services:
         - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
         - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
     deploy:
-      mode: replicated
+      mode: global
       replicas: 5
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
     networks:
       health_network:
         aliases:

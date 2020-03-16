@@ -6,7 +6,7 @@
 version: '3'
 
 volumes:
-  peer0_hprovider_healthcare_com:    
+  orderer_healthcare_com:
 
 networks:
   health_network:
@@ -14,30 +14,28 @@ networks:
       name: health_network
 
 services:
-  
-  peer0_hprovider_healthcare_com:
-    image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer0.hprovider.healthcare.com
-    env_file: env/.peer1-hp-env
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: peer node start
+
+  orderer_healthcare_com:
+    image: hyperledger/fabric-orderer:$IMAGE_TAG
+    hostname: orderer.healthcare.com
+    env_file: env/.orderer-env
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
     volumes:
-        - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
-        - peer0_hprovider_healthcare_com:/var/hyperledger/production
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp:/var/hyperledger/orderer/msp
+        - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/:/var/hyperledger/orderer/tls
+        - orderer_healthcare_com:/var/hyperledger/production/orderer
     ports:
-      - 7051:7051
+      - 7050:7050
+    deploy:
+      mode: global
+      placement:
+        constraints: [node.role == manager]
     networks:
       health_network:
         aliases:
-          - peer0_hprovider_healthcare_com
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints: [node.role == worker]
-    
+          - orderer.healthcare.com
 
 
   # cli:

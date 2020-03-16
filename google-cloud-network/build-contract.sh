@@ -1,18 +1,17 @@
 #!/bin/bash
 
-CHANNEL_NAME=healthchannel
-CONTRACT_PATH=/opt/gopath/src/github.com/chaincode/Dicom-contract
-CONTRACT_NAME=Dicom-contract
+export CHANNEL_NAME=healthchannel
+export CONTRACT_PATH=/opt/gopath/src/github.com/chaincode/Dicom-contract
+export CONTRACT_NAME=Dicom-contract
 
-CONFIG_ROOT=/opt/gopath/src/github.com/hyperledger/fabric/peer
-HPROVIDER_MSPCONFIGPATH=${CONFIG_ROOT}/crypto-config/peerOrganizations/hprovider.healthcare.com/users/Admin@hprovider.healthcare.com/msp
-HPROVIDER_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
-RESEARCH_MSPCONFIGPATH=${CONFIG_ROOT}/crypto-config/peerOrganizations/research.healthcare.com/users/Admin@research.healthcare.com/msp
-RESEARCH_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/tls/ca.crt
-ORDERER_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp/tlscacerts/tlsca.healthcare.com-cert.pem
+export CONFIG_ROOT=/opt/gopath/src/github.com/hyperledger/fabric/peer
+export HPROVIDER_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
+export RESEARCH_MSPCONFIGPATH=${CONFIG_ROOT}/crypto/peerOrganizations/research.healthcare.com/users/Admin@research.healthcare.com/msp
+export RESEARCH_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/tls/ca.crt
+export ORDERER_TLS_ROOTCERT_FILE=${CONFIG_ROOT}/crypto/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp/tlscacerts/tlsca.healthcare.com-cert.pem
 
-CORE_PEER_TLS_ENABLED=true
-ORDERER_CA=${CONFIG_ROOT}/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp/tlscacerts/tlsca.healthcare.com-cert.pem
+export CORE_PEER_TLS_ENABLED=true
+export ORDERER_CA=${CONFIG_ROOT}/crypto/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp/tlscacerts/tlsca.healthcare.com-cert.pem
 
 PEER0_HPROVIDER="docker exec
 -e CORE_PEER_LOCALMSPID=HProviderMSP
