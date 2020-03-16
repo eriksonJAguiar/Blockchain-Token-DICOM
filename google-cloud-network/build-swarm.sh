@@ -11,6 +11,7 @@ set -x
 docker stack deploy --compose-file docker-compose-ca-pc1.yaml ca-node1
 docker stack deploy --compose-file docker-compose-couch-pc1.yaml couch-node1
 docker stack deploy --compose-file docker-compose-cli-pc1.yaml services-node1
+docker stack deploy --compose-file docker-compose-hlf-cli.yaml cli-node1
 
 
 

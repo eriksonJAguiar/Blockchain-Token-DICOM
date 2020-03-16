@@ -62,29 +62,29 @@ services:
     
 
 
-  cli:
-    hostname: cli
-    image: hyperledger/fabric-tools:$IMAGE_TAG
-    tty: true
-    stdin_open: true
-    env_file: env/.cli-env
-    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
-    command: /bin/bash
-    volumes:
-        - /var/run/:/host/var/run/
-        - ./chaincode/:/opt/gopath/src/github.com/chaincode
-        - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
-        - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
-        - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
-    depends_on:
-      - orderer_healthcare_com
-      - peer0_hprovider_healthcare_com
-    deploy:
-      replicas: 5
-      placement:
-        constraints: [node.role == worker]
-    networks:
-      health_network:
-        aliases:
-          - cli
+  # cli:
+  #   hostname: cli
+  #   image: hyperledger/fabric-tools:$IMAGE_TAG
+  #   tty: true
+  #   stdin_open: true
+  #   env_file: env/.cli-env
+  #   working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+  #   command: /bin/bash
+  #   volumes:
+  #       - /var/run/:/host/var/run/
+  #       - ./chaincode/:/opt/gopath/src/github.com/chaincode
+  #       - ./crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+  #       - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+  #       - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
+  #   depends_on:
+  #     - orderer_healthcare_com
+  #     - peer0_hprovider_healthcare_com
+  #   deploy:
+  #     replicas: 5
+  #     placement:
+  #       constraints: [node.role == worker]
+  #   networks:
+  #     health_network:
+  #       aliases:
+  #         - cli
     
