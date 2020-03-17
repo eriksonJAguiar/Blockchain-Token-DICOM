@@ -7,7 +7,15 @@
 
 
 #set -e
+set -e
 
+#FABRIC_CFG_PATH="configtx.yaml" # Config used by configtxgen
+CRYPTO_CONFIG="crypto-config.yaml"
+
+PROFILE=HealthOrdererGenesis
+CHANNEL_PROFILE=HealthChannel
+export CHANNEL_NAME=healthchannel
+ORGANIZATION_NAME=(HProviderMSP ResearchMSP)
 export FABRIC_ROOT=${PWD}
 export FABRIC_CFG_PATH=${PWD}
 echo
@@ -50,101 +58,60 @@ function replacePrivateKey () {
 	done
 }
 
-## Generates Org certs using cryptogen tool
-function generateCerts (){
-	CRYPTOGEN=$FABRIC_ROOT/bin/cryptogen
-  which $CRYPTOGEN
-	if [ "$?" -ne 0 ]; then
-    echo "cryptogen tool not found. exiting"
-    exit 1
-  fi
+# 1. Generate crypto-config Folder containing all CA, PEER, TLS, NETWORK ADMIN, certificate etc.
+function generateCert() {
+  rm -Rf ./crypto-config
+  mkdir ./crypto-config
 
-  rm -rf ./crypto-config
-
-	echo
-	echo "##########################################################"
-	echo "##### Generate certificates using cryptogen tool #########"
-	echo "##########################################################"
-	$CRYPTOGEN generate --config=./crypto-config.yaml
-	if [ "$?" -ne 0 ]; then
+  set -x
+  ../bin/cryptogen generate --config=./$CRYPTO_CONFIG
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
     echo "Failed to generate certificates..."
     exit 1
   fi
-	echo
 }
 
-## Generate orderer genesis block , channel configuration transaction and anchor peer update transactions
+# 2. Create Genesis block with initial consortium definition and anchorPeers
 function generateChannelArtifacts() {
 
-	CONFIGTXGEN=$FABRIC_ROOT/bin/configtxgen
-	which $CONFIGTXGEN
-	if [ "$?" -ne 0 ]; then
-    echo "configtxgen tool not found. exiting"
-    exit 1
-  fi
+  rm -Rf ./channel-artifacts
+  mkdir ./channel-artifacts
 
-  # rm -rf ./channel-artifacts
-
-	echo "##########################################################"
-	echo "#########  Generating Orderer Genesis block ##############"
-	echo "##########################################################"
-	# Note: For some unknown reason (at least for now) the block file can't be
-	# named orderer.genesis.block or the orderer will fail to launch!
-	$CONFIGTXGEN -profile HealthOrdererGenesis -outputBlock ./channel-artifacts/genesis.block
-	if [ "$?" -ne 0 ]; then
+  # Create Genesis block defined by profile OrgsOrdererGenesis in configtx.yaml
+  set -x
+  ../bin/configtxgen -profile $PROFILE -outputBlock ./channel-artifacts/genesis.block
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
     echo "Failed to generate orderer genesis block..."
     exit 1
   fi
-	echo
-	echo "#################################################################"
-	echo "### Generating channel configuration transaction 'channel.tx' ###"
-	echo "#################################################################"
-	$CONFIGTXGEN -profile HealthChannel -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
-	if [ "$?" -ne 0 ]; then
+
+  # Create initial channel configuration defined by profile OrgsChannel in configtx.yaml
+  set -x
+  ../bin/configtxgen -profile $CHANNEL_PROFILE -outputCreateChannelTx ./channel-artifacts/channel.tx -channelID $CHANNEL_NAME
+  res=$?
+  set +x
+  if [ $res -ne 0 ]; then
     echo "Failed to generate channel configuration transaction..."
     exit 1
   fi
 
-	echo
-	echo "#################################################################"
-	echo "#######    Generating anchor peer update for HProviderMSP   ##########"
-	echo "#################################################################"
-	$CONFIGTXGEN -profile HealthChannel -outputAnchorPeersUpdate ./channel-artifacts/HProviderMSPanchors.tx -channelID $CHANNEL_NAME -asOrg HProviderMSP
-	if [ "$?" -ne 0 ]; then
-	echo "Failed to generate anchor peer update for Org${i}MSP..."
-	exit 1
-	fi
+  # Create anchorPeer configuration defined in profile OneOrgChannel in configtx.yaml
+  for i in ${!ORGANIZATION_NAME[@]}; do
+    set -x
+    ../bin/configtxgen -profile $CHANNEL_PROFILE -outputAnchorPeersUpdate ./channel-artifacts/${ORGANIZATION_NAME[$i]}-anchors.tx -channelID $CHANNEL_NAME -asOrg ${ORGANIZATION_NAME[$i]}
+    res=$?
+    set +x
+    if [ $res -ne 0 ]; then
+      echo "Failed to generate ${ORGANIZATION_NAME[$i]} Anchor peer configuration transaction..."
+      exit 1
+    fi
+  done
 
-	echo
-	echo "#################################################################"
-	echo "#######    Generating anchor peer update for ResearchMSP   ##########"
-	echo "#################################################################"
-	$CONFIGTXGEN -profile HealthChannel -outputAnchorPeersUpdate ./channel-artifacts/ResearchMSPanchors.tx -channelID $CHANNEL_NAME -asOrg ResearchMSP
-	if [ "$?" -ne 0 ]; then
-	echo "Failed to generate anchor peer update for Org${i}MSP..."
-	exit 1
-	fi
 }
-
-CHANNEL_NAME="healthchannel"
-DOMAIN_NAME="healthcare.com"
-NUM_ORGS=(hprovider,research)
-
-# Parse commandline args
-while getopts "h?c:d:o:" opt; do
-  case "$opt" in
-    h|\?)
-      printHelp
-      exit 0
-    ;;
-    c)  CHANNEL_NAME=$OPTARG
-    ;;
-    d)  DOMAIN_NAME=$OPTARG
-    ;;
-		o)  NUM_ORGS=$OPTARG
-		;;
-  esac
-done
 
 generateCerts
 replacePrivateKey
