@@ -11,12 +11,12 @@ organizations:
   HProvider:
     mspid: HProviderMSP
     peers:
-    - peer0.hprovider.healthcare.com
-    - peer1.hprovider.healthcare.com
+    - peer0_hprovider_healthcare_com
+    - peer1_hprovider_healthcare_com
     certificateAuthorities:
-    - ca.hprovider.healthcare.com
+    - ca_hprovider_healthcare_com
 peers:
-  peer0.hprovider.healthcare.com:
+  peer0_hprovider_healthcare_com:
     url: grpcs://localhost:7051
     tlsCACerts:
       pem: |
@@ -38,9 +38,9 @@ peers:
         -----END CERTIFICATE-----
         
     grpcOptions:
-      ssl-target-name-override: peer0.hprovider.healthcare.com
-      hostnameOverride: peer0.hprovider.healthcare.com
-  peer1.hprovider.healthcare.com:
+      ssl-target-name-override: peer0_hprovider_healthcare_com
+      hostnameOverride: peer0_hprovider_healthcare_com
+  peer1_hprovider_healthcare_com:
     url: grpcs://localhost:8051
     tlsCACerts:
       pem: |
@@ -63,11 +63,11 @@ peers:
         
     grpcOptions:
       ssl-target-name-override: peer1.{ORG}.healthcare.com
-      hostnameOverride: peer1.hprovider.healthcare.com
+      hostnameOverride: peer1_hprovider_healthcare_com
 certificateAuthorities:
-  ca.hprovider.healthcare.com:
+  ca_hprovider_healthcare_com:
     url: https://localhost:7054
-    caName: ca.hprovider.healthcare.com
+    caName: ca_hprovider_healthcare_com
     tlsCACerts:
       pem: |
         -----BEGIN CERTIFICATE-----

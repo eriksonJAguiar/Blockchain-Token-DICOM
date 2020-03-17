@@ -11,31 +11,31 @@ organizations:
   ${ORGMSP}:
     mspid: ${ORGMSP}MSP
     peers:
-    - peer0.${ORG}.healthcare.com
-    - peer1.${ORG}.healthcare.com
+    - peer0_${ORG}_healthcare_com
+    - peer1_${ORG}_healthcare_com
     certificateAuthorities:
-    - ca.${ORG}.healthcare.com
+    - ca_${ORG}_healthcare_com
 peers:
-  peer0.${ORG}.healthcare.com:
+  peer0_${ORG}_healthcare_com:
     url: grpcs://localhost:${P0PORT}
     tlsCACerts:
       pem: |
         ${PEERPEM}
     grpcOptions:
-      ssl-target-name-override: peer0.${ORG}.healthcare.com
-      hostnameOverride: peer0.${ORG}.healthcare.com
-  peer1.${ORG}.healthcare.com:
+      ssl-target-name-override: peer0_${ORG}_healthcare_com
+      hostnameOverride: peer0_${ORG}_healthcare_com
+  peer1_${ORG}_healthcare_com:
     url: grpcs://localhost:${P1PORT}
     tlsCACerts:
       pem: |
         ${PEERPEM}
     grpcOptions:
-      ssl-target-name-override: peer1.{ORG}.healthcare.com
-      hostnameOverride: peer1.${ORG}.healthcare.com
+      ssl-target-name-override: peer1_{ORG}_healthcare_com
+      hostnameOverride: peer1_${ORG}_healthcare_com
 certificateAuthorities:
-  ca.${ORG}.healthcare.com:
+  ca_${ORG}_healthcare_com:
     url: https://localhost:${CAPORT}
-    caName: ca.${ORG}.healthcare.com
+    caName: ca_${ORG}_healthcare_com
     tlsCACerts:
       pem: |
         ${CAPEM}
