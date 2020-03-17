@@ -1,8 +1,8 @@
 version: "3"
 networks:
-  hyperledger-ov:
+  health-network:
     external:
-      name: hyperledger-ov
+      name: health-network
 services:
   ca_hprovider:
     deploy:
@@ -14,7 +14,7 @@ services:
     hostname: ca0.healthcare.com
     image: hyperledger/fabric-ca:x86_64-1.0.2
     networks:
-      hyperledger-ov:
+      health-network:
         aliases:
         - ca_hprovider
     environment:
@@ -38,7 +38,7 @@ services:
     hostname: ca_research.healthcare.com
     image: hyperledger/fabric-ca:x86_64-1.0.2
     networks:
-      hyperledger-ov:
+      health-network:
         aliases:
         - ca_research
     environment:
