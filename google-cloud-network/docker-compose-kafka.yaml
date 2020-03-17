@@ -15,7 +15,7 @@ networks:
 
 services:
   zookeeper_healthcare_com:
-    hostname: zookeeper.healthcare.com
+    hostname: zookeeper.healthcare_com
     container_name: zookeeper_healthcare_com
     image: hyperledger/fabric-zookeeper:$IMAGE_TAG
     environment:

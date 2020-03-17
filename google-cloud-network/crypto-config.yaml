@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: Orderer
-    Domain: healthcare.com
+    Domain: healthcare_com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
@@ -31,7 +31,7 @@ PeerOrgs:
   # HProvider
   # ---------------------------------------------------------------------------
   - Name: HProvider
-    Domain: hprovider.healthcare.com
+    Domain: hprovider_healthcare_com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"
@@ -81,7 +81,7 @@ PeerOrgs:
   # research: See "HProvider" for full specification
   # ---------------------------------------------------------------------------
   - Name: Research
-    Domain: research.healthcare.com
+    Domain: research_healthcare_com
     EnableNodeOUs: true
     Template:
       Count: 5

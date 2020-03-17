@@ -13,6 +13,7 @@ networks:
 services:
   
   couchdb7:
+    hostname: couchdb7
     container_name: couchdb7
     image: hyperledger/fabric-couchdb:latest
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -34,6 +35,7 @@ services:
         constraints: [node.role == worker]
   
   couchdb8:
+    hostname: couchdb8
     container_name: couchdb8
     image: hyperledger/fabric-couchdb:latest
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password
@@ -55,6 +57,7 @@ services:
         constraints: [node.role == worker]
 
   couchdb9:
+    hostname: couchdb9
     container_name: couchdb9
     image: hyperledger/fabric-couchdb:latest
     # Populate the COUCHDB_USER and COUCHDB_PASSWORD to set an admin user and password

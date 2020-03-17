@@ -18,13 +18,13 @@ services:
 
   peer0_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer0.research.healthcare.com
+    hostname: peer0_research_healthcare_com
     container_name: peer0_research_healthcare_com
     env_file: env/.peer0-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer0_research_healthcare_com:/var/hyperledger/production
     ports:
       - 9051:9051
@@ -41,13 +41,13 @@ services:
 
   peer1_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer1.research.healthcare.com
+    hostname: peer1_research_healthcare_com
     container_name: peer1_research_healthcare_com
     env_file: env/.peer1-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer1_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer1_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer1_research_healthcare_com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -75,12 +75,12 @@ services:
   #     #- FABRIC_LOGGING_SPEC=DEBUG
   #     - FABRIC_LOGGING_SPEC=INFO
   #     - CORE_PEER_ID=cli
-  #     - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
+  #     - CORE_PEER_ADDRESS=peer0_hprovider.healthcare.com:7051
   #     - CORE_PEER_LOCALMSPID=HProviderMSP
   #     - CORE_PEER_TLS_ENABLED=true
-  #     - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.crt
-  #     - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.key
-  #     - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
+  #     - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0_hprovider.healthcare.com/tls/server.crt
+  #     - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0_hprovider.healthcare.com/tls/server.key
+  #     - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0_hprovider.healthcare.com/tls/ca.crt
   #     - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/users/Admin@hprovider.healthcare.com/msp
   #   working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
   #   command: /bin/bash
@@ -91,6 +91,6 @@ services:
   #       - ./scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
   #       - ./channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts
   #   depends_on:
-  #     - peer0.research.healthcare.com
+  #     - peer0_research_healthcare_com
   #   networks:
   #     - health_network

@@ -17,14 +17,14 @@ services:
 
   orderer_healthcare_com:
     image: hyperledger/fabric-orderer:$IMAGE_TAG
-    hostname: orderer.healthcare.com
+    hostname: orderer_healthcare_com
     env_file: env/.orderer-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
-        - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp:/var/hyperledger/orderer/msp
-        - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/:/var/hyperledger/orderer/tls
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer_genesis.block
+        - ../crypto-config/ordererOrganizations/healthcare_com/orderers/orderer_healthcare_com/msp:/var/hyperledger/orderer/msp
+        - ../crypto-config/ordererOrganizations/healthcare_com/orderers/orderer_healthcare_com/tls/:/var/hyperledger/orderer/tls
         - orderer_healthcare_com:/var/hyperledger/production/orderer
     ports:
       - 7050:7050
@@ -35,7 +35,7 @@ services:
     networks:
       health_network:
         aliases:
-          - orderer.healthcare.com
+          - orderer_healthcare_com
 
 
   # cli:
