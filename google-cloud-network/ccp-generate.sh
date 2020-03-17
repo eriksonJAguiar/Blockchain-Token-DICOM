@@ -35,7 +35,7 @@ ORGMSP=HProvider
 P0PORT=7051
 P1PORT=8051
 CAPORT=7054
-PEERPEM=crypto-config/peerOrganizations/hprovider_healthcare_com/tlsca/tlsca.hprovider_healthcare_com-cert.pem
+PEERPEM=crypto-config/peerOrganizations/hprovider_healthcare_com/tlsca/tlsca_hprovider_healthcare_com-cert.pem
 CAPEM=crypto-config/peerOrganizations/hprovider_healthcare_com/ca/ca_hprovider_healthcare_com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > ./connections/connection-hprovider.json
@@ -46,7 +46,7 @@ ORGMSP=Research
 P0PORT=9051
 P1PORT=10051
 CAPORT=8054
-PEERPEM=crypto-config/peerOrganizations/research_healthcare_com/tlsca/tlsca.research_healthcare_com-cert.pem
+PEERPEM=crypto-config/peerOrganizations/research_healthcare_com/tlsca/tlsca_research_healthcare_com-cert.pem
 CAPEM=crypto-config/peerOrganizations/research_healthcare_com/ca/ca_research_healthcare_com-cert.pem
 
 echo "$(json_ccp $ORG $ORGMSP $P0PORT $P1PORT $CAPORT $PEERPEM $CAPEM)" > ./connections/connection-research.json
