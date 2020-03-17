@@ -164,8 +164,8 @@ function networkUp() {
   COMPOSE_FILES="-f ${COMPOSE_FILE}"
   if [ "${CERTIFICATE_AUTHORITIES}" == "true" ]; then
     COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_CA}"
-    export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk)
-    export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research.healthcare.com/ca && ls *_sk)
+    export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider_healthcare_com/ca && ls *_sk)
+    export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research_healthcare_com/ca && ls *_sk)
   fi
   if [ "${CONSENSUS_TYPE}" == "kafka" ]; then
     COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_KAFKA}"
@@ -207,7 +207,7 @@ function networkUp() {
 # and relaunch the orderer and peers with latest tag
 function upgradeNetwork() {
   if [[ "$IMAGETAG" == *"1.4"* ]] || [[ $IMAGETAG == "latest" ]]; then
-    docker inspect -f '{{.Config.Volumes}}' orderer.healthcare.com | grep -q '/var/hyperledger/production/orderer'
+    docker inspect -f '{{.Config.Volumes}}' orderer_healthcare_com | grep -q '/var/hyperledger/production/orderer'
     if [ $? -ne 0 ]; then
       echo "ERROR !!!! This network does not appear to start with fabric-samples >= v1.3.x?"
       exit 1
@@ -222,8 +222,8 @@ function upgradeNetwork() {
     COMPOSE_FILES="-f ${COMPOSE_FILE}"
     if [ "${CERTIFICATE_AUTHORITIES}" == "true" ]; then
       COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_CA}"
-      export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk)
-      export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research.healthcare.com/ca && ls *_sk)
+      export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider_healthcare_com/ca && ls *_sk)
+      export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research_healthcare_com/ca && ls *_sk)
     fi
     if [ "${CONSENSUS_TYPE}" == "kafka" ]; then
       COMPOSE_FILES="${COMPOSE_FILES} -f ${COMPOSE_FILE_KAFKA}"
@@ -239,10 +239,10 @@ function upgradeNetwork() {
     docker-compose $COMPOSE_FILES up -d --no-deps cli
 
     echo "Upgrading orderer"
-    docker-compose $COMPOSE_FILES stop orderer.healthcare.com
-    docker cp -a orderer.healthcare.com:/var/hyperledger/production/orderer $LEDGERS_BACKUP/orderer.healthcare.com
-    docker-compose $COMPOSE_FILES up -d --no-deps orderer.healthcare.com
-    for PEER in peer0.hprovider.healthcare.com peer1.hprovider.healthcare.com peer2.hprovider.healthcare.com peer3.hprovider.healthcare.com peer4.hprovider.healthcare.com peer0.research.healthcare.com peer1.research.healthcare.com peer2.research.healthcare.com peer3.research.healthcare.com peer4.research.healthcare.com; do
+    docker-compose $COMPOSE_FILES stop orderer_healthcare_com
+    docker cp -a orderer_healthcare_com:/var/hyperledger/production/orderer $LEDGERS_BACKUP/orderer_healthcare_com
+    docker-compose $COMPOSE_FILES up -d --no-deps orderer_healthcare_com
+    for PEER in peer0_hprovider_healthcare_com peer1_hprovider_healthcare_com peer2_hprovider_healthcare_com peer3_hprovider_healthcare_com peer4_hprovider_healthcare_com peer0_research_healthcare_com peer1_research_healthcare_com peer2_research_healthcare_com peer3_research_healthcare_com peer4_research_healthcare_com; do
       echo "Upgrading peer $PEER"
 
       # Stop the peer and backup its ledger
@@ -314,11 +314,11 @@ function replacePrivateKey() {
   # The next steps will replace the template's contents with the
   # actual values of the private key file names for the two CAs.
   CURRENT_DIR=$PWD
-  cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca/
+  cd crypto-config/peerOrganizations/hprovider_healthcare_com/ca/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-  cd crypto-config/peerOrganizations/research.healthcare.com/ca/
+  cd crypto-config/peerOrganizations/research_healthcare_com/ca/
   PRIV_KEY=$(ls *_sk)
   cd "$CURRENT_DIR"
   sed $OPTS "s/CA2_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
@@ -392,7 +392,7 @@ function generateCerts() {
 # These headers are important, as we will pass them in as arguments when we create
 # our artifacts.  This file also contains two additional specifications that are worth
 # noting.  Firstly, we specify the anchor peers for each Peer Org
-# (``peer0.hprovider.healthcare.com`` & ``peer0.research.healthcare.com``).  Secondly, we point to
+# (``peer0_hprovider_healthcare_com`` & ``peer0_research_healthcare_com``).  Secondly, we point to
 # the location of the MSP directory for each member, in turn allowing us to store the
 # root certificates for each Org in the orderer genesis block.  This is a critical
 # concept. Now any network entity communicating with the ordering service can have
@@ -619,8 +619,8 @@ elif [ "${MODE}" == "generate" ]; then ## Generate Artifacts
   generateCerts
   replacePrivateKey
   generateChannelArtifacts
-  export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk)
-  export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research.healthcare.com/ca && ls *_sk)
+  export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider_healthcare_com/ca && ls *_sk)
+  export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research_healthcare_com/ca && ls *_sk)
   export IMAGE_TAG=1.4
   export CHANNEL_NAME=healthchannel
 elif [ "${MODE}" == "restart" ]; then ## Restart the network
