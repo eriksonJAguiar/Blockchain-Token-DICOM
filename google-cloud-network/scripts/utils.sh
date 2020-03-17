@@ -6,10 +6,10 @@
 
 # This is a collection of bash functions used by different scripts
 
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp/tlscacerts/tlsca.healthcare.com-cert.pem
-PEER0_HPROVIDER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
-PEER0_RESEARCH_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/tls/ca.crt
-PEER0_ORG3_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.healthcare.com/peers/peer0.org3.healthcare.com/tls/ca.crt
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/msp/tlscacerts/tlsca_healthcare_com-cert.pem
+PEER0_HPROVIDER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer0_hprovider_healthcare_com/tls/ca.crt
+PEER0_RESEARCH_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/tls/ca.crt
+PEER0_ORG3_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/org3_healthcare_com/peers/peer0_org3_healthcare_com/tls/ca.crt
 
 org_name=(hprovider research)
 
@@ -26,8 +26,8 @@ verifyResult() {
 # Set OrdererOrg.Admin globals
 setOrdererGlobals() {
   CORE_PEER_LOCALMSPID="OrdererMSP"
-  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp/tlscacerts/tlsca.healthcare.com-cert.pem
-  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/ordererOrganizations/healthcare.com/users/Admin@healthcare.com/msp
+  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/msp/tlscacerts/tlsca_healthcare_com-cert.pem
+  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare.com/users/Admin@healthcare.com/msp
 }
 
 setGlobals() {
@@ -36,42 +36,42 @@ setGlobals() {
   if [ $ORG -eq 1 ]; then
     CORE_PEER_LOCALMSPID="HProviderMSP"
     CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_HPROVIDER_CA
-    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/users/Admin@hprovider.healthcare.com/msp
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/hprovider_healthcare_com/users/Admin@hprovider_healthcare_com/msp
     if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
+      CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
     elif [ $PEER -eq 1 ]; then
-      CORE_PEER_ADDRESS=peer1.hprovider.healthcare.com:8051
+      CORE_PEER_ADDRESS=peer1_hprovider_healthcare_com:8051
     elif [ $PEER -eq 2 ]; then
-      CORE_PEER_ADDRESS=peer2.hprovider.healthcare.com:11051
+      CORE_PEER_ADDRESS=peer2_hprovider_healthcare_com:11051
     elif [ $PEER -eq 3 ]; then
-      CORE_PEER_ADDRESS=peer3.hprovider.healthcare.com:12051
+      CORE_PEER_ADDRESS=peer3_hprovider_healthcare_com:12051
     else
-      CORE_PEER_ADDRESS=peer4.hprovider.healthcare.com:13051
+      CORE_PEER_ADDRESS=peer4_hprovider_healthcare_com:13051
     fi
   elif [ $ORG -eq 2 ]; then
     CORE_PEER_LOCALMSPID="ResearchMSP"
     CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_RESEARCH_CA
-    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/research.healthcare.com/users/Admin@research.healthcare.com/msp
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/research_healthcare_com/users/Admin@research_healthcare_com/msp
     if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.research.healthcare.com:9051
+      CORE_PEER_ADDRESS=peer0_research_healthcare_com:9051
     elif [ $PEER -eq 1 ]; then
-      CORE_PEER_ADDRESS=peer1.research.healthcare.com:10051
+      CORE_PEER_ADDRESS=peer1_research_healthcare_com:10051
     elif [ $PEER -eq 2 ]; then
-      CORE_PEER_ADDRESS=peer2.research.healthcare.com:14051
+      CORE_PEER_ADDRESS=peer2_research_healthcare_com:14051
     elif [ $PEER -eq 3 ]; then
-      CORE_PEER_ADDRESS=peer3.research.healthcare.com:15051
+      CORE_PEER_ADDRESS=peer3_research_healthcare_com:15051
     else
-      CORE_PEER_ADDRESS=peer4.research.healthcare.com:16051
+      CORE_PEER_ADDRESS=peer4_research_healthcare_com:16051
     fi
 
   elif [ $ORG -eq 3 ]; then
     CORE_PEER_LOCALMSPID="Org3MSP"
     CORE_PEER_TLS_ROOTCERT_FILE=$PEER0_ORG3_CA
-    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/org3.healthcare.com/users/Admin@org3.healthcare.com/msp
+    CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/org3_healthcare_com/users/Admin@org3_healthcare_com/msp
     if [ $PEER -eq 0 ]; then
-      CORE_PEER_ADDRESS=peer0.org3.healthcare.com:11051
+      CORE_PEER_ADDRESS=peer0_org3_healthcare_com:11051
     else
-      CORE_PEER_ADDRESS=peer1.org3.healthcare.com:12051
+      CORE_PEER_ADDRESS=peer1_org3_healthcare_com:12051
     fi
   else
     echo "================== ERROR !!! ORG Unknown =================="
@@ -89,12 +89,12 @@ updateAnchorPeers() {
 
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer channel update -o orderer.healthcare.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
+    peer channel update -o orderer_healthcare_com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer channel update -o orderer.healthcare.com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
+    peer channel update -o orderer_healthcare_com:7050 -c $CHANNEL_NAME -f ./channel-artifacts/${CORE_PEER_LOCALMSPID}anchors.tx --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA >&log.txt
     res=$?
     set +x
   fi
@@ -153,12 +153,12 @@ instantiateChaincode() {
   # the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode instantiate -o orderer.healthcare.com:7050 -C $CHANNEL_NAME -n dicom -l ${LANGUAGE} -v ${VERSION} -c '{"Args":[]}' -P "AND ('HProviderMSP.peer','ResearchMSP.peer')" >&log.txt
+    peer chaincode instantiate -o orderer_healthcare_com:7050 -C $CHANNEL_NAME -n dicom -l ${LANGUAGE} -v ${VERSION} -c '{"Args":[]}' -P "AND ('HProviderMSP.peer','ResearchMSP.peer')" >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode instantiate -o orderer.healthcare.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n dicom -l ${LANGUAGE} -v 1.0 -c '{"Args":[]}' -P "AND ('HProviderMSP.peer','ResearchMSP.peer')" >&log.txt
+    peer chaincode instantiate -o orderer_healthcare_com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n dicom -l ${LANGUAGE} -v 1.0 -c '{"Args":[]}' -P "AND ('HProviderMSP.peer','ResearchMSP.peer')" >&log.txt
     res=$?
     set +x
   fi
@@ -174,7 +174,7 @@ upgradeChaincode() {
   setGlobals $PEER $ORG
 
   set -x
-  peer chaincode upgrade -o orderer.healthcare.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n dicom -v 2.0 -c '{"Args":["init","a","90","b","210"]}' -P "AND ('HProviderMSP.peer','ResearchMSP.peer','Org3MSP.peer')"
+  peer chaincode upgrade -o orderer_healthcare_com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n dicom -v 2.0 -c '{"Args":["init","a","90","b","210"]}' -P "AND ('HProviderMSP.peer','ResearchMSP.peer','Org3MSP.peer')"
   res=$?
   set +x
   cat log.txt
@@ -234,11 +234,11 @@ fetchChannelConfig() {
   echo "Fetching the most recent configuration block for the channel"
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer channel fetch config config_block.pb -o orderer.healthcare.com:7050 -c $CHANNEL --cafile $ORDERER_CA
+    peer channel fetch config config_block.pb -o orderer_healthcare_com:7050 -c $CHANNEL --cafile $ORDERER_CA
     set +x
   else
     set -x
-    peer channel fetch config config_block.pb -o orderer.healthcare.com:7050 -c $CHANNEL --tls --cafile $ORDERER_CA
+    peer channel fetch config config_block.pb -o orderer_healthcare_com:7050 -c $CHANNEL --tls --cafile $ORDERER_CA
     set +x
   fi
 
@@ -319,12 +319,12 @@ chaincodeInvoke() {
   # it using the "-o" option
   if [ -z "$CORE_PEER_TLS_ENABLED" -o "$CORE_PEER_TLS_ENABLED" = "false" ]; then
     set -x
-    peer chaincode invoke -o orderer.healthcare.com:7050 -C $CHANNEL_NAME -n dicom $PEER_CONN_PARMS -c '{"Args":["invoke","a","b","10"]}' >&log.txt
+    peer chaincode invoke -o orderer_healthcare_com:7050 -C $CHANNEL_NAME -n dicom $PEER_CONN_PARMS -c '{"Args":["invoke","a","b","10"]}' >&log.txt
     res=$?
     set +x
   else
     set -x
-    peer chaincode invoke -o orderer.healthcare.com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n dicom $PEER_CONN_PARMS -c '{"Args":["invoke","a","b","10"]}' >&log.txt
+    peer chaincode invoke -o orderer_healthcare_com:7050 --tls $CORE_PEER_TLS_ENABLED --cafile $ORDERER_CA -C $CHANNEL_NAME -n dicom $PEER_CONN_PARMS -c '{"Args":["invoke","a","b","10"]}' >&log.txt
     res=$?
     set +x
   fi
