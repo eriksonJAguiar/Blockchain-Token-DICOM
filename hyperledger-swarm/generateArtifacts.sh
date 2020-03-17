@@ -124,8 +124,6 @@ function generateChannelArtifacts() {
 	echo "Failed to generate anchor peer update for Org${i}MSP..."
 	exit 1
 	fi
-
-	done
 }
 
 CHANNEL_NAME="healthchannel"
