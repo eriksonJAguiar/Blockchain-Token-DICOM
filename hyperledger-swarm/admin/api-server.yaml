@@ -1,7 +1,7 @@
 apiVersion: extensions/v1beta1
 kind: Deployment
 metadata:
-  namespace: org1-f-1
+  namespace: hprovider.healthcare.com
   name: admin
 spec:
   replicas: 1
@@ -9,17 +9,17 @@ spec:
   template:
     metadata:
       labels:
-       app: hyperledger
+       app: health-network
        role: admin
-       org: org1-f-1
+       org: hprovider.healthcare.com
        name: admin
     spec:
       # nodeSelector:
       #   # assume all org node can access to docker
-      #   org: org1-f-1
+      #   org: hprovider.healthcare.com
       containers:
        - name: admin
-         image: hyperledger/admin-api
+         image: health-network/admin-api
          imagePullPolicy: Never
          env: 
          - name:  PORT
@@ -51,13 +51,13 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-   namespace: org1-f-1
+   namespace: hprovider.healthcare.com
    name: admin
 spec:
  selector:
-   app: hyperledger
+   app: health-network
    role: admin
-   org: org1-f-1
+   org: hprovider.healthcare.com
    name: admin
  type: NodePort
  ports:

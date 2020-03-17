@@ -1,10 +1,10 @@
 version: '3'
 #
 networks:
-  hyperledger-ov:
+  health-network:
     # If network is created with deplyment, Chaincode container cannot connect to network
     external:
-      name: hyperledger-ov
+      name: health-network
 
 services:
   busybox:
@@ -18,7 +18,7 @@ services:
         delay: 5s
         max_attempts: 3
     networks:
-        - hyperledger-ov
+        - health-network
     hostname: busybox
     image: busybox
     command: sleep 3600

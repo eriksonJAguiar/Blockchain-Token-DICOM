@@ -20,9 +20,9 @@ fi
 cat <<EOF > api-server.yaml
 version: '3'
 networks:
-  hyperledger-ov:
+  health-network:
     external:
-      name: hyperledger-ov
+      name: health-network
 
 services:
   admin:
@@ -34,7 +34,7 @@ services:
         max_attempts: 3
     image: $IMAGE_NAME
     networks:
-      hyperledger-ov:
+      health-network:
         aliases:
         - admin
     
