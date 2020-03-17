@@ -59,7 +59,7 @@ function replacePrivateKey () {
 }
 
 # 1. Generate crypto-config Folder containing all CA, PEER, TLS, NETWORK ADMIN, certificate etc.
-function generateCert() {
+function generateCert(){
   rm -Rf ./crypto-config
   mkdir ./crypto-config
 
@@ -113,6 +113,6 @@ function generateChannelArtifacts() {
 
 }
 
-generateCerts
+generateCert
 replacePrivateKey
 generateChannelArtifacts
