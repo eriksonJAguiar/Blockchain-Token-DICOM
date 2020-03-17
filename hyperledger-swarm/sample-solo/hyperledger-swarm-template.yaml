@@ -1,0 +1,297 @@
+version: '3'
+
+networks:
+  health-network:
+    # If network is created with deplyment, Chaincode container cannot connect to network
+    # as the created network name is '<STACK NAME>_health-network'.
+    # But chaincode container will attempt to connect 'health-network' network
+    external:
+      name: health-network
+
+services:
+  ca_hprovider:
+    image: hyperledger/fabric-ca:x86_64-1.0.0-beta
+    networks:
+      health-network:
+        aliases:
+          - ca_hprovider
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-hprovider
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA1_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/hprovider.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
+  ca_research:
+    image: hyperledger/fabric-ca:x86_64-1.0.0-beta
+    networks:
+      health-network:
+        aliases:
+          - ca_research
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    environment:
+      - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+      - FABRIC_CA_SERVER_CA_NAME=ca-research
+      - FABRIC_CA_SERVER_TLS_ENABLED=true
+      - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem
+      - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem --ca.keyfile /etc/hyperledger/fabric-ca-server-config/CA2_PRIVATE_KEY -b admin:adminpw -d'
+    volumes:
+      - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/research.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
+
+  orderer:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-orderer:x86_64-1.0.0-beta
+    # Give network alias
+    networks:
+      health-network:
+        aliases:
+          - orderer.healthcare.com
+    environment:
+      - ORDERER_GENERAL_LOGLEVEL=debug
+      - ORDERER_GENERAL_LISTENADDRESS=0.0.0.0
+      - ORDERER_GENERAL_GENESISMETHOD=file
+      - ORDERER_GENERAL_GENESISFILE=/var/hyperledger/orderer/orderer.genesis.block
+      - ORDERER_GENERAL_LOCALMSPID=OrdererMSP
+      - ORDERER_GENERAL_LOCALMSPDIR=/var/hyperledger/orderer/msp
+      - ORDERER_GENERAL_TLS_ENABLED=true
+      - ORDERER_GENERAL_TLS_PRIVATEKEY=/var/hyperledger/orderer/tls/server.key
+      - ORDERER_GENERAL_TLS_CERTIFICATE=/var/hyperledger/orderer/tls/server.crt
+      - ORDERER_GENERAL_TLS_ROOTCAS=[/var/hyperledger/orderer/tls/ca.crt]
+      # https://stackoverflow.com/questions/43113916/how-can-i-set-up-hyperledger-fabric-with-multiple-hosts-using-docker
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=health-network
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric
+    command: orderer
+    volumes:
+        - /nfs-share/release/linux-amd64/channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp:/var/hyperledger/orderer/msp
+        - /nfs-share/release/linux-amd64/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/:/var/hyperledger/orderer/tls
+
+  # comma(.) in service name of composer v3 is not supported
+  # So I user underbar(_)
+  peer0_hprovider:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
+    networks:
+      health-network:
+        # This will make others connect to this container with alias name
+        aliases:
+          - peer0.hprovider.healthcare.com
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=health-network
+      #- CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer0.hprovider.healthcare.com
+      - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      # enable CouchDB
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb0:5984
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+        - /var/run/:/host/var/run/
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+
+  peer1_hprovider:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
+    networks:
+      health-network:
+        # This will make others connect to this container with alias name
+        aliases:
+          - peer1.hprovider.healthcare.com
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=health-network
+      #- CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer1.hprovider.healthcare.com
+      - CORE_PEER_ADDRESS=peer1.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.hprovider.healthcare.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      # enable CouchDB
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb1:5984
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+        - /var/run/:/host/var/run/
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+
+  peer0_research:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
+    networks:
+      health-network:
+        # This will make others connect to this container with alias name
+        aliases:
+          - peer0.research.healthcare.com
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=health-network
+      #- CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer0.research.healthcare.com
+      - CORE_PEER_ADDRESS=peer0.research.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer0.research.healthcare.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer0.research.healthcare.com:7051
+      - CORE_PEER_LOCALMSPID=ResearchMSP
+      # enable CouchDB
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb2:5984
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+        - /var/run/:/host/var/run/
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+
+  peer1_research:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-peer:x86_64-1.0.0-beta
+    networks:
+      health-network:
+        # This will make others connect to this container with alias name
+        aliases:
+          - peer1.research.healthcare.com
+    environment:
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      # the following setting starts chaincode containers on the same
+      # bridge network as the peers
+      # https://docs.docker.com/compose/networking/
+      - CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=health-network
+      #- CORE_LOGGING_LEVEL=ERROR
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_ENDORSER_ENABLED=true
+      - CORE_PEER_GOSSIP_USELEADERELECTION=true
+      - CORE_PEER_GOSSIP_ORGLEADER=false
+      - CORE_PEER_PROFILE_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/etc/hyperledger/fabric/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/etc/hyperledger/fabric/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/etc/hyperledger/fabric/tls/ca.crt
+      - CORE_PEER_ID=peer1.research.healthcare.com
+      - CORE_PEER_ADDRESS=peer1.research.healthcare.com:7051
+      - CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer1.research.healthcare.com:7051
+      - CORE_PEER_GOSSIP_BOOTSTRAP=peer1.research.healthcare.com:7051
+      - CORE_PEER_LOCALMSPID=ResearchMSP
+      # enable CouchDB
+      - CORE_LEDGER_STATE_STATEDATABASE=CouchDB
+      - CORE_LEDGER_STATE_COUCHDBCONFIG_COUCHDBADDRESS=couchdb3:5984
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    command: peer node start
+    volumes:
+        - /var/run/:/host/var/run/
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - /nfs-share/release/linux-amd64/crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+
+  cli:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    image: hyperledger/fabric-tools:x86_64-1.0.0-beta
+    networks:
+      - health-network
+    tty: true
+    environment:
+      - GOPATH=/opt/gopath
+      - CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
+      - CORE_LOGGING_LEVEL=DEBUG
+      - CORE_PEER_ID=cli
+      - CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
+      - CORE_PEER_LOCALMSPID=Org1MSP
+      - CORE_PEER_TLS_ENABLED=true
+      - CORE_PEER_TLS_CERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.crt
+      - CORE_PEER_TLS_KEY_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/server.key
+      - CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls/ca.crt
+      - CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/peerOrganizations/hprovider.healthcare.com/users/Admin@hprovider.healthcare.com/msp
+    working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
+    #command: /bin/bash -c './scripts/script.sh ${CHANNEL_NAME}; sleep $TIMEOUT'
+    command: sleep 100000
+    volumes:
+        - /var/run/:/host/var/run/
+        - /nfs-share/release/linux-amd64/chaincode/go/:/opt/gopath/src/github.com/hyperledger/fabric/examples/chaincode/go
+        - /nfs-share/release/linux-amd64/crypto-config:/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto/
+        - /nfs-share/release/linux-amd64/scripts:/opt/gopath/src/github.com/hyperledger/fabric/peer/scripts/
+        - /nfs-share/release/linux-amd64/channel-artifacts:/opt/gopath/src/github.com/hyperledger/fabric/peer/channel-artifacts

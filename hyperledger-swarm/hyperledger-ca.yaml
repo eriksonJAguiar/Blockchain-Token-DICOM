@@ -1,0 +1,54 @@
+version: "3"
+networks:
+  hyperledger-ov:
+    external:
+      name: hyperledger-ov
+services:
+  ca_hprovider:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: ca0.healthcare.com
+    image: hyperledger/fabric-ca:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - ca_hprovider
+    environment:
+    - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    - FABRIC_CA_SERVER_CA_NAME=ca-hprovider
+    - FABRIC_CA_SERVER_TLS_ENABLED=true
+    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem
+    - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk}
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.hprovider.healthcare.com-cert.pem
+      --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk} -b admin:adminpw
+      -d'
+    volumes:
+    - ./crypto-config/peerOrganizations/hprovider.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
+  ca_research:
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        delay: 5s
+        max_attempts: 3
+    hostname: ca_research.healthcare.com
+    image: hyperledger/fabric-ca:x86_64-1.0.2
+    networks:
+      hyperledger-ov:
+        aliases:
+        - ca_research
+    environment:
+    - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
+    - FABRIC_CA_SERVER_CA_NAME=ca-research
+    - FABRIC_CA_SERVER_TLS_ENABLED=true
+    - FABRIC_CA_SERVER_TLS_CERTFILE=/etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem
+    - FABRIC_CA_SERVER_TLS_KEYFILE=/etc/hyperledger/fabric-ca-server-config/${cd crypto-config/peerOrganizations/research.healthcare.com/ca && ls *_sk}
+    command: sh -c 'fabric-ca-server start --ca.certfile /etc/hyperledger/fabric-ca-server-config/ca.research.healthcare.com-cert.pem
+      --ca.keyfile /etc/hyperledger/fabric-ca-server-config/${cd crypto-config/peerOrganizations/research.healthcare.com/ca && ls *_sk} -b admin:adminpw
+      -d'
+    volumes:
+    - ./crypto-config/peerOrganizations/research.healthcare.com/ca/:/etc/hyperledger/fabric-ca-server-config
