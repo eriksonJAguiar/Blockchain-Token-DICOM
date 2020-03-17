@@ -21,15 +21,17 @@ services:
     environment:
       ZOOKEEPER_CLIENT_PORT: 32181
       ZOOKEEPER_TICK_TIME: 2000
-    networks:
-      health_network:
-        aliases:
-          - zookeeper_healthcare_com
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == manager]
 
+    networks:
+      health_network:
+        aliases:
+          - zookeeper_healthcare_com
+  
+  
   kafka_healthcare_com:
     hostname: kafka_healthcare_com
     container_name: kafka_healthcare_com
@@ -47,11 +49,12 @@ services:
       - KAFKA_LOG_RETENTION_MS=-1
       - KAFKA_MIN_INSYNC_REPLICAS=1
       - KAFKA_DEFAULT_REPLICATION_FACTOR=1
-    networks:
-      health_network:
-        aliases:
-          - kafka_healthcare_com
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == manager]
+    networks:
+      health_network:
+        aliases:
+          - kafka_healthcare_com
+    

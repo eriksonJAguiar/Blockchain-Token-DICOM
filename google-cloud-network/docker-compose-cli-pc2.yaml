@@ -51,16 +51,17 @@ services:
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer2_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer2_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer2_hprovider_healthcare_com:/var/hyperledger/production
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 11051:8051
     networks:
       health_network:
         aliases:
           - peer2_hprovider_healthcare_com
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == worker]
+    
 
   peer3_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
@@ -73,16 +74,17 @@ services:
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer3_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer3_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer3_hprovider_healthcare_com:/var/hyperledger/production
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 12051:8051
     networks:
       health_network:
         aliases:
           - peer3_hprovider_healthcare_com
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == worker]
+    
   
   peer4_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
@@ -95,16 +97,17 @@ services:
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer4_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer4_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer4_hprovider_healthcare_com:/var/hyperledger/production
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 13051:8051
     networks:
       health_network:
         aliases:
           - peer4_hprovider_healthcare_com
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == worker]
+    
 
   # cli_pc2:
   #   #hostname: clipc2

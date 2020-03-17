@@ -26,12 +26,12 @@ services:
         - ../crypto-config/ordererOrganizations/healthcare_com/orderers/orderer_healthcare_com/msp:/var/hyperledger/orderer/msp
         - ../crypto-config/ordererOrganizations/healthcare_com/orderers/orderer_healthcare_com/tls/:/var/hyperledger/orderer/tls
         - orderer_healthcare_com:/var/hyperledger/production/orderer
-    ports:
-      - 7050:7050
     deploy:
       mode: global
       placement:
         constraints: [node.role == manager]
+    ports:
+      - 7050:7050
     networks:
       health_network:
         aliases:

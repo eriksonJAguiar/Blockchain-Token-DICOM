@@ -26,18 +26,18 @@ services:
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer0_research_healthcare_com:/var/hyperledger/production
-    ports:
-      - 9051:9051
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
-    networks:
-      health_network:
-        aliases:
-          - peer0_research_healthcare_com
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == worker]
+    ports:
+      - 9051:9051
+    networks:
+      health_network:
+        aliases:
+          - peer0_research_healthcare_com
 
   peer1_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
@@ -51,16 +51,16 @@ services:
         - peer1_research_healthcare_com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 10051:10051
     networks:
       health_network:
         aliases:
           - peer0_research_healthcare_com
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == worker]
 
 
   # cli:

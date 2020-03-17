@@ -19,7 +19,7 @@ networks:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     container_name: peer2_research_healthcare_com
     hostname: peer2_research_healthcare_com
-    env_file: .peer2-rs-env
+    env_file: env/.peer2-rs-env
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer2_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
@@ -27,62 +27,62 @@ networks:
         - peer2_research_healthcare_com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 15051:10051
     networks:
       health_network:
         aliases:
           - peer2_research_healthcare_com
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == worker]
 
   peer3_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     container_name: peer3_hprovider_healthcare_com
     hostname: peer3_hprovider_healthcare_com
-    env_file: .peer3-rs-env
+    env_file: env/.peer3-rs-env
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer3_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer3_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer3_research_healthcare_com:/var/hyperledger/production
-    ports:
-      - 15051:10051
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
-    networks:
-      health_network:
-        aliases:
-          - peer3_research_healthcare_com
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == worker]
+    ports:
+      - 15051:10051
+    networks:
+      health_network:
+        aliases:
+          - peer3_research_healthcare_com
 
   peer4_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
     container_name: peer4_hprovider_healthcare_com
     hostname: peer4_hprovider_healthcare_com
-    env_file: .peer4-rs-env
+    env_file: env/.peer4-rs-env
     volumes:
         - /var/run/:/host/var/run/
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer4_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer4_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer4_research_healthcare_com:/var/hyperledger/production
-    ports:
-      - 16051:10051
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
-    networks:
-      health_network:
-        aliases:
-          - peer4_research_healthcare_com
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == worker]
+    ports:
+      - 16051:10051
+    networks:
+      health_network:
+        aliases:
+          - peer4_research_healthcare_com
 
   # cli:
   #   container_name: cli

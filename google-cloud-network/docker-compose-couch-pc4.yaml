@@ -25,14 +25,14 @@ services:
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "12984:5984"
-    networks:
-      health_network:
-        aliases:
-          - couchdb7
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == worker]
+    networks:
+      health_network:
+        aliases:
+          - couchdb7
   
   couchdb8:
     hostname: couchdb8
@@ -47,14 +47,14 @@ services:
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "13984:5984"
-    networks:
-      health_network:
-        aliases:
-          - couchdb8
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == worker]
+    networks:
+      health_network:
+        aliases:
+          - couchdb8
 
   couchdb9:
     hostname: couchdb9
@@ -69,11 +69,11 @@ services:
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
     ports:
       - "14984:5984"
-    networks:
-      health_network:
-        aliases:
-          - couchdb9
     deploy:
       mode: replicated
       placement:
         constraints: [node.role == worker]
+    networks:
+      health_network:
+        aliases:
+          - couchdb9

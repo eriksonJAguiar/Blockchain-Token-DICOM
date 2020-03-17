@@ -26,17 +26,18 @@ services:
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer0_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
         - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer0_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
         - peer0_hprovider_healthcare_com:/var/hyperledger/production
+    deploy:
+      mode: replicated
+      replicas: 2
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 7051:7051
     networks:
       health_network:
         aliases:
           - peer0_hprovider_healthcare_com
-    deploy:
-      mode: replicated
-      replicas: 2
-      placement:
-        constraints: [node.role == worker]
+    
     
 
 
