@@ -6,7 +6,7 @@
 
 # This is a collection of bash functions used by different scripts
 
-ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/msp/tlscacerts/tlsca_healthcare_com-cert.pem
+ORDERER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare_com/orderers/orderer_healthcare_com/msp/tlscacerts/tlsca_healthcare_com-cert.pem
 PEER0_HPROVIDER_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer0_hprovider_healthcare_com/tls/ca.crt
 PEER0_RESEARCH_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/tls/ca.crt
 PEER0_ORG3_CA=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/peerOrganizations/org3_healthcare_com/peers/peer0_org3_healthcare_com/tls/ca.crt
@@ -26,8 +26,8 @@ verifyResult() {
 # Set OrdererOrg.Admin globals
 setOrdererGlobals() {
   CORE_PEER_LOCALMSPID="OrdererMSP"
-  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/msp/tlscacerts/tlsca_healthcare_com-cert.pem
-  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare.com/users/Admin@healthcare.com/msp
+  CORE_PEER_TLS_ROOTCERT_FILE=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare_com/orderers/orderer_healthcare_com/msp/tlscacerts/tlsca_healthcare_com-cert.pem
+  CORE_PEER_MSPCONFIGPATH=/opt/gopath/src/github.com/hyperledger/fabric/peer/crypto-config/ordererOrganizations/healthcare_com/users/Admin@healthcare_com/msp
 }
 
 setGlobals() {
