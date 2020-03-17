@@ -46,15 +46,14 @@ function replacePrivateKey () {
 
 	#cp docker-compose-e2e-template.yaml docker-compose-e2e.yaml
   #cp hyperledger-swarm-template.yaml hyperledger-swarm.yaml
-	i=1
+	NUM_ORGS=(hprovider, research)
 	while [ "$i" -le "$NUM_ORGS" ]; do
 		CURRENT_DIR=$PWD
-  	cd crypto-config/peerOrganizations/org${i}.${DOMAIN_NAME}/ca/
+  	cd crypto-config/peerOrganizations/${i}.healthcare.com/ca/
   	PRIV_KEY=$(ls *_sk)
   	cd $CURRENT_DIR
   	#sed $OPTS "s/CA1_PRIVATE_KEY/${PRIV_KEY}/g" docker-compose-e2e.yaml
-		sed $OPTS "s/CA${i}_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-ca.yaml
-		i=$(($i + 1))
+		sed $OPTS "s/CA_${i}_PRIVATE_KEY/${PRIV_KEY}/g" hyperledger-ca.yaml
 	done
 }
 
