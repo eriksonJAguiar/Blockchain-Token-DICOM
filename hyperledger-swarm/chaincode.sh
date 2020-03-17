@@ -7,9 +7,9 @@ fi
 cat <<EOF > hyperledger-chaincode.yaml
 version: "3"
 networks:
-  hyperledger-ov:
+  health-network:
     external:
-      name: hyperledger-ov
+      name: health-network
 services:
   chaincode:
     deploy:
@@ -20,7 +20,7 @@ services:
         max_attempts: 3
     image: hyperledger/fabric-ccenv:x86_64-1.0.2
     networks:
-      hyperledger-ov:
+      health-network:
         aliases:
         - chaincode
     environment:
