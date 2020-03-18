@@ -6,7 +6,7 @@
 version: '3'
 
 volumes:
-  orderer_healthcare_com:
+  orderer.healthcare.com:
 
 networks:
   health_network:
