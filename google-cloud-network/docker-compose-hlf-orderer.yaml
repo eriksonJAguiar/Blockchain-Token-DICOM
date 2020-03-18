@@ -22,7 +22,7 @@ services:
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric
     command: orderer
     volumes:
-        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer_genesis.block
+        - ../channel-artifacts/genesis.block:/var/hyperledger/orderer/orderer.genesis.block
         - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/msp:/var/hyperledger/orderer/msp
         - ../crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/:/var/hyperledger/orderer/tls
         - orderer.healthcare.com:/var/hyperledger/production/orderer

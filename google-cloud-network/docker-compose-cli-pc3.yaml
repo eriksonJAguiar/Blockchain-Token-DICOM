@@ -6,8 +6,8 @@
 version: '3'
 
 volumes:
-  peer0_research_healthcare_com:
-  peer1_research_healthcare_com:   
+  peer0.research.healthcare.com:
+  peer1.research.healthcare.com:   
 
 networks:
   health_network:
