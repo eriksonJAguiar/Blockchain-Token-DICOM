@@ -25,7 +25,7 @@ Organizations:
         ID: OrdererMSP
 
         # MSPDir is the filesystem path which contains the MSP configuration
-        MSPDir: crypto-config/ordererOrganizations/healthcare_com/msp
+        MSPDir: crypto-config/ordererOrganizations/healthcare.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -49,7 +49,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: HProviderMSP
 
-        MSPDir: crypto-config/peerOrganizations/hprovider_healthcare_com/msp
+        MSPDir: crypto-config/peerOrganizations/hprovider.healthcare.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -70,7 +70,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0_hprovider_healthcare_com
+            - Host: peer0.hprovider.healthcare.com
               Port: 7051
 
     - &Research
@@ -81,7 +81,7 @@ Organizations:
         # ID to load the MSP definition as
         ID: ResearchMSP
 
-        MSPDir: crypto-config/peerOrganizations/research_healthcare_com/msp
+        MSPDir: crypto-config/peerOrganizations/research.healthcare.com/msp
 
         # Policies defines the set of policies at this level of the config tree
         # For organization policies, their canonical path is usually
@@ -101,7 +101,7 @@ Organizations:
             # AnchorPeers defines the location of peers which can be used
             # for cross org gossip communication.  Note, this value is only
             # encoded in the genesis block in the Application section context
-            - Host: peer0_research_healthcare_com
+            - Host: peer0.research.healthcare.com
               Port: 9051
 
 ################################################################################
@@ -220,7 +220,7 @@ Orderer: &OrdererDefaults
     OrdererType: solo
 
     Addresses:
-        - orderer_healthcare_com:7050
+        - orderer.healthcare.com:7050
 
     # Batch Timeout: The amount of time to wait before creating a batch
     BatchTimeout: 2s
@@ -254,26 +254,26 @@ Orderer: &OrdererDefaults
         # a subset of the host:port items enumerated in this list should be
         # replicated under the Orderer.Addresses key above.
         Consenters:
-            - Host: orderer_healthcare_com
+            - Host: orderer.healthcare.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/tls/server.crt
-            - Host: orderer2_healthcare_com
+              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/server.crt
+            - Host: orderer2.healthcare.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2_healthcare_com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2_healthcare_com/tls/server.crt
-            - Host: orderer3_healthcare_com
+              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2.healthcare.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2.healthcare.com/tls/server.crt
+            - Host: orderer3.healthcare.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3_healthcare_com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3_healthcare_com/tls/server.crt
-            - Host: orderer4_healthcare_com
+              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3.healthcare.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3.healthcare.com/tls/server.crt
+            - Host: orderer4.healthcare.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4_healthcare_com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4_healthcare_com/tls/server.crt
-            - Host: orderer5_healthcare_com
+              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4.healthcare.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4.healthcare.com/tls/server.crt
+            - Host: orderer5.healthcare.com
               Port: 7050
-              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5_healthcare_com/tls/server.crt
-              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5_healthcare_com/tls/server.crt
+              ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5.healthcare.com/tls/server.crt
+              ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5.healthcare.com/tls/server.crt
 
     # Organizations is the list of orgs which are defined as participants on
     # the orderer side of the network
@@ -373,7 +373,7 @@ Profiles:
             OrdererType: kafka
             Kafka:
                 Brokers:
-                - kafka_healthcare_com:9092
+                - kafka.healthcare.com:9092
 
             Organizations:
             - *OrdererOrg
@@ -398,32 +398,32 @@ Profiles:
             OrdererType: etcdraft
             EtcdRaft:
                 Consenters:
-                - Host: orderer_healthcare_com
+                - Host: orderer.healthcare.com
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer_healthcare_com/tls/server.crt
-                - Host: orderer2_healthcare_com
+                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer.healthcare.com/tls/server.crt
+                - Host: orderer2.healthcare.com
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2_healthcare_com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2_healthcare_com/tls/server.crt
-                - Host: orderer3_healthcare_com
+                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2.healthcare.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer2.healthcare.com/tls/server.crt
+                - Host: orderer3.healthcare.com
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3_healthcare_com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3_healthcare_com/tls/server.crt
-                - Host: orderer4_healthcare_com
+                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3.healthcare.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer3.healthcare.com/tls/server.crt
+                - Host: orderer4.healthcare.com
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4_healthcare_com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4_healthcare_com/tls/server.crt
-                - Host: orderer5_healthcare_com
+                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4.healthcare.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer4.healthcare.com/tls/server.crt
+                - Host: orderer5.healthcare.com
                   Port: 7050
-                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5_healthcare_com/tls/server.crt
-                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5_healthcare_com/tls/server.crt
+                  ClientTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5.healthcare.com/tls/server.crt
+                  ServerTLSCert: crypto-config/ordererOrganizations/healthcare.com/orderers/orderer5.healthcare.com/tls/server.crt
             Addresses:
-                - orderer_healthcare_com:7050
-                - orderer2_healthcare_com:7050
-                - orderer3_healthcare_com:7050
-                - orderer4_healthcare_com:7050
-                - orderer5_healthcare_com:7050
+                - orderer.healthcare.com:7050
+                - orderer2.healthcare.com:7050
+                - orderer3.healthcare.com:7050
+                - orderer4.healthcare.com:7050
+                - orderer5.healthcare.com:7050
 
             Organizations:
             - *OrdererOrg

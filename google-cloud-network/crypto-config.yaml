@@ -11,7 +11,7 @@ OrdererOrgs:
   # Orderer
   # ---------------------------------------------------------------------------
   - Name: Orderer
-    Domain: healthcare_com
+    Domain: healthcare.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs" - See PeerOrgs below for complete description
@@ -31,7 +31,7 @@ PeerOrgs:
   # HProvider
   # ---------------------------------------------------------------------------
   - Name: HProvider
-    Domain: hprovider_healthcare_com
+    Domain: hprovider.healthcare.com
     EnableNodeOUs: true
     # ---------------------------------------------------------------------------
     # "Specs"
@@ -73,7 +73,7 @@ PeerOrgs:
     # ---------------------------------------------------------------------------
     # "Users"
     # ---------------------------------------------------------------------------
-    # Count: The number of user accounts _in addition_ to Admin
+    # Count: The number of user accounts .in addition. to Admin
     # ---------------------------------------------------------------------------
     Users:
       Count: 3
@@ -81,7 +81,7 @@ PeerOrgs:
   # research: See "HProvider" for full specification
   # ---------------------------------------------------------------------------
   - Name: Research
-    Domain: research_healthcare_com
+    Domain: research.healthcare.com
     EnableNodeOUs: true
     Template:
       Count: 5

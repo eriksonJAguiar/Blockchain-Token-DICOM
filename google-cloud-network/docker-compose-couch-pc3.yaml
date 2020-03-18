@@ -22,16 +22,16 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
+    deploy:
+      placement:
+        constraints: [node.role == worker]
     ports:
       - "8984:5984"
     networks:
       health_network:
         aliases:
           - couchdb3
-    deploy:
-      placement:
-        constraints: [node.role == manager]
-
+  
   couchdb5:
     hostname: couchdb5
     container_name: couchdb5
@@ -43,13 +43,13 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - "15984:5984"
     networks:
       health_network:
         aliases:
           - couchdb5
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == manager]

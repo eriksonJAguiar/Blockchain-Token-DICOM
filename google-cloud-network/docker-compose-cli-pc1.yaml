@@ -6,7 +6,7 @@
 version: '3'
 
 volumes:
-  peer0_hprovider_healthcare_com:    
+  peer0.hprovider.healthcare.com:    
 
 networks:
   health_network:
@@ -17,26 +17,26 @@ services:
   
   peer0_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer0_hprovider_healthcare_com
+    hostname: peer0.hprovider.healthcare.com
     env_file: env/.peer1-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer0_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer0_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer0_hprovider_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer0.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
       replicas: 2
       placement:
-        constraints: [node.role == worker]
+        constraints: [node.role == manager]
     ports:
       - 7051:7051
     networks:
       health_network:
         aliases:
-          - peer0_hprovider_healthcare_com
+          - peer0.hprovider.healthcare.com
     
     
 

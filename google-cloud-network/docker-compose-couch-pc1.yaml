@@ -23,13 +23,13 @@ services:
       - COUCHDB_PASSWORD=wines
     # Comment/Uncomment the port mapping if you want to hide/expose the CouchDB service,
     # for healthcare map it to utilize Fauxton User Interface in dev environments.
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == manager]
     ports:
       - "5984:5984"
     networks:
       health_network:
         aliases:
           - couchdb0
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == manager]

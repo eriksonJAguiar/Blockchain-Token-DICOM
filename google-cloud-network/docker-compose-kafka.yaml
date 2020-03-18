@@ -15,8 +15,8 @@ networks:
 
 services:
   zookeeper_healthcare_com:
-    hostname: zookeeper.healthcare_com
-    container_name: zookeeper_healthcare_com
+    hostname: zookeeper.healthcare.com
+    container_name: zookeeper.healthcare.com
     image: hyperledger/fabric-zookeeper:$IMAGE_TAG
     environment:
       ZOOKEEPER_CLIENT_PORT: 32181
@@ -29,19 +29,19 @@ services:
     networks:
       health_network:
         aliases:
-          - zookeeper_healthcare_com
+          - zookeeper.healthcare.com
   
   
   kafka_healthcare_com:
-    hostname: kafka_healthcare_com
-    container_name: kafka_healthcare_com
+    hostname: kafka.healthcare.com
+    container_name: kafka.healthcare.com
     image: hyperledger/fabric-kafka:$IMAGE_TAG
     depends_on:
-    - zookeeper_healthcare_com
+    - zookeeper.healthcare.com
     environment:
       - KAFKA_BROKER_ID=1
-      - KAFKA_ZOOKEEPER_CONNECT=zookeeper_healthcare_com:2181
-      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka_healthcare_com:9092
+      - KAFKA_ZOOKEEPER_CONNECT=zookeeper.healthcare.com:2181
+      - KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka.healthcare.com:9092
       - KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR=1
       - KAFKA_MESSAGE_MAX_BYTES=1048576 # 1 * 1024 * 1024 B
       - KAFKA_REPLICA_FETCH_MAX_BYTES=1048576 # 1 * 1024 * 1024 B
@@ -56,5 +56,5 @@ services:
     networks:
       health_network:
         aliases:
-          - kafka_healthcare_com
+          - kafka.healthcare.com
     

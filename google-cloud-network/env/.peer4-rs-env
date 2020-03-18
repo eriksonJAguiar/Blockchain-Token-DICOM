@@ -1,10 +1,10 @@
-CORE_PEER_ID=peer4_research_healthcare_com
-CORE_PEER_ADDRESS=peer4_research_healthcare_com:16051
+CORE_PEER_ID=peer4.research.healthcare.com
+CORE_PEER_ADDRESS=peer4.research.healthcare.com:16051
 CORE_PEER_LISTENADDRESS=0.0.0.0:16051
-CORE_PEER_CHAINCODEADDRESS=peer4_research_healthcare_com:16052
+CORE_PEER_CHAINCODEADDRESS=peer4.research.healthcare.com:16052
 CORE_PEER_CHAINCODELISTENADDRESS=0.0.0.0:16052
-CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4_research_healthcare_com:16051
-CORE_PEER_GOSSIP_BOOTSTRAP=peer0_research_healthcare_com:9051
+CORE_PEER_GOSSIP_EXTERNALENDPOINT=peer4.research.healthcare.com:16051
+CORE_PEER_GOSSIP_BOOTSTRAP=peer0.research.healthcare.com:9051
 CORE_PEER_LOCALMSPID=ResearchMSP
 CORE_VM_ENDPOINT=unix:///host/var/run/docker.sock
 CORE_VM_DOCKER_HOSTCONFIG_NETWORKMODE=${COMPOSE_PROJECT_NAME}_health_network

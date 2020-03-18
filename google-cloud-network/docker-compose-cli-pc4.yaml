@@ -6,9 +6,9 @@
 version: '3'
 
 volumes:
-  peer2_research_healthcare_com:
-  peer3_research_healthcare_com:
-  peer4_research_healthcare_com:
+  peer2.research.healthcare.com:
+  peer3.research.healthcare.com:
+  peer4.research.healthcare.com:
 
 networks:
   health_network:
@@ -17,14 +17,14 @@ networks:
 
   peer2_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    container_name: peer2_research_healthcare_com
-    hostname: peer2_research_healthcare_com
+    container_name: peer2.research.healthcare.com
+    hostname: peer2.research.healthcare.com
     env_file: env/.peer2-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer2_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer2_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer2_research_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer2.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer2.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer2.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     deploy:
@@ -36,18 +36,18 @@ networks:
     networks:
       health_network:
         aliases:
-          - peer2_research_healthcare_com
+          - peer2.research.healthcare.com
 
   peer3_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    container_name: peer3_hprovider_healthcare_com
-    hostname: peer3_hprovider_healthcare_com
+    container_name: peer3.hprovider.healthcare.com
+    hostname: peer3.hprovider.healthcare.com
     env_file: env/.peer3-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer3_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer3_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer3_research_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer3.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer3.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer3.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     deploy:
@@ -59,18 +59,18 @@ networks:
     networks:
       health_network:
         aliases:
-          - peer3_research_healthcare_com
+          - peer3.research.healthcare.com
 
   peer4_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    container_name: peer4_hprovider_healthcare_com
-    hostname: peer4_hprovider_healthcare_com
+    container_name: peer4.hprovider.healthcare.com
+    hostname: peer4.hprovider.healthcare.com
     env_file: env/.peer4-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer4_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer4_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer4_research_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer4.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer4.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer4.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     deploy:
@@ -82,7 +82,7 @@ networks:
     networks:
       health_network:
         aliases:
-          - peer4_research_healthcare_com
+          - peer4.research.healthcare.com
 
   # cli:
   #   container_name: cli

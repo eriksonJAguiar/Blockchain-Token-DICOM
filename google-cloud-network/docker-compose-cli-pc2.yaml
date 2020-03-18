@@ -6,10 +6,10 @@
 version: '3'
 
 volumes:
-  peer1_hprovider_healthcare_com:
-  peer2_hprovider_healthcare_com:  
-  peer3_hprovider_healthcare_com:
-  peer4_hprovider_healthcare_com:
+  peer1.hprovider.healthcare.com:
+  peer2.hprovider.healthcare.com:  
+  peer3.hprovider.healthcare.com:
+  peer4.hprovider.healthcare.com:
 
 networks:
   health_network:
@@ -20,37 +20,38 @@ services:
 
   peer1_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer1_hprovider_healthcare_com
+    hostname: peer1.hprovider.healthcare.com
     env_file: env/.peer1-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer1_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer1_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer1_hprovider_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.hprovider.healthcare.com:/var/hyperledger/production
+    deploy:
+      mode: replicated
+      placement:
+        constraints: [node.role == worker]
     ports:
       - 8051:8051
     networks:
       health_network:
         aliases:
-          - peer1_hprovider_healthcare_com
-    deploy:
-      mode: replicated
-      placement:
-        constraints: [node.role == worker]
+          - peer1.hprovider.healthcare.com
+  
   
   peer2_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer2_hprovider_healthcare.com
+    hostname: peer2.hprovider.healthcare.com
     env_file: env/.peer2-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer2_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer2_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer2_hprovider_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer2.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
       placement:
@@ -60,20 +61,20 @@ services:
     networks:
       health_network:
         aliases:
-          - peer2_hprovider_healthcare_com
+          - peer2.hprovider.healthcare.com
     
 
   peer3_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer3_hprovider_healthcare_com
+    hostname: peer3.hprovider.healthcare.com
     env_file: env/.peer3-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer3_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer3_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer3_hprovider_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer3.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
       placement:
@@ -83,20 +84,20 @@ services:
     networks:
       health_network:
         aliases:
-          - peer3_hprovider_healthcare_com
+          - peer3.hprovider.healthcare.com
     
   
   peer4_hprovider_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer4_hprovider_healthcare_com
+    hostname: peer4.hprovider.healthcare.com
     env_file: env/.peer4-hp-env
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer4_hprovider_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider_healthcare_com/peers/peer4_hprovider_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer4_hprovider_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer4.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
       placement:
@@ -106,7 +107,7 @@ services:
     networks:
       health_network:
         aliases:
-          - peer4_hprovider_healthcare_com
+          - peer4.hprovider.healthcare.com
     
 
   # cli_pc2:

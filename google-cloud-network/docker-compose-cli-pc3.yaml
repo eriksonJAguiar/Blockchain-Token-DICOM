@@ -18,14 +18,14 @@ services:
 
   peer0_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer0_research_healthcare_com
-    container_name: peer0_research_healthcare_com
+    hostname: peer0.research.healthcare.com
+    container_name: peer0.research.healthcare.com
     env_file: env/.peer0-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer0_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer0_research_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer0.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer0.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     deploy:
@@ -37,18 +37,18 @@ services:
     networks:
       health_network:
         aliases:
-          - peer0_research_healthcare_com
+          - peer0.research.healthcare.com
 
   peer1_research_healthcare_com:
     image: hyperledger/fabric-peer:$IMAGE_TAG
-    hostname: peer1_research_healthcare_com
-    container_name: peer1_research_healthcare_com
+    hostname: peer1.research.healthcare.com
+    container_name: peer1.research.healthcare.com
     env_file: env/.peer1-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer1_research_healthcare_com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research_healthcare_com/peers/peer1_research_healthcare_com/tls:/etc/hyperledger/fabric/tls
-        - peer1_research_healthcare_com:/var/hyperledger/production
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer1.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - peer1.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
     deploy:
@@ -60,7 +60,7 @@ services:
     networks:
       health_network:
         aliases:
-          - peer0_research_healthcare_com
+          - peer0.research.healthcare.com
 
 
   # cli:

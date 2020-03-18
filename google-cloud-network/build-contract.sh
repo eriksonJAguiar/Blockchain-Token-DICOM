@@ -15,7 +15,7 @@ export ORDERER_CA=${CONFIG_ROOT}/crypto/ordererOrganizations/healthcare.com/orde
 
 PEER0_HPROVIDER="docker exec
 -e CORE_PEER_LOCALMSPID=HProviderMSP
--e CORE_PEER_ADDRESS=peer0_hprovider_healthcare_com:7051
+-e CORE_PEER_ADDRESS=peer0.hprovider.healthcare.com:7051
 -e CORE_PEER_MSPCONFIGPATH=${HPROVIDER_MSPCONFIGPATH}
 -e CORE_PEER_TLS_ROOTCERT_FILE=${HPROVIDER_TLS_ROOTCERT_FILE}
 cli
