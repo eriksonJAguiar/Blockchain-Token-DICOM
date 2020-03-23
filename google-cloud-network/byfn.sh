@@ -619,8 +619,8 @@ elif [ "${MODE}" == "generate" ]; then ## Generate Artifacts
   generateCerts
   replacePrivateKey
   generateChannelArtifacts
-  export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider_healthcare_com/ca && ls *_sk)
-  export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research_healthcare_com/ca && ls *_sk)
+  export BYFN_CA1_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/hprovider.healthcare.com/ca && ls *_sk)
+  export BYFN_CA2_PRIVATE_KEY=$(cd crypto-config/peerOrganizations/research.healthcare.com/ca && ls *_sk)
   export IMAGE_TAG=1.4
   export CHANNEL_NAME=healthchannel
 elif [ "${MODE}" == "restart" ]; then ## Restart the network
