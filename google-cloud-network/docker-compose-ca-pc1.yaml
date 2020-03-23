@@ -14,7 +14,7 @@ networks:
 services:
   ca_hprovider_healthcare_com:
     image: hyperledger/fabric-ca:$IMAGE_TAG
-    #container_name: ca.hprovider.healthcare.com
+    container_name: ca.hprovider.healthcare.com
     hostname: ca.hprovider.healthcare.com
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server

@@ -13,6 +13,7 @@ networks:
 services: 
   cli:
     hostname: cli
+    container_name: cli
     image: hyperledger/fabric-tools:$IMAGE_TAG
     tty: true
     stdin_open: true

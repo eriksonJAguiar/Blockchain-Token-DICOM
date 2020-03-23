@@ -13,6 +13,7 @@ networks:
 services:
   ca_research_healthcare_com:
     image: hyperledger/fabric-ca:$IMAGE_TAG
+    container_name: ca.research.healthcare.com
     hostname: ca.research.healthcare.com
     environment:
       - FABRIC_CA_HOME=/etc/hyperledger/fabric-ca-server
