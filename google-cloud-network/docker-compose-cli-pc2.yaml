@@ -27,8 +27,8 @@ services:
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer1.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer1.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
@@ -51,8 +51,8 @@ services:
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer2.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer2.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
@@ -75,8 +75,8 @@ services:
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer3.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer3.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated
@@ -99,8 +99,8 @@ services:
     command: peer node start
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/hprovider.healthcare.com/peers/peer4.hprovider.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer4.hprovider.healthcare.com:/var/hyperledger/production
     deploy:
       mode: replicated

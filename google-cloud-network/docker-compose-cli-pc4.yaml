@@ -22,8 +22,8 @@ networks:
     env_file: env/.peer2-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer2.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer2.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/research.healthcare.com/peers/peer2.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/research.healthcare.com/peers/peer2.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer2.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -45,8 +45,8 @@ networks:
     env_file: env/.peer3-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer3.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer3.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/research.healthcare.com/peers/peer3.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/research.healthcare.com/peers/peer3.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer3.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
@@ -68,8 +68,8 @@ networks:
     env_file: env/.peer4-rs-env
     volumes:
         - /var/run/:/host/var/run/
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer4.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
-        - ../crypto-config/peerOrganizations/research.healthcare.com/peers/peer4.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
+        - ./crypto-config/peerOrganizations/research.healthcare.com/peers/peer4.research.healthcare.com/msp:/etc/hyperledger/fabric/msp
+        - ./crypto-config/peerOrganizations/research.healthcare.com/peers/peer4.research.healthcare.com/tls:/etc/hyperledger/fabric/tls
         - peer4.research.healthcare.com:/var/hyperledger/production
     working_dir: /opt/gopath/src/github.com/hyperledger/fabric/peer
     command: peer node start
