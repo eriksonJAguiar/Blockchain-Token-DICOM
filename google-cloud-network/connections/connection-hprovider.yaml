@@ -1,0 +1,43 @@
+---
+name: first-network-orghprovider
+version: 1.0.0
+client:
+  organization: HProvider
+  connection:
+    timeout:
+      peer:
+        endorser: '300'
+organizations:
+  HProvider:
+    mspid: HProviderMSP
+    peers:
+    - peer0.hprovider.healthcare.com
+    - peer1.hprovider.healthcare.com
+    certificateAuthorities:
+    - ca.hprovider.healthcare.com
+peers:
+  peer0.hprovider.healthcare.com:
+    url: grpcs://localhost:7051
+    tlsCACerts:
+      pem: |
+        
+    grpcOptions:
+      ssl-target-name-override: peer0_hprovider.healthcare.com
+      hostnameOverride: peer0_hprovider.healthcare.com
+  peer1.hprovider.healthcare.com:
+    url: grpcs://localhost:8051
+    tlsCACerts:
+      pem: |
+        
+    grpcOptions:
+      ssl-target-name-override: peer1_{ORG}.healthcare.com
+      hostnameOverride: peer1_hprovider.healthcare.com
+certificateAuthorities:
+  ca.hprovider.healthcare.com:
+    url: https://localhost:7054
+    caName: ca.hprovider.healthcare.com
+    tlsCACerts:
+      pem: |
+        
+    httpOptions:
+      verify: false

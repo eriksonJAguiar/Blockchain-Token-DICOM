@@ -1,0 +1,60 @@
+{
+    "name": "first-network-research",
+    "version": "1.0.0",
+    "client": {
+        "organization": "Research",
+        "connection": {
+            "timeout": {
+                "peer": {
+                    "endorser": "300"
+                }
+            }
+        }
+    },
+    "organizations": {
+        "Research": {
+            "mspid": "ResearchMSP",
+            "peers": [
+                "peer0.research.healthcare.com",
+                "peer1.research.healthcare.com"
+            ],
+            "certificateAuthorities": [
+                "ca_research.healthcare.com"
+            ]
+        }
+    },
+    "peers": {
+        "peer0.research.healthcare.com": {
+            "url": "grpcs://localhost:9051",
+            "tlsCACerts": {
+                "pem": ""
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer0.research.healthcare.com",
+                "hostnameOverride": "peer0.research.healthcare.com"
+            }
+        },
+        "peer1.research.healthcare.com": {
+            "url": "grpcs://localhost:10051",
+            "tlsCACerts": {
+                "pem": ""
+            },
+            "grpcOptions": {
+                "ssl-target-name-override": "peer1.research.healthcare.com",
+                "hostnameOverride": "peer1.research.healthcare.com"
+            }
+        }
+    },
+    "certificateAuthorities": {
+        "ca.research.healthcare.com": {
+            "url": "https://localhost:8054",
+            "caName": "ca.research.healthcare.com",
+            "tlsCACerts": {
+                "pem": ""
+            },
+            "httpOptions": {
+                "verify": false
+            }
+        }
+    }
+}
