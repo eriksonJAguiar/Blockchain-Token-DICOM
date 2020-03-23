@@ -16,6 +16,7 @@ networks:
 services:
 
   orderer_healthcare_com:
+    container_name: orderer.healthcare.com
     image: hyperledger/fabric-orderer:$IMAGE_TAG
     hostname: orderer.healthcare.com
     env_file: env/.orderer-env
