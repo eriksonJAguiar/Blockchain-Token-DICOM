@@ -148,6 +148,8 @@ normalize <- function(x) {
   return ((x - min(x)) / (max(x) - min(x)))
 }
 
+
+
 normEnpy <- normalize(enpy)
 
 denpoison <- dpois(enpy,2)
@@ -164,9 +166,8 @@ d <- pnorm(normEnpy)
 g <- rgamma(normEnpy, scale = var(normEnpy), shape = max(normEnpy))
 ex <- rexp(normEnpy)
 qqr <- pchisq(normEnpy, 1, ncp = 0, lower.tail = TRUE, log.p = FALSE)
-
 png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/pdf_entropy.png", width = 4, height = 4, units = 'in', res = 300)
-plot(density(d), ylab="Density", xlab="Entropy", main = "PDF of tokens entropy",col="red")
+plot(density(d), ylab="Density", xlab="Entropy", main = "PDF of tokens entropy",col="red", ba)
 dev.off()
 
 png(file = "/Users/erjulioaguiar/Documents/healh-blockchain/Blockchain_DICOM_CBMS20/Results/cdf_entropy.png", width = 5, height = 4, units = 'in', res = 300)
