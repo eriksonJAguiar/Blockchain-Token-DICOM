@@ -3,7 +3,7 @@ A Hyperledger fabric and python3 project for tracking medical imaging sharing be
 
 ### Blockchain network
 
-The blockchain network built with Hyperledger Fabric 1.4.8 is describes on [Folder Network](https://github.com/eriksonJAguiar/Blockchain-Token-DICOM/tree/master/hyperledger-network)
+The blockchain network built with Hyperledger Fabric 1.4.8 is describes in [Folder Network](https://github.com/eriksonJAguiar/Blockchain-Token-DICOM/tree/master/hyperledger-network)
 
 ### Tracking token module
 
